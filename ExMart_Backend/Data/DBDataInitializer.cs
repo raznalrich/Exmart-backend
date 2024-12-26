@@ -9,13 +9,13 @@ namespace ExMart_Backend.Data
         private readonly ApplicationDBContext _dbContext;
         public DBDataInitializer(ApplicationDBContext dbContext)
         {
-            _dbcontext = dbcontext;
+            _dbContext = dbContext;
             InitializeData();
         }
 
         private void InitializeData()
         {
-            productList = _dbcontext.Products.ToList();
+            productList = _dbContext.Products.ToList();
         }
 
         public List<Product> GetProducts()
