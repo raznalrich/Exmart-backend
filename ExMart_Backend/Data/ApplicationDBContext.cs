@@ -13,7 +13,6 @@ namespace ExMart_Backend.Data
         }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +33,22 @@ namespace ExMart_Backend.Data
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
                     CreatedBy = 1
+                },
+                new Product
+                {
+                    Id = 2,
+                    Name = "Tshirt",
+                    Description = "Men's tshirt",
+                    Brand = "ABC",
+                    Price = 250,
+                    VendorId = 2,
+                    CategoryId = "C003",
+                    Size = ["XS", "S", "M"],
+                    Color = ["Black", "Green", "Purple"],
+                    Weight = 250,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    CreatedBy = 5
                 }
                 );
         }

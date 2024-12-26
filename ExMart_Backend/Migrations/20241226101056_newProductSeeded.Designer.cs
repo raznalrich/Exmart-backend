@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ExMart_Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExMart_Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241226101056_newProductSeeded")]
+    partial class newProductSeeded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,13 +87,13 @@ namespace ExMart_Backend.Migrations
                             Brand = "VAFS",
                             CategoryId = "C001",
                             Color = new List<string> { "Blue", "Green" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 35, 50, 387, DateTimeKind.Utc).AddTicks(8782),
+                            CreatedAt = new DateTime(2024, 12, 26, 10, 10, 56, 582, DateTimeKind.Utc).AddTicks(354),
                             CreatedBy = 1,
                             Description = "Ergonomic wireless mouse with 2.4 GHz connectivity",
                             Name = "Wireless Mouse",
                             Price = 25m,
                             Size = new List<string> { "XS", "S", "M" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 35, 50, 387, DateTimeKind.Utc).AddTicks(8786),
+                            UpdatedAt = new DateTime(2024, 12, 26, 10, 10, 56, 582, DateTimeKind.Utc).AddTicks(357),
                             VendorId = 1,
                             Weight = 250m
                         },
@@ -100,19 +103,19 @@ namespace ExMart_Backend.Migrations
                             Brand = "ABC",
                             CategoryId = "C003",
                             Color = new List<string> { "Black", "Green", "Purple" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 35, 50, 387, DateTimeKind.Utc).AddTicks(8792),
+                            CreatedAt = new DateTime(2024, 12, 26, 10, 10, 56, 582, DateTimeKind.Utc).AddTicks(363),
                             CreatedBy = 5,
                             Description = "Men's tshirt",
                             Name = "Tshirt",
                             Price = 250m,
                             Size = new List<string> { "XS", "S", "M" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 35, 50, 387, DateTimeKind.Utc).AddTicks(8793),
+                            UpdatedAt = new DateTime(2024, 12, 26, 10, 10, 56, 582, DateTimeKind.Utc).AddTicks(363),
                             VendorId = 2,
                             Weight = 250m
                         });
                 });
 
-            modelBuilder.Entity("ExMart_Backend.Model.Users", b =>
+            modelBuilder.Entity("ExMart_Backend.Model.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

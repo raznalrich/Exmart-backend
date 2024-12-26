@@ -15,6 +15,7 @@ namespace ExMart_Backend.Controllers
             _productRepository = productRepository;
             _dbInitializer = dbInitializer;
         }
+        [HttpGet]
         public IActionResult GetAllProducts()
         {
             var products = _dbInitializer.GetProducts();
