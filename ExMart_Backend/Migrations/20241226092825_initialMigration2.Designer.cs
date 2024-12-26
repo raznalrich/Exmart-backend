@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ExMart_Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExMart_Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241226092825_initialMigration2")]
+    partial class initialMigration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,48 +83,20 @@ namespace ExMart_Backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 12,
+                            Id = 1,
                             Brand = "VAFS",
                             CategoryId = "C001",
                             Color = new List<string> { "Blue", "Green" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 35, 50, 387, DateTimeKind.Utc).AddTicks(8782),
+                            CreatedAt = new DateTime(2024, 12, 26, 9, 28, 24, 788, DateTimeKind.Utc).AddTicks(1026),
                             CreatedBy = 1,
                             Description = "Ergonomic wireless mouse with 2.4 GHz connectivity",
                             Name = "Wireless Mouse",
                             Price = 25m,
                             Size = new List<string> { "XS", "S", "M" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 4, 34, 41, 563, DateTimeKind.Utc).AddTicks(1638),
+                            UpdatedAt = new DateTime(2024, 12, 26, 9, 28, 24, 788, DateTimeKind.Utc).AddTicks(1030),
                             VendorId = 1,
                             Weight = 250m
                         });
-                });
-
-            modelBuilder.Entity("ExMart_Backend.Model.Users", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

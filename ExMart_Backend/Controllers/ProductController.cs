@@ -8,18 +8,26 @@ namespace ExMart_Backend.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
-        private readonly DBDataInitializer _dbInitializer;
+        private IProductRepository _productRepository;
+        private DBDataInitializer _dbInitializer;
         public ProductController(IProductRepository productRepository, DBDataInitializer dbInitializer)
         {
             _productRepository = productRepository;
             _dbInitializer = dbInitializer;
         }
+
         [HttpGet]
         public IActionResult GetAllProducts()
         {
             var products = _dbInitializer.GetProducts();
             return Ok(products);
+        }
+
+        [HttpGet("GetProductById")]
+
+        public async Task<IActionResult> GetProductById(int id)
+        {
+            return Ok(await _dbInitializer.GetProductById(id));
         }
     }
 }

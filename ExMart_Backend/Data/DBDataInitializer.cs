@@ -23,5 +23,9 @@ namespace ExMart_Backend.Data
         {
             return productList;
         }
+        public async Task<Product> GetProductById(int id)
+        {
+            return productList.FirstOrDefault(p => p.Id == id);
+        }
     }
 }
