@@ -13,6 +13,8 @@ namespace ExMart_Backend.Data
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<ColourMaster> ColourMaster { get; set; }
+        public DbSet<SizeMaster> SizeMaster { get; set; }
 
         public DbSet<Order> Orders { get; set; }
 
@@ -21,6 +23,24 @@ namespace ExMart_Backend.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<SizeMaster>().HasData(
+                new SizeMaster { SizeId = 1,Size="XS"},
+                new SizeMaster { SizeId = 2,Size="S"},
+                new SizeMaster { SizeId = 3,Size="M"},
+                new SizeMaster { SizeId = 4,Size="L"},
+                new SizeMaster { SizeId = 5,Size="XL"},
+                new SizeMaster { SizeId = 6,Size="XXL"},
+                new SizeMaster { SizeId = 7,Size="XXXL"}
+                );
+            modelBuilder.Entity<ColourMaster>().HasData(
+                new ColourMaster { ColorId = 1, ColorName = "red", ColorCode = "#FF0000" },
+    new ColourMaster { ColorId = 2, ColorName = "blue", ColorCode = "#0000FF" },
+    new ColourMaster { ColorId = 3, ColorName = "white", ColorCode = "#FFFFFF" },
+    new ColourMaster { ColorId = 4, ColorName = "black", ColorCode = "#000000" },
+    new ColourMaster { ColorId = 5, ColorName = "green", ColorCode = "#008000" },
+    new ColourMaster { ColorId = 6, ColorName = "violet", ColorCode = "#8F00FF" },
+    new ColourMaster { ColorId = 7, ColorName = "yellow", ColorCode = "#FFFF00" }
+                );
 
             // Configure the one-to-many relationship
             modelBuilder.Entity<Order>()
@@ -208,8 +228,8 @@ namespace ExMart_Backend.Data
         Price = 149.99m,
         VendorId = 1,
         CategoryId = "STA001",
-        Size = new List<string> { "Standard" },
-        Color = new List<string> { "Black", "White" },
+        Size = ["Standard" ],
+        Color = [ "Black", "White" ],
         Weight = 700m,
         CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
         UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
