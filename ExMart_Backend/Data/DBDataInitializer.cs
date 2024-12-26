@@ -6,15 +6,22 @@ namespace ExMart_Backend.Data
     {
         List<Product> productList = new();
         List<AddToCart> cartList = new();
-        private readonly ApplicationDBContext _dbContext;
-        public DBDataInitializer(ApplicationDBContext dbContext)
+
+        private readonly ApplicationDBContext _dbcontext;
+        public DBDataInitializer(ApplicationDBContext dbcontext)
         {
-            _dbContext = dbContext;
+            _dbcontext = dbcontext;
             InitializeData();
         }
-        public void InitializeData()
+
+        private void InitializeData()
         {
-            productList = _dbContext.Products.ToList();
+            productList = _dbcontext.Products.ToList();
+        }
+
+        public List<Product> GetProducts()
+        {
+            return productList;
         }
         public async Task<Product> GetProductById(int id)
         {
