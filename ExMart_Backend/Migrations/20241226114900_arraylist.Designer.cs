@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExMart_Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241226092825_initialMigration2")]
-    partial class initialMigration2
+    [Migration("20241226114900_arraylist")]
+    partial class arraylist
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,27 @@ namespace ExMart_Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ExMart_Backend.Model.ColourMaster", b =>
+                {
+                    b.Property<int>("ColorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ColorId"));
+
+                    b.Property<string>("ColorCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ColorName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ColorId");
+
+                    b.ToTable("ColourMaster");
+                });
 
             modelBuilder.Entity("ExMart_Backend.Model.Product", b =>
                 {
@@ -83,20 +104,197 @@ namespace ExMart_Backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 12,
                             Brand = "VAFS",
                             CategoryId = "C001",
                             Color = new List<string> { "Blue", "Green" },
-                            CreatedAt = new DateTime(2024, 12, 26, 9, 28, 24, 788, DateTimeKind.Utc).AddTicks(1026),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Ergonomic wireless mouse with 2.4 GHz connectivity",
                             Name = "Wireless Mouse",
                             Price = 25m,
                             Size = new List<string> { "XS", "S", "M" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 9, 28, 24, 788, DateTimeKind.Utc).AddTicks(1030),
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 250m
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Brand = "Experion",
+                            CategoryId = "GAR001",
+                            Color = new List<string> { "red", "black" },
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Description = "Experion branded t-shirt",
+                            Name = "Experion Tshirt",
+                            Price = 1499.00m,
+                            Size = new List<string> { "15.6 inches" },
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
+                            VendorId = 1,
+                            Weight = 500m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Brand = "Experion",
+                            CategoryId = "GAR001",
+                            Color = new List<string> { "white" },
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Description = "Experion branded hoodie",
+                            Name = "Hoody Experion brand",
+                            Price = 399.99m,
+                            Size = new List<string> { "Standard" },
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
+                            VendorId = 1,
+                            Weight = 600m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Brand = "Experion",
+                            CategoryId = "GAR001",
+                            Color = new List<string> { "black", "red" },
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Description = "Experion branded jersey",
+                            Name = "Jersey Experion branded",
+                            Price = 399.99m,
+                            Size = new List<string> { "40mm", "44mm" },
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
+                            VendorId = 1,
+                            Weight = 400m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Brand = "Swiss Military",
+                            CategoryId = "APP001",
+                            Color = new List<string> { "white", "blue" },
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Description = "Swiss military branded earpods",
+                            Name = "Earpods Swiss military",
+                            Price = 349.99m,
+                            Size = new List<string> { "Standard" },
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
+                            VendorId = 1,
+                            Weight = 50m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Brand = "VAFS",
+                            CategoryId = "STA001",
+                            Color = new List<string> { "blue", "white", "green" },
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Description = "Reusable water bottle",
+                            Name = "Water Bottle",
+                            Price = 399.00m,
+                            Size = new List<string> { "41mm", "45mm" },
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
+                            VendorId = 1,
+                            Weight = 300m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Brand = "VAFS",
+                            CategoryId = "STA001",
+                            Color = new List<string> { "Black", "red" },
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Description = "Insulated flask",
+                            Name = "Flask",
+                            Price = 349.99m,
+                            Size = new List<string> { "Standard" },
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
+                            VendorId = 1,
+                            Weight = 400m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Brand = "Nike",
+                            CategoryId = "STA001",
+                            Color = new List<string> { "White", "Black", "Red" },
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Description = "Nike Air Force 1 sneakers",
+                            Name = "Nike Air Force 1",
+                            Price = 99.99m,
+                            Size = new List<string> { "5", "6", "7", "8", "9", "10", "11", "12" },
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
+                            VendorId = 1,
+                            Weight = 800m
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Brand = "Samsung",
+                            CategoryId = "APP001",
+                            Color = new List<string> { "black", "White" },
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Description = "Samsung wireless earbuds",
+                            Name = "Samsung Galaxy Buds 2 Pro",
+                            Price = 1999.99m,
+                            Size = new List<string> { "Standard" },
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
+                            VendorId = 1,
+                            Weight = 50m
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Brand = "VAFS",
+                            CategoryId = "STA001",
+                            Color = new List<string> { "Black", "White" },
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Description = "Personal diary",
+                            Name = "Diary",
+                            Price = 149.99m,
+                            Size = new List<string> { "Standard" },
+                            UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            VendorId = 1,
+                            Weight = 200m
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Brand = "VAFS",
+                            CategoryId = "STA001",
+                            Color = new List<string> { "Black", "White" },
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Description = "Multi-purpose backpack",
+                            Name = "BackPack",
+                            Price = 149.99m,
+                            Size = new List<string> { "Standard" },
+                            UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            VendorId = 1,
+                            Weight = 700m
                         });
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.SizeMaster", b =>
+                {
+                    b.Property<int>("SizeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SizeId"));
+
+                    b.Property<string>("Size")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("SizeId");
+
+                    b.ToTable("SizeMaster");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
