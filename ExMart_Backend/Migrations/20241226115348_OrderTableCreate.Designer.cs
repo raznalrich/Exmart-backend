@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ExMart_Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExMart_Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241226115348_OrderTableCreate")]
+    partial class OrderTableCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,71 +25,6 @@ namespace ExMart_Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("ExMart_Backend.Model.ColourMaster", b =>
-                {
-                    b.Property<int>("ColorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ColorId"));
-
-                    b.Property<string>("ColorCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ColorName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ColorId");
-
-                    b.ToTable("ColourMaster");
-
-                    b.HasData(
-                        new
-                        {
-                            ColorId = 1,
-                            ColorCode = "#FF0000",
-                            ColorName = "red"
-                        },
-                        new
-                        {
-                            ColorId = 2,
-                            ColorCode = "#0000FF",
-                            ColorName = "blue"
-                        },
-                        new
-                        {
-                            ColorId = 3,
-                            ColorCode = "#FFFFFF",
-                            ColorName = "white"
-                        },
-                        new
-                        {
-                            ColorId = 4,
-                            ColorCode = "#000000",
-                            ColorName = "black"
-                        },
-                        new
-                        {
-                            ColorId = 5,
-                            ColorCode = "#008000",
-                            ColorName = "green"
-                        },
-                        new
-                        {
-                            ColorId = 6,
-                            ColorCode = "#8F00FF",
-                            ColorName = "violet"
-                        },
-                        new
-                        {
-                            ColorId = 7,
-                            ColorCode = "#FFFF00",
-                            ColorName = "yellow"
-                        });
-                });
 
             modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
                 {
@@ -376,60 +314,6 @@ namespace ExMart_Backend.Migrations
                             UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 700m
-                        });
-                });
-
-            modelBuilder.Entity("ExMart_Backend.Model.SizeMaster", b =>
-                {
-                    b.Property<int>("SizeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SizeId"));
-
-                    b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("SizeId");
-
-                    b.ToTable("SizeMaster");
-
-                    b.HasData(
-                        new
-                        {
-                            SizeId = 1,
-                            Size = "XS"
-                        },
-                        new
-                        {
-                            SizeId = 2,
-                            Size = "S"
-                        },
-                        new
-                        {
-                            SizeId = 3,
-                            Size = "M"
-                        },
-                        new
-                        {
-                            SizeId = 4,
-                            Size = "L"
-                        },
-                        new
-                        {
-                            SizeId = 5,
-                            Size = "XL"
-                        },
-                        new
-                        {
-                            SizeId = 6,
-                            Size = "XXL"
-                        },
-                        new
-                        {
-                            SizeId = 7,
-                            Size = "XXXL"
                         });
                 });
 
