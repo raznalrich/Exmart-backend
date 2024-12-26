@@ -14,16 +14,6 @@ builder.Services.AddDbContext<ApplicationDBContext>
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddControllers();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAngularApp", policy =>
-    {
-        policy.WithOrigins("http://localhost:4200") // Allow Angular app URL
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); // If you're using cookies for authentication
-    });
-});
 
 builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -34,6 +24,16 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Allow Angular app URL
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // If you're using cookies for authentication
+    });
+});
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 var app = builder.Build();
@@ -44,7 +44,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 // Apply CORS policy globally
 app.UseCors("AllowAngularApp");

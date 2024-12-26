@@ -11,7 +11,7 @@ namespace ExMart_Backend.Controllers
         private IProductRepository _productRepository;
         private DBDataInitializer _dbInitializer;
         public ProductController(IProductRepository productRepository, DBDataInitializer dbInitializer)
-        {
+        { 
             _productRepository = productRepository;
             _dbInitializer = dbInitializer;
         }
