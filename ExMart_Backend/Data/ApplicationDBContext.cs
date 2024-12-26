@@ -13,6 +13,9 @@ namespace ExMart_Backend.Data
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> addToCategories { get; set; }
+
+
         public DbSet<ColourMaster> ColourMaster { get; set; }
         public DbSet<SizeMaster> SizeMaster { get; set; }
 
@@ -236,6 +239,29 @@ namespace ExMart_Backend.Data
         CreatedBy = 1
     }
                 );
+            modelBuilder.Entity<Category>().HasData(
+                new Category
+                {
+                    Id = 1,
+                    CategoryName = "Garments",
+                    IconPath = "iconURL"
+                },
+                new Category
+                {
+                    Id = 8,
+                    CategoryName = "Stationary",
+                    IconPath = "iconUrl"
+
+                }
+            );
         }
+
+
+        
+
+
+
+
+
     }
 }

@@ -23,6 +23,25 @@ namespace ExMart_Backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ExMart_Backend.Model.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("IconPath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("addToCategories");
             modelBuilder.Entity("ExMart_Backend.Model.ColourMaster", b =>
                 {
                     b.Property<int>("ColorId")
@@ -46,6 +65,19 @@ namespace ExMart_Backend.Migrations
                     b.HasData(
                         new
                         {
+                            Id = 1,
+                            CategoryName = "Garments",
+                            IconPath = "iconURL"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryName = "Stationary",
+                            IconPath = "iconUrl"
+                        });
+                });
+
+
                             ColorId = 1,
                             ColorCode = "#FF0000",
                             ColorName = "red"
