@@ -2,5 +2,7 @@
 {
     public interface IMailRepository
     {
+        public Task SendEmail(string recepter, string subject, string body);
+
     }
 }
