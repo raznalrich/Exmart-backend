@@ -4,11 +4,10 @@ namespace ExMart_Backend.Data
 {
     public class DBDataInitializer
     {
-        List<Product> productList = new();
-        List<AddToCart> cartList = new();
-
-        private readonly ApplicationDBContext _dbcontext;
-        public DBDataInitializer(ApplicationDBContext dbcontext)
+        public static List<Product> productList = new List<Product>();
+        public static List<AddToCart> cartList = new List<AddToCart>();
+        private readonly ApplicationDBContext _dbContext;
+        public DBDataInitializer(ApplicationDBContext dbContext)
         {
             _dbcontext = dbcontext;
             InitializeData();
