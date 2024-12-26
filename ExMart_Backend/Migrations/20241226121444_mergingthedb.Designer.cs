@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExMart_Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241226100844_newProductDataSeeding26")]
-    partial class newProductDataSeeding26
+    [Migration("20241226121444_mergingthedb")]
+    partial class mergingthedb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,129 @@ namespace ExMart_Backend.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ExMart_Backend.Model.ColourMaster", b =>
+                {
+                    b.Property<int>("ColorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ColorId"));
+
+                    b.Property<string>("ColorCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ColorName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ColorId");
+
+                    b.ToTable("ColourMaster");
+
+                    b.HasData(
+                        new
+                        {
+                            ColorId = 1,
+                            ColorCode = "#FF0000",
+                            ColorName = "red"
+                        },
+                        new
+                        {
+                            ColorId = 2,
+                            ColorCode = "#0000FF",
+                            ColorName = "blue"
+                        },
+                        new
+                        {
+                            ColorId = 3,
+                            ColorCode = "#FFFFFF",
+                            ColorName = "white"
+                        },
+                        new
+                        {
+                            ColorId = 4,
+                            ColorCode = "#000000",
+                            ColorName = "black"
+                        },
+                        new
+                        {
+                            ColorId = 5,
+                            ColorCode = "#008000",
+                            ColorName = "green"
+                        },
+                        new
+                        {
+                            ColorId = 6,
+                            ColorCode = "#8F00FF",
+                            ColorName = "violet"
+                        },
+                        new
+                        {
+                            ColorId = 7,
+                            ColorCode = "#FFFF00",
+                            ColorName = "yellow"
+                        });
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderId"));
+
+                    b.Property<int>("AddressId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Order_ItemId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Product_StatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.OrderItem", b =>
+                {
+                    b.Property<int>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderItemId"));
+
+                    b.Property<int>("ColorId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductRateId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems");
+                });
 
             modelBuilder.Entity("ExMart_Backend.Model.Product", b =>
                 {
@@ -87,13 +210,13 @@ namespace ExMart_Backend.Migrations
                             Brand = "VAFS",
                             CategoryId = "C001",
                             Color = new List<string> { "Blue", "Green" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9247),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Ergonomic wireless mouse with 2.4 GHz connectivity",
                             Name = "Wireless Mouse",
                             Price = 25m,
                             Size = new List<string> { "XS", "S", "M" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9250),
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 250m
                         },
@@ -103,13 +226,13 @@ namespace ExMart_Backend.Migrations
                             Brand = "Experion",
                             CategoryId = "GAR001",
                             Color = new List<string> { "red", "black" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9258),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Experion branded t-shirt",
                             Name = "Experion Tshirt",
                             Price = 1499.00m,
-                            Size = new List<string> { "XS,L,XL" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9259),
+                            Size = new List<string> { "15.6 inches" },
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 500m
                         },
@@ -119,13 +242,13 @@ namespace ExMart_Backend.Migrations
                             Brand = "Experion",
                             CategoryId = "GAR001",
                             Color = new List<string> { "white" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9264),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Experion branded hoodie",
                             Name = "Hoody Experion brand",
                             Price = 399.99m,
-                            Size = new List<string>(),
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9265),
+                            Size = new List<string> { "Standard" },
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 600m
                         },
@@ -135,13 +258,13 @@ namespace ExMart_Backend.Migrations
                             Brand = "Experion",
                             CategoryId = "GAR001",
                             Color = new List<string> { "black", "red" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9269),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Experion branded jersey",
                             Name = "Jersey Experion branded",
                             Price = 399.99m,
                             Size = new List<string> { "40mm", "44mm" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9270),
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 400m
                         },
@@ -151,13 +274,13 @@ namespace ExMart_Backend.Migrations
                             Brand = "Swiss Military",
                             CategoryId = "APP001",
                             Color = new List<string> { "white", "blue" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9275),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Swiss military branded earpods",
                             Name = "Earpods Swiss military",
                             Price = 349.99m,
                             Size = new List<string> { "Standard" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9276),
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 50m
                         },
@@ -167,13 +290,13 @@ namespace ExMart_Backend.Migrations
                             Brand = "VAFS",
                             CategoryId = "STA001",
                             Color = new List<string> { "blue", "white", "green" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9281),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Reusable water bottle",
                             Name = "Water Bottle",
                             Price = 399.00m,
                             Size = new List<string> { "41mm", "45mm" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9282),
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 300m
                         },
@@ -183,13 +306,13 @@ namespace ExMart_Backend.Migrations
                             Brand = "VAFS",
                             CategoryId = "STA001",
                             Color = new List<string> { "Black", "red" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9314),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Insulated flask",
                             Name = "Flask",
                             Price = 349.99m,
                             Size = new List<string> { "Standard" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9315),
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 400m
                         },
@@ -199,13 +322,13 @@ namespace ExMart_Backend.Migrations
                             Brand = "Nike",
                             CategoryId = "STA001",
                             Color = new List<string> { "White", "Black", "Red" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9321),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Nike Air Force 1 sneakers",
                             Name = "Nike Air Force 1",
                             Price = 99.99m,
                             Size = new List<string> { "5", "6", "7", "8", "9", "10", "11", "12" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9322),
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 800m
                         },
@@ -215,13 +338,13 @@ namespace ExMart_Backend.Migrations
                             Brand = "Samsung",
                             CategoryId = "APP001",
                             Color = new List<string> { "black", "White" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9327),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Samsung wireless earbuds",
                             Name = "Samsung Galaxy Buds 2 Pro",
                             Price = 1999.99m,
                             Size = new List<string> { "Standard" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9327),
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 50m
                         },
@@ -231,13 +354,13 @@ namespace ExMart_Backend.Migrations
                             Brand = "VAFS",
                             CategoryId = "STA001",
                             Color = new List<string> { "Black", "White" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9332),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Personal diary",
                             Name = "Diary",
                             Price = 149.99m,
                             Size = new List<string> { "Standard" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9333),
+                            UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 200m
                         },
@@ -247,15 +370,69 @@ namespace ExMart_Backend.Migrations
                             Brand = "VAFS",
                             CategoryId = "STA001",
                             Color = new List<string> { "Black", "White" },
-                            CreatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9338),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Multi-purpose backpack",
                             Name = "BackPack",
                             Price = 149.99m,
                             Size = new List<string> { "Standard" },
-                            UpdatedAt = new DateTime(2024, 12, 26, 10, 8, 43, 895, DateTimeKind.Utc).AddTicks(9338),
+                            UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 700m
+                        });
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.SizeMaster", b =>
+                {
+                    b.Property<int>("SizeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SizeId"));
+
+                    b.Property<string>("Size")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("SizeId");
+
+                    b.ToTable("SizeMaster");
+
+                    b.HasData(
+                        new
+                        {
+                            SizeId = 1,
+                            Size = "XS"
+                        },
+                        new
+                        {
+                            SizeId = 2,
+                            Size = "S"
+                        },
+                        new
+                        {
+                            SizeId = 3,
+                            Size = "M"
+                        },
+                        new
+                        {
+                            SizeId = 4,
+                            Size = "L"
+                        },
+                        new
+                        {
+                            SizeId = 5,
+                            Size = "XL"
+                        },
+                        new
+                        {
+                            SizeId = 6,
+                            Size = "XXL"
+                        },
+                        new
+                        {
+                            SizeId = 7,
+                            Size = "XXXL"
                         });
                 });
 
@@ -455,6 +632,15 @@ namespace ExMart_Backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ExMart_Backend.Model.OrderItem", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.Order", null)
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -504,6 +690,11 @@ namespace ExMart_Backend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

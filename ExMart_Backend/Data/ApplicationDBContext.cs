@@ -13,8 +13,15 @@ namespace ExMart_Backend.Data
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> addToCategories { get; set; }
+
+
         public DbSet<ColourMaster> ColourMaster { get; set; }
         public DbSet<SizeMaster> SizeMaster { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +44,14 @@ namespace ExMart_Backend.Data
     new ColourMaster { ColorId = 6, ColorName = "violet", ColorCode = "#8F00FF" },
     new ColourMaster { ColorId = 7, ColorName = "yellow", ColorCode = "#FFFF00" }
                 );
+
+            // Configure the one-to-many relationship
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.OrderItems)
+                .WithOne()
+                .HasForeignKey(oi => oi.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {
@@ -224,6 +239,29 @@ namespace ExMart_Backend.Data
         CreatedBy = 1
     }
                 );
+            modelBuilder.Entity<Category>().HasData(
+                new Category
+                {
+                    Id = 1,
+                    CategoryName = "Garments",
+                    IconPath = "iconURL"
+                },
+                new Category
+                {
+                    Id = 8,
+                    CategoryName = "Stationary",
+                    IconPath = "iconUrl"
+
+                }
+            );
         }
+
+
+        
+
+
+
+
+
     }
 }
