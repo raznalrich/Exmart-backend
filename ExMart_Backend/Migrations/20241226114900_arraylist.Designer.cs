@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ExMart_Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExMart_Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241226114900_arraylist")]
+    partial class arraylist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,25 +26,6 @@ namespace ExMart_Backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ExMart_Backend.Model.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("IconPath")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("addToCategories");
             modelBuilder.Entity("ExMart_Backend.Model.ColourMaster", b =>
                 {
                     b.Property<int>("ColorId")
@@ -61,121 +45,6 @@ namespace ExMart_Backend.Migrations
                     b.HasKey("ColorId");
 
                     b.ToTable("ColourMaster");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryName = "Garments",
-                            IconPath = "iconURL"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CategoryName = "Stationary",
-                            IconPath = "iconUrl"
-                        });
-                });
-
-
-                            ColorId = 1,
-                            ColorCode = "#FF0000",
-                            ColorName = "red"
-                        },
-                        new
-                        {
-                            ColorId = 2,
-                            ColorCode = "#0000FF",
-                            ColorName = "blue"
-                        },
-                        new
-                        {
-                            ColorId = 3,
-                            ColorCode = "#FFFFFF",
-                            ColorName = "white"
-                        },
-                        new
-                        {
-                            ColorId = 4,
-                            ColorCode = "#000000",
-                            ColorName = "black"
-                        },
-                        new
-                        {
-                            ColorId = 5,
-                            ColorCode = "#008000",
-                            ColorName = "green"
-                        },
-                        new
-                        {
-                            ColorId = 6,
-                            ColorCode = "#8F00FF",
-                            ColorName = "violet"
-                        },
-                        new
-                        {
-                            ColorId = 7,
-                            ColorCode = "#FFFF00",
-                            ColorName = "yellow"
-                        });
-                });
-
-            modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderId"));
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Order_ItemId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Product_StatusId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("OrderId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("ExMart_Backend.Model.OrderItem", b =>
-                {
-                    b.Property<int>("OrderItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderItemId"));
-
-                    b.Property<int>("ColorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductRateId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SizeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("OrderItemId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("ExMart_Backend.Model.Product", b =>
@@ -426,43 +295,6 @@ namespace ExMart_Backend.Migrations
                     b.HasKey("SizeId");
 
                     b.ToTable("SizeMaster");
-
-                    b.HasData(
-                        new
-                        {
-                            SizeId = 1,
-                            Size = "XS"
-                        },
-                        new
-                        {
-                            SizeId = 2,
-                            Size = "S"
-                        },
-                        new
-                        {
-                            SizeId = 3,
-                            Size = "M"
-                        },
-                        new
-                        {
-                            SizeId = 4,
-                            Size = "L"
-                        },
-                        new
-                        {
-                            SizeId = 5,
-                            Size = "XL"
-                        },
-                        new
-                        {
-                            SizeId = 6,
-                            Size = "XXL"
-                        },
-                        new
-                        {
-                            SizeId = 7,
-                            Size = "XXXL"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -661,15 +493,6 @@ namespace ExMart_Backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ExMart_Backend.Model.OrderItem", b =>
-                {
-                    b.HasOne("ExMart_Backend.Model.Order", null)
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -719,11 +542,6 @@ namespace ExMart_Backend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }
