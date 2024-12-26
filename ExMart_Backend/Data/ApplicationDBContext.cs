@@ -2,6 +2,7 @@
 using ExMart_Backend.Model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ExMart_Backend.Data
 {
@@ -11,7 +12,7 @@ namespace ExMart_Backend.Data
         {
         }
         public DbSet<Product> Products { get; set; }
-
+        public DbSet<ProductImages> Images { get; set; }
         public DbSet<Category> addToCategories { get; set; }
 
 
@@ -25,6 +26,7 @@ namespace ExMart_Backend.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<SizeMaster>().HasData(
                 new SizeMaster { SizeId = 1,Size="XS"},
                 new SizeMaster { SizeId = 2,Size="S"},
