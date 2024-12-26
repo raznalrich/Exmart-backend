@@ -1,6 +1,8 @@
-﻿namespace ExMart_Backend.Services.Repository
+﻿using ExMart_Backend.Services.Interface;
+
+namespace ExMart_Backend.Services.Repository
 {
-    public class MailRepository
+    public class MailRepository:IMailRepository
     {
     }
 }
