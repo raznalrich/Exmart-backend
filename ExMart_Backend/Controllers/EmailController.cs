@@ -1,4 +1,5 @@
-﻿using ExMart_Backend.Services.Repository;
+﻿using ExMart_Backend.Services.Interface;
+//using ExMart_Backend.Services.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExMart_Backend.Controllers
@@ -7,8 +8,8 @@ namespace ExMart_Backend.Controllers
     [ApiController]
     public class EmailController:ControllerBase
     {
-        private readonly MailRepository _mailRepository;
-        public EmailController(MailRepository mailRepository)
+        private readonly IMailRepository _mailRepository;
+        public EmailController(IMailRepository mailRepository)
         {
             _mailRepository = mailRepository;
         }
