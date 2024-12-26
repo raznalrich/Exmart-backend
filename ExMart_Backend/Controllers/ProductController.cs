@@ -15,12 +15,19 @@ namespace ExMart_Backend.Controllers
             _productRepository = productRepository;
             _dbInitializer = dbInitializer;
         }
+
+        [HttpGet]
+        public IActionResult GetAllProducts()
+        {
+            var products = _dbInitializer.GetProducts();
+            return Ok(products);
+        }
+
         [HttpGet("GetProductById")]
 
         public async Task<IActionResult> GetProductById(int id)
         {
             return Ok(await _dbInitializer.GetProductById(id));
-
         }
     }
 }
