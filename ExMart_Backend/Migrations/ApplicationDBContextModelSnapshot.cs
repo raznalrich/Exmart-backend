@@ -199,9 +199,8 @@ namespace ExMart_Backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CategoryId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
 
                     b.Property<List<string>>("Color")
                         .IsRequired()
@@ -216,6 +215,9 @@ namespace ExMart_Backend.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -250,11 +252,12 @@ namespace ExMart_Backend.Migrations
                         {
                             Id = 1,
                             Brand = "Experion",
-                            CategoryId = "GAR001",
+                            CategoryId = 1,
                             Color = new List<string> { "red", "black" },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Experion branded t-shirt",
+                            IsActive = true,
                             Name = "Experion Tshirt",
                             Price = 1499.00m,
                             PrimaryImageUrl = "staticimages/pro_tshirt.png",
@@ -267,11 +270,12 @@ namespace ExMart_Backend.Migrations
                         {
                             Id = 2,
                             Brand = "Experion",
-                            CategoryId = "GAR001",
+                            CategoryId = 1,
                             Color = new List<string> { "white" },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Experion branded hoodie",
+                            IsActive = true,
                             Name = "Hoody Experion brand",
                             Price = 399.99m,
                             PrimaryImageUrl = "https://media.karousell.com/media/photos/products/2023/4/29/gildan_zipup_hoodie_1682750904_29598b39.jpg",
@@ -284,11 +288,12 @@ namespace ExMart_Backend.Migrations
                         {
                             Id = 3,
                             Brand = "Experion",
-                            CategoryId = "GAR001",
+                            CategoryId = 1,
                             Color = new List<string> { "black", "red" },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Experion branded jersey",
+                            IsActive = true,
                             Name = "Jersey Experion branded",
                             Price = 399.99m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/51C2ieRiU9L.jpg",
@@ -301,11 +306,12 @@ namespace ExMart_Backend.Migrations
                         {
                             Id = 4,
                             Brand = "Swiss Military",
-                            CategoryId = "APP001",
+                            CategoryId = 3,
                             Color = new List<string> { "white", "blue" },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Swiss military branded earpods",
+                            IsActive = true,
                             Name = "Earpods Swiss military",
                             Price = 349.99m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/71RFdy6y6LL._SL1500_.jpg",
@@ -318,11 +324,12 @@ namespace ExMart_Backend.Migrations
                         {
                             Id = 5,
                             Brand = "VAFS",
-                            CategoryId = "STA001",
+                            CategoryId = 2,
                             Color = new List<string> { "blue", "white", "green" },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Reusable water bottle",
+                            IsActive = true,
                             Name = "Water Bottle",
                             Price = 399.00m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/71zFvtVuP1L._SL1500_.jpg",
@@ -335,11 +342,12 @@ namespace ExMart_Backend.Migrations
                         {
                             Id = 6,
                             Brand = "VAFS",
-                            CategoryId = "STA001",
+                            CategoryId = 2,
                             Color = new List<string> { "Black", "red" },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Insulated flask",
+                            IsActive = true,
                             Name = "Flask",
                             Price = 349.99m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/41W9B1Ri4hL.jpg",
@@ -352,11 +360,12 @@ namespace ExMart_Backend.Migrations
                         {
                             Id = 7,
                             Brand = "Nike",
-                            CategoryId = "STA001",
+                            CategoryId = 2,
                             Color = new List<string> { "White", "Black", "Red" },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Nike Air Force 1 sneakers",
+                            IsActive = true,
                             Name = "Nike Air Force 1",
                             Price = 99.99m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/61t0gIsFpjL._SY675_.jpg",
@@ -369,11 +378,12 @@ namespace ExMart_Backend.Migrations
                         {
                             Id = 8,
                             Brand = "Samsung",
-                            CategoryId = "APP001",
+                            CategoryId = 3,
                             Color = new List<string> { "black", "White" },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Samsung wireless earbuds",
+                            IsActive = true,
                             Name = "Samsung Galaxy Buds 2 Pro",
                             Price = 1999.99m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/61KVX-MbIUL._SL1500_.jpg",
@@ -386,11 +396,12 @@ namespace ExMart_Backend.Migrations
                         {
                             Id = 9,
                             Brand = "VAFS",
-                            CategoryId = "STA001",
+                            CategoryId = 2,
                             Color = new List<string> { "Black", "White" },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Personal diary",
+                            IsActive = true,
                             Name = "Diary",
                             Price = 149.99m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/61eYApdaTDL._SL1100_.jpg",
@@ -403,11 +414,12 @@ namespace ExMart_Backend.Migrations
                         {
                             Id = 10,
                             Brand = "VAFS",
-                            CategoryId = "STA001",
+                            CategoryId = 2,
                             Color = new List<string> { "Black", "White" },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Multi-purpose backpack",
+                            IsActive = true,
                             Name = "BackPack",
                             Price = 149.99m,
                             PrimaryImageUrl = "staticimages/pro_bag.png",
@@ -500,6 +512,23 @@ namespace ExMart_Backend.Migrations
                             ImageUrl = "https://example.com/gproxsuperlight_1.jpg",
                             ProductId = 10
                         });
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.ProductStatus", b =>
+                {
+                    b.Property<int>("ProductStatusID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProductStatusID"));
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ProductStatusID");
+
+                    b.ToTable("Status");
                 });
 
             modelBuilder.Entity("ExMart_Backend.Model.SizeMaster", b =>
