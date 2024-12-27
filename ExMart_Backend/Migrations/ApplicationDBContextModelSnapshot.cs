@@ -48,13 +48,19 @@ namespace ExMart_Backend.Migrations
                         {
                             Id = 1,
                             CategoryName = "Garments",
-                            IconPath = "iconURL"
+                            IconPath = "icons/garments.png"
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 2,
                             CategoryName = "Stationary",
-                            IconPath = "iconUrl"
+                            IconPath = "icons/stationary.png"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryName = "Appliances",
+                            IconPath = "icons/appliance.png"
                         });
                 });
 
@@ -218,6 +224,10 @@ namespace ExMart_Backend.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("PrimaryImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<List<string>>("Size")
                         .IsRequired()
                         .HasColumnType("text[]");
@@ -247,6 +257,7 @@ namespace ExMart_Backend.Migrations
                             Description = "Experion branded t-shirt",
                             Name = "Experion Tshirt",
                             Price = 1499.00m,
+                            PrimaryImageUrl = "staticimages/pro_tshirt.png",
                             Size = new List<string> { "15.6 inches" },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
@@ -263,6 +274,7 @@ namespace ExMart_Backend.Migrations
                             Description = "Experion branded hoodie",
                             Name = "Hoody Experion brand",
                             Price = 399.99m,
+                            PrimaryImageUrl = "https://media.karousell.com/media/photos/products/2023/4/29/gildan_zipup_hoodie_1682750904_29598b39.jpg",
                             Size = new List<string> { "Standard" },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
@@ -279,6 +291,7 @@ namespace ExMart_Backend.Migrations
                             Description = "Experion branded jersey",
                             Name = "Jersey Experion branded",
                             Price = 399.99m,
+                            PrimaryImageUrl = "https://m.media-amazon.com/images/I/51C2ieRiU9L.jpg",
                             Size = new List<string> { "40mm", "44mm" },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
@@ -295,6 +308,7 @@ namespace ExMart_Backend.Migrations
                             Description = "Swiss military branded earpods",
                             Name = "Earpods Swiss military",
                             Price = 349.99m,
+                            PrimaryImageUrl = "https://m.media-amazon.com/images/I/71RFdy6y6LL._SL1500_.jpg",
                             Size = new List<string> { "Standard" },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
@@ -311,6 +325,7 @@ namespace ExMart_Backend.Migrations
                             Description = "Reusable water bottle",
                             Name = "Water Bottle",
                             Price = 399.00m,
+                            PrimaryImageUrl = "https://m.media-amazon.com/images/I/71zFvtVuP1L._SL1500_.jpg",
                             Size = new List<string> { "41mm", "45mm" },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
@@ -327,6 +342,7 @@ namespace ExMart_Backend.Migrations
                             Description = "Insulated flask",
                             Name = "Flask",
                             Price = 349.99m,
+                            PrimaryImageUrl = "https://m.media-amazon.com/images/I/41W9B1Ri4hL.jpg",
                             Size = new List<string> { "Standard" },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
@@ -343,6 +359,7 @@ namespace ExMart_Backend.Migrations
                             Description = "Nike Air Force 1 sneakers",
                             Name = "Nike Air Force 1",
                             Price = 99.99m,
+                            PrimaryImageUrl = "https://m.media-amazon.com/images/I/61t0gIsFpjL._SY675_.jpg",
                             Size = new List<string> { "5", "6", "7", "8", "9", "10", "11", "12" },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
@@ -359,6 +376,7 @@ namespace ExMart_Backend.Migrations
                             Description = "Samsung wireless earbuds",
                             Name = "Samsung Galaxy Buds 2 Pro",
                             Price = 1999.99m,
+                            PrimaryImageUrl = "https://m.media-amazon.com/images/I/61KVX-MbIUL._SL1500_.jpg",
                             Size = new List<string> { "Standard" },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
@@ -375,6 +393,7 @@ namespace ExMart_Backend.Migrations
                             Description = "Personal diary",
                             Name = "Diary",
                             Price = 149.99m,
+                            PrimaryImageUrl = "https://m.media-amazon.com/images/I/61eYApdaTDL._SL1100_.jpg",
                             Size = new List<string> { "Standard" },
                             UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
@@ -391,10 +410,95 @@ namespace ExMart_Backend.Migrations
                             Description = "Multi-purpose backpack",
                             Name = "BackPack",
                             Price = 149.99m,
+                            PrimaryImageUrl = "staticimages/pro_bag.png",
                             Size = new List<string> { "Standard" },
                             UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 700m
+                        });
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.ProductImages", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ImageId"));
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ImageId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Images");
+
+                    b.HasData(
+                        new
+                        {
+                            ImageId = 1,
+                            ImageUrl = " https://assets.ajio.com/medias/sys_master/root/20240202/XzVa/65bd163a8cdf1e0df5e313a0/-1117Wx1400H-442273276-black-MODEL7.jpg",
+                            ProductId = 1
+                        },
+                        new
+                        {
+                            ImageId = 2,
+                            ImageUrl = " https://m.media-amazon.com/images/I/51XQKBTbJ7L._SX569_.jpg",
+                            ProductId = 2
+                        },
+                        new
+                        {
+                            ImageId = 3,
+                            ImageUrl = "https://m.media-amazon.com/images/I/915Qebmr9XL._SX679_.jpg",
+                            ProductId = 3
+                        },
+                        new
+                        {
+                            ImageId = 4,
+                            ImageUrl = "https://m.media-amazon.com/images/I/61F5lcvJHLL._SX522_.jpg",
+                            ProductId = 4
+                        },
+                        new
+                        {
+                            ImageId = 5,
+                            ImageUrl = "https://m.media-amazon.com/images/I/51caXIXHv0L._SX679_.jpg",
+                            ProductId = 5
+                        },
+                        new
+                        {
+                            ImageId = 6,
+                            ImageUrl = "https://m.media-amazon.com/images/I/51zrU3wXApL._SX679_.jpg",
+                            ProductId = 6
+                        },
+                        new
+                        {
+                            ImageId = 7,
+                            ImageUrl = "https://m.media-amazon.com/images/I/61ZkbRBEBvL._SY675_.jpg",
+                            ProductId = 7
+                        },
+                        new
+                        {
+                            ImageId = 8,
+                            ImageUrl = "https://m.media-amazon.com/images/I/61lEskbCaoL._SY450_.jpg",
+                            ProductId = 8
+                        },
+                        new
+                        {
+                            ImageId = 9,
+                            ImageUrl = "https://m.media-amazon.com/images/I/516HwL0zZhL._SY450_.jpg",
+                            ProductId = 9
+                        },
+                        new
+                        {
+                            ImageId = 10,
+                            ImageUrl = "https://example.com/gproxsuperlight_1.jpg",
+                            ProductId = 10
                         });
                 });
 
@@ -657,6 +761,17 @@ namespace ExMart_Backend.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ExMart_Backend.Model.ProductImages", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -711,6 +826,11 @@ namespace ExMart_Backend.Migrations
             modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.Product", b =>
+                {
+                    b.Navigation("ProductImages");
                 });
 #pragma warning restore 612, 618
         }
