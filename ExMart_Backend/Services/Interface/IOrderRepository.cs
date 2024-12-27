@@ -6,7 +6,6 @@ namespace ExMart_Backend.Services.Interface
     {
         Task<Order> AddOrder(Order order);
         Task<IEnumerable<Order>> GetOrders();
-
         Task<Order> GetOrderById(int id);
     }
 }
