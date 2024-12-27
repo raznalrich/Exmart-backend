@@ -14,14 +14,13 @@ namespace ExMart_Backend.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImages> Images { get; set; }
         public DbSet<Category> addToCategories { get; set; }
-
-
         public DbSet<ColourMaster> ColourMaster { get; set; }
         public DbSet<SizeMaster> SizeMaster { get; set; }
-
         public DbSet<Order> Orders { get; set; }
-
         public DbSet<OrderItem> OrderItems { get; set; }
+
+        //public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -115,6 +114,38 @@ namespace ExMart_Backend.Data
                             ProductId = 10,
                         }
                 );
+
+
+            //modelBuilder.Entity<ProductImage>().HasData(
+            //    new ProductImage
+            //    {
+            //        Id = 1,
+            //        ImageUrl = "",
+            //        IsPrimary = true,
+            //        ProductId = 3,
+            //    },
+            //    new ProductImage
+            //    {
+            //        Id = 2,
+            //        ImageUrl = "",
+            //        IsPrimary = false,
+            //        ProductId = 3,
+            //    },
+            //    new ProductImage
+            //    {
+            //        Id = 3,
+            //        ImageUrl = "",
+            //        IsPrimary = false,
+            //        ProductId = 3,
+            //    },
+            //    new ProductImage
+            //    {
+            //        Id = 4,
+            //        ImageUrl = "",
+            //        IsPrimary = false,
+            //        ProductId = 3,
+            //    }
+            //    );
 
             modelBuilder.Entity<Product>().HasData(
                 new Product
