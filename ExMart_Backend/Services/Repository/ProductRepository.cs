@@ -14,6 +14,26 @@ namespace ExMart_Backend.Services.Repository
             _db = db;
         }
 
+        public async Task<Product> AddProductAsync(Product product)
+        {
+            try { 
+                if (product.ProductImages != null && product.ProductImages.Any())
+                { 
+                    foreach (var image in product.ProductImages)
+                    { 
+                        image.Product = product; 
+                    } 
+                }
+                _db.Products.Add(product);
+                await _db.SaveChangesAsync();
+                return product;
+            } 
+            catch
+            { 
+                throw new Exception("An error occurred while adding the product.");
+            }
+        }
+
         public Task<Product> GetProductById(int id)
         {
             throw new NotImplementedException();
