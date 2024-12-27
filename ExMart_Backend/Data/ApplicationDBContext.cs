@@ -115,38 +115,6 @@ namespace ExMart_Backend.Data
                         }
                 );
 
-
-            //modelBuilder.Entity<ProductImage>().HasData(
-            //    new ProductImage
-            //    {
-            //        Id = 1,
-            //        ImageUrl = "",
-            //        IsPrimary = true,
-            //        ProductId = 3,
-            //    },
-            //    new ProductImage
-            //    {
-            //        Id = 2,
-            //        ImageUrl = "",
-            //        IsPrimary = false,
-            //        ProductId = 3,
-            //    },
-            //    new ProductImage
-            //    {
-            //        Id = 3,
-            //        ImageUrl = "",
-            //        IsPrimary = false,
-            //        ProductId = 3,
-            //    },
-            //    new ProductImage
-            //    {
-            //        Id = 4,
-            //        ImageUrl = "",
-            //        IsPrimary = false,
-            //        ProductId = 3,
-            //    }
-            //    );
-
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {

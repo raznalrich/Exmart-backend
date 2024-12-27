@@ -18,7 +18,6 @@ namespace ExMart_Backend.Model
         public string CategoryId { get; set; }
         public List<string> Size { get; set; }
         public List<string> Color { get; set; }
-
         public string PrimaryImageUrl { get; set; }
         public decimal Weight { get; set; }
         public decimal Price { get; set; }
