@@ -15,7 +15,7 @@ namespace ExMart_Backend.Model
         public string Description { get; set; }
         public string Brand { get; set; }
         public int VendorId { get; set; }
-        public string CategoryId { get; set; }
+        public int CategoryId { get; set; }
         public List<string> Size { get; set; }
         public List<string> Color { get; set; }
         public string PrimaryImageUrl { get; set; }
@@ -24,7 +24,8 @@ namespace ExMart_Backend.Model
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public int CreatedBy { get; set; }
+        public bool IsActive {  get; set; }
 
-        public ICollection<ProductImages> ProductImages { get; set; }
+        public virtual ICollection<ProductImages> ProductImages { get; set; }
     }
 }

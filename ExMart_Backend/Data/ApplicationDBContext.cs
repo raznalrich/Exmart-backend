@@ -13,6 +13,7 @@ namespace ExMart_Backend.Data
         }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImages> Images { get; set; }
+        public DbSet<ProductStatus> Status { get; set; }
         public DbSet<Category> addToCategories { get; set; }
         public DbSet<ColourMaster> ColourMaster { get; set; }
         public DbSet<SizeMaster> SizeMaster { get; set; }
@@ -25,6 +26,11 @@ namespace ExMart_Backend.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Product>()
+            .HasMany(p => p.ProductImages)    // Changed from Images to ProductImages to match the property name
+            .WithOne(pi => pi.Product)
+            .HasForeignKey(pi => pi.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<SizeMaster>().HasData(
                 new SizeMaster { SizeId = 1,Size="XS"},
@@ -125,13 +131,14 @@ namespace ExMart_Backend.Data
                     Price = 1499.00m,
                     VendorId = 1,
                     PrimaryImageUrl= "staticimages/pro_tshirt.png",
-                    CategoryId = "GAR001",
+                    CategoryId = 1,
                     Size = new List<string> { "15.6 inches" },
                     Color = new List<string> { "red", "black" },
                     Weight = 500m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
-                    CreatedBy = 1
+                    CreatedBy = 1,
+                    IsActive = true,
                 },
                 new Product
                 {
@@ -143,13 +150,15 @@ namespace ExMart_Backend.Data
                     VendorId = 1,
                     PrimaryImageUrl = "https://media.karousell.com/media/photos/products/2023/4/29/gildan_zipup_hoodie_1682750904_29598b39.jpg",
 
-                    CategoryId = "GAR001",
+                    CategoryId = 1,
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "white" },
                     Weight = 600m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
-                    CreatedBy = 1
+                    CreatedBy = 1,
+                    IsActive = true,
+
                 },
                 new Product
                 {
@@ -161,13 +170,14 @@ namespace ExMart_Backend.Data
                     VendorId = 1,
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/51C2ieRiU9L.jpg",
 
-                    CategoryId = "GAR001",
+                    CategoryId = 1,
                     Size = new List<string> { "40mm", "44mm" },
                     Color = new List<string> { "black", "red" },
                     Weight = 400m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
-                    CreatedBy = 1
+                    CreatedBy = 1,
+                    IsActive = true,
                 },
                 new Product
                 {
@@ -179,13 +189,14 @@ namespace ExMart_Backend.Data
                     VendorId = 1,
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/71RFdy6y6LL._SL1500_.jpg",
 
-                    CategoryId = "APP001",
+                    CategoryId = 3,
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "white", "blue" },
                     Weight = 50m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
-                    CreatedBy = 1
+                    CreatedBy = 1,
+                    IsActive = true,
                 },
                 new Product
                 {
@@ -197,13 +208,14 @@ namespace ExMart_Backend.Data
                     VendorId = 1,
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/71zFvtVuP1L._SL1500_.jpg",
 
-                    CategoryId = "STA001",
+                    CategoryId = 2,
                     Size = new List<string> { "41mm", "45mm" },
                     Color = new List<string> { "blue", "white", "green" },
                     Weight = 300m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
-                    CreatedBy = 1
+                    CreatedBy = 1,
+                    IsActive = true,
                 },
                 new Product
                 {
@@ -215,13 +227,14 @@ namespace ExMart_Backend.Data
                     VendorId = 1,
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/41W9B1Ri4hL.jpg",
 
-                    CategoryId = "STA001",
+                    CategoryId = 2,
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "Black", "red" },
                     Weight = 400m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
-                    CreatedBy = 1
+                    CreatedBy = 1,
+                    IsActive = true,
                 },
                 new Product
                 {
@@ -233,13 +246,14 @@ namespace ExMart_Backend.Data
                     VendorId = 1,
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/61t0gIsFpjL._SY675_.jpg",
 
-                    CategoryId = "STA001",
+                    CategoryId = 2,
                     Size = new List<string> { "5", "6", "7", "8", "9", "10", "11", "12" },
                     Color = new List<string> { "White", "Black", "Red" },
                     Weight = 800m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
-                    CreatedBy = 1
+                    CreatedBy = 1,
+                    IsActive = true,
                 },
                 new Product
                 {
@@ -251,13 +265,14 @@ namespace ExMart_Backend.Data
                     VendorId = 1,
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/61KVX-MbIUL._SL1500_.jpg",
 
-                    CategoryId = "APP001",
+                    CategoryId = 3,
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "black", "White" },
                     Weight = 50m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
-                    CreatedBy = 1
+                    CreatedBy = 1,
+                    IsActive = true,
                 },
                 new Product
                 {
@@ -269,13 +284,13 @@ namespace ExMart_Backend.Data
                     VendorId = 1,
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/61eYApdaTDL._SL1100_.jpg",
 
-                    CategoryId = "STA001",
+                    CategoryId = 2,
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "Black", "White" },
                     Weight = 200m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
-                    CreatedBy = 1
+                    CreatedBy = 1, IsActive = true,
                 },
                 new Product
                 {
@@ -287,13 +302,14 @@ namespace ExMart_Backend.Data
                     VendorId = 1,
                     PrimaryImageUrl = "staticimages/pro_bag.png",
 
-                    CategoryId = "STA001",
+                    CategoryId = 2,
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "Black", "White" },
                     Weight = 700m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
-                    CreatedBy = 1
+                    CreatedBy = 1,
+                    IsActive = true,
                 }
 
 
