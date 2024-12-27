@@ -13,9 +13,9 @@ namespace ExMart_Backend.Services.Repository
         {
             _db = db;
         }
-        public async Task<List<ProductImage>> GetImagesByProductId(int productId)
+        public async Task<List<ProductImages>> GetImagesByProductId(int productId)
         {
-            var images = await _db.ProductImages
+            var images = await _db.Images
                                   .Where(img => img.ProductId == productId)
                                   .ToListAsync();
             return images;

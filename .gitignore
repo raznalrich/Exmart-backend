@@ -1,6 +1,8 @@
 .vs/
 bin/
 obj/
+Migrations/
+appsettings.json
 # Properties/
 # ExMart_Backend.csproj
 

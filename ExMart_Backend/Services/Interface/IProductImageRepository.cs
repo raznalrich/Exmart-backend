@@ -4,6 +4,6 @@ namespace ExMart_Backend.Services.Interface
 {
     public interface IProductImageRepository
     {
-        Task<List<ProductImage>> GetImagesByProductId(int  productId);
+        Task<List<ProductImages>> GetImagesByProductId(int  productId);
     }
 }
