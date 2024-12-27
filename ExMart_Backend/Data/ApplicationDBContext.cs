@@ -53,6 +53,69 @@ namespace ExMart_Backend.Data
                 .HasForeignKey(oi => oi.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<ProductImages>().HasData(
+                new ProductImages
+                {
+                    ImageId = 1,
+                    ImageUrl = " https://assets.ajio.com/medias/sys_master/root/20240202/XzVa/65bd163a8cdf1e0df5e313a0/-1117Wx1400H-442273276-black-MODEL7.jpg",
+                    ProductId = 1,
+                },
+                new ProductImages
+                {
+                    ImageId = 2,
+                    ImageUrl = " https://m.media-amazon.com/images/I/51XQKBTbJ7L._SX569_.jpg",
+                    ProductId = 2,
+                },
+                 new ProductImages
+                 {
+                     ImageId = 3,
+                     ImageUrl = "https://m.media-amazon.com/images/I/915Qebmr9XL._SX679_.jpg",
+                     ProductId = 3,
+                 },
+                  new ProductImages
+                  {
+                      ImageId = 4,
+                      ImageUrl = "https://m.media-amazon.com/images/I/61F5lcvJHLL._SX522_.jpg",
+                      ProductId = 4,
+                  },
+                   new ProductImages
+                   {
+                       ImageId = 5,
+                       ImageUrl = "https://m.media-amazon.com/images/I/51caXIXHv0L._SX679_.jpg",
+                       ProductId = 5,
+                   },
+                    new ProductImages
+                    {
+                        ImageId = 6,
+                        ImageUrl = "https://m.media-amazon.com/images/I/51zrU3wXApL._SX679_.jpg",
+                        ProductId = 6,
+                    },
+                     new ProductImages
+                     {
+                         ImageId = 7,
+                         ImageUrl = "https://m.media-amazon.com/images/I/61ZkbRBEBvL._SY675_.jpg",
+                         ProductId = 7,
+                     },
+                      new ProductImages
+                      {
+                          ImageId = 8,
+                          ImageUrl = "https://m.media-amazon.com/images/I/61lEskbCaoL._SY450_.jpg",
+                          ProductId = 8,
+                      },
+                       new ProductImages
+                       {
+                           ImageId = 9,
+                           ImageUrl = "https://m.media-amazon.com/images/I/516HwL0zZhL._SY450_.jpg",
+                           ProductId = 9,
+                       },
+                        new ProductImages
+                        {
+                            ImageId = 10,
+                            ImageUrl = "https://example.com/gproxsuperlight_1.jpg",
+                            ProductId = 10,
+                        }
+                );
+
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {
@@ -62,6 +125,7 @@ namespace ExMart_Backend.Data
                     Brand = "Experion",
                     Price = 1499.00m,
                     VendorId = 1,
+                    PrimaryImageUrl= "staticimages/pro_tshirt.png",
                     CategoryId = "GAR001",
                     Size = new List<string> { "15.6 inches" },
                     Color = new List<string> { "red", "black" },
@@ -78,6 +142,8 @@ namespace ExMart_Backend.Data
                     Brand = "Experion",
                     Price = 399.99m,
                     VendorId = 1,
+                    PrimaryImageUrl = "https://media.karousell.com/media/photos/products/2023/4/29/gildan_zipup_hoodie_1682750904_29598b39.jpg",
+
                     CategoryId = "GAR001",
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "white" },
@@ -94,6 +160,8 @@ namespace ExMart_Backend.Data
                     Brand = "Experion",
                     Price = 399.99m,
                     VendorId = 1,
+                    PrimaryImageUrl = "https://m.media-amazon.com/images/I/51C2ieRiU9L.jpg",
+
                     CategoryId = "GAR001",
                     Size = new List<string> { "40mm", "44mm" },
                     Color = new List<string> { "black", "red" },
@@ -110,6 +178,8 @@ namespace ExMart_Backend.Data
                     Brand = "Swiss Military",
                     Price = 349.99m,
                     VendorId = 1,
+                    PrimaryImageUrl = "https://m.media-amazon.com/images/I/71RFdy6y6LL._SL1500_.jpg",
+
                     CategoryId = "APP001",
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "white", "blue" },
@@ -126,6 +196,8 @@ namespace ExMart_Backend.Data
                     Brand = "VAFS",
                     Price = 399.00m,
                     VendorId = 1,
+                    PrimaryImageUrl = "https://m.media-amazon.com/images/I/71zFvtVuP1L._SL1500_.jpg",
+
                     CategoryId = "STA001",
                     Size = new List<string> { "41mm", "45mm" },
                     Color = new List<string> { "blue", "white", "green" },
@@ -142,6 +214,8 @@ namespace ExMart_Backend.Data
                     Brand = "VAFS",
                     Price = 349.99m,
                     VendorId = 1,
+                    PrimaryImageUrl = "https://m.media-amazon.com/images/I/41W9B1Ri4hL.jpg",
+
                     CategoryId = "STA001",
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "Black", "red" },
@@ -158,6 +232,8 @@ namespace ExMart_Backend.Data
                     Brand = "Nike",
                     Price = 99.99m,
                     VendorId = 1,
+                    PrimaryImageUrl = "https://m.media-amazon.com/images/I/61t0gIsFpjL._SY675_.jpg",
+
                     CategoryId = "STA001",
                     Size = new List<string> { "5", "6", "7", "8", "9", "10", "11", "12" },
                     Color = new List<string> { "White", "Black", "Red" },
@@ -174,6 +250,8 @@ namespace ExMart_Backend.Data
                     Brand = "Samsung",
                     Price = 1999.99m,
                     VendorId = 1,
+                    PrimaryImageUrl = "https://m.media-amazon.com/images/I/61KVX-MbIUL._SL1500_.jpg",
+
                     CategoryId = "APP001",
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "black", "White" },
@@ -190,6 +268,8 @@ namespace ExMart_Backend.Data
                     Brand = "VAFS",
                     Price = 149.99m,
                     VendorId = 1,
+                    PrimaryImageUrl = "https://m.media-amazon.com/images/I/61eYApdaTDL._SL1100_.jpg",
+
                     CategoryId = "STA001",
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "Black", "White" },
@@ -206,6 +286,8 @@ namespace ExMart_Backend.Data
                     Brand = "VAFS",
                     Price = 149.99m,
                     VendorId = 1,
+                    PrimaryImageUrl = "staticimages/pro_bag.png",
+
                     CategoryId = "STA001",
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "Black", "White" },
@@ -224,15 +306,22 @@ namespace ExMart_Backend.Data
                 {
                     Id = 1,
                     CategoryName = "Garments",
-                    IconPath = "iconURL"
+                    IconPath = "icons/garments.png"
                 },
                 new Category
                 {
-                    Id = 8,
+                    Id = 2,
                     CategoryName = "Stationary",
-                    IconPath = "iconUrl"
+                    IconPath = "icons/stationary.png"
 
-                }
+                },
+                 new Category
+                 {
+                     Id = 3,
+                     CategoryName = "Appliances",
+                     IconPath = "icons/appliance.png"
+
+                 }
             );
         }
 
