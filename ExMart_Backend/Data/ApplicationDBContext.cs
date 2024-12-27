@@ -11,9 +11,44 @@ namespace ExMart_Backend.Data
         {
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ProductImage>().HasData(
+                new ProductImage
+                {
+                    Id = 1,
+                    ImageUrl = "",
+                    IsPrimary = true,
+                    ProductId = 3,
+                },
+                new ProductImage
+                {
+                    Id = 2,
+                    ImageUrl = "",
+                    IsPrimary = false,
+                    ProductId = 3,
+                },
+                new ProductImage
+                {
+                    Id = 3,
+                    ImageUrl = "",
+                    IsPrimary = false,
+                    ProductId = 3,
+                },
+                new ProductImage
+                {
+                    Id = 4,
+                    ImageUrl = "",
+                    IsPrimary = false,
+                    ProductId = 3,
+                }
+                );
+
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {
