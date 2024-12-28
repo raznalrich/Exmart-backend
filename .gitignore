@@ -5,4 +5,4 @@ Migrations/
 appsettings.json
 # Properties/
 # ExMart_Backend.csproj
-
+AppliocationDBContextModelSnapshot.cs
