@@ -36,13 +36,7 @@ namespace ExMart_Backend.Services.Repository
 
             // Set the CreatedAt property
             order.CreatedAt = DateTime.UtcNow;
-<<<<<<< HEAD
-
-            // Save the Order to the database
-            await _db.Orders.AddAsync(order);
-=======
             _db.Orders.Add(order);
->>>>>>> 05a26b99e5e72480244a2ecd399c7d4405112596
             await _db.SaveChangesAsync();
 
             // Assign OrderItemIds for each OrderItem and save them

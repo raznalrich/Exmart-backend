@@ -16,7 +16,7 @@ namespace ExMart_Backend.Services.Repository
         {
             try
             {
-                int Id = _db.Users.OrderByDescending(u => u.Id).FirstOrDefault()?.Id + 1 ?? 1;
+                int Id = _db.Users.OrderByDescending(u => u.UserId).FirstOrDefault()?.UserId + 1 ?? 1;
                 await _db.Users.AddAsync(user);
                 await _db.SaveChangesAsync();
                 return true;

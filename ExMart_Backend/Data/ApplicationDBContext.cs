@@ -14,13 +14,10 @@ namespace ExMart_Backend.Data
         {
         }
         public DbSet<Product> Products { get; set; }
-<<<<<<< HEAD
-
-=======
         public DbSet<ProductImages> Images { get; set; }
         public DbSet<ProductStatus> Status { get; set; }
         public DbSet<Category> addToCategories { get; set; }
->>>>>>> 05a26b99e5e72480244a2ecd399c7d4405112596
+
         public DbSet<ColourMaster> ColourMaster { get; set; }
         public DbSet<SizeMaster> SizeMaster { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -32,7 +29,7 @@ namespace ExMart_Backend.Data
 
 
         //public DbSet<ProductImage> ProductImages { get; set; }
-        public DbSet<User> Users { get; set; }
+        //public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -75,83 +72,8 @@ namespace ExMart_Backend.Data
                 .HasForeignKey(oi => oi.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-<<<<<<< HEAD
-            // Order to User (Restrict Delete)
-            modelBuilder.Entity<Order>()
-                .HasOne(o => o.User)
-                .WithMany(u => u.Orders)
-                .HasForeignKey(o => o.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Order to ProductStatus (Restrict Delete)
-            modelBuilder.Entity<Order>()
-                .HasOne(o => o.ProductStatus)
-                .WithMany(ps => ps.Orders)
-                .HasForeignKey(o => o.Product_StatusId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // OrderItem to Product (Restrict Delete)
-            modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.Product)
-                .WithMany(p => p.OrderItems)
-                .HasForeignKey(oi => oi.ProductId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // OrderItem to Size (Restrict Delete)
-            modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.Size)
-                .WithMany(s => s.OrderItems)
-                .HasForeignKey(oi => oi.SizeId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // OrderItem to Color (Restrict Delete)
-            modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.Color)
-                .WithMany(c => c.OrderItems)
-                .HasForeignKey(oi => oi.ColorId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-
-           
-        
-           
-
-            // Seeding the User table
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    UserId = 1,
-                    Name = "John Doe",
-                    Email = "johndoe@example.com",
-                    Phone = "1234567890",
-                    CreatedAt = DateTime.UtcNow
-                },
-                new User
-                {
-                    UserId = 2,
-                    Name = "Jane Smith",
-                    Email = "janesmith@example.com",
-                    Phone = "0987654321",
-                    CreatedAt = DateTime.UtcNow
-                },
-                new User
-                {
-                    UserId = 3,
-                    Name = "Alice Brown",
-                    Email = "alicebrown@example.com",
-                    Phone = "1122334455",
-                    CreatedAt =  DateTime.UtcNow // Specific UTC DateTime
-                }
-            );
-
-
-
-            modelBuilder.Entity<Product>().HasData(
-                new Product
-=======
             modelBuilder.Entity<ProductImages>().HasData(
                 new ProductImages
->>>>>>> 05a26b99e5e72480244a2ecd399c7d4405112596
                 {
                     ImageId = 1,
                     ImageUrl = " https://assets.ajio.com/medias/sys_master/root/20240202/XzVa/65bd163a8cdf1e0df5e313a0/-1117Wx1400H-442273276-black-MODEL7.jpg",
@@ -334,7 +256,94 @@ namespace ExMart_Backend.Data
                         }
                 );
 
+            //modelBuilder.Entity<Product>().HasData(
+            // Order to User (Restrict Delete)
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Order to ProductStatus (Restrict Delete)
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.ProductStatus)
+                .WithMany(ps => ps.Orders)
+                .HasForeignKey(o => o.Product_StatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // OrderItem to Product (Restrict Delete)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Product)
+                .WithMany(p => p.OrderItems)
+                .HasForeignKey(oi => oi.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // OrderItem to Size (Restrict Delete)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Size)
+                .WithMany(s => s.OrderItems)
+                .HasForeignKey(oi => oi.SizeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // OrderItem to Color (Restrict Delete)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Color)
+                .WithMany(c => c.OrderItems)
+                .HasForeignKey(oi => oi.ColorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+           
+        
+           
+
+            // Seeding the User table
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    UserId = 1,
+                    Name = "John Doe",
+                    Email = "johndoe@example.com",
+                    Phone = "1234567890",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new User
+                {
+                    UserId = 2,
+                    Name = "Jane Smith",
+                    Email = "janesmith@example.com",
+                    Phone = "0987654321",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new User
+                {
+                    UserId = 3,
+                    Name = "Alice Brown",
+                    Email = "alicebrown@example.com",
+                    Phone = "1122334455",
+                    CreatedAt =  DateTime.UtcNow // Specific UTC DateTime
+                }
+            );
+
+
+
             modelBuilder.Entity<Product>().HasData(
+                new Product
+                {
+                    Id = 12,
+                    Name = "Wireless Mouse",
+                    Description = "Ergonomic wireless mouse with 2.4 GHz connectivity",
+                    Brand = "VAFS",
+                    Price = 25,
+                    VendorId = 1,
+                    CategoryId = 001,
+                    Size = ["XS", "S", "M"],
+                    Color = ["Blue", "Green"],
+                    Weight = 250,
+                    CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+                    UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
+                    CreatedBy = 1
+                },
                 new Product
                 {
                     Id = 1,
