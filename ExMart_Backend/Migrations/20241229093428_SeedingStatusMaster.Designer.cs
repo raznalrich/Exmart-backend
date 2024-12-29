@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ExMart_Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExMart_Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241229093428_SeedingStatusMaster")]
+    partial class SeedingStatusMaster
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -503,32 +506,6 @@ namespace ExMart_Backend.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            CreatedAt = new DateTime(2024, 12, 29, 10, 40, 37, 49, DateTimeKind.Utc).AddTicks(2758),
-                            Email = "johndoe@example.com",
-                            Name = "John Doe",
-                            Phone = "1234567890"
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            CreatedAt = new DateTime(2024, 12, 29, 10, 40, 37, 49, DateTimeKind.Utc).AddTicks(2762),
-                            Email = "janesmith@example.com",
-                            Name = "Jane Smith",
-                            Phone = "0987654321"
-                        },
-                        new
-                        {
-                            UserId = 3,
-                            CreatedAt = new DateTime(2024, 12, 29, 10, 40, 37, 49, DateTimeKind.Utc).AddTicks(2763),
-                            Email = "alicebrown@example.com",
-                            Name = "Alice Brown",
-                            Phone = "1122334455"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

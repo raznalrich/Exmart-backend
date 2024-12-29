@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using ExMart_Backend;
 using ExMart_Backend.Data;
 using ExMart_Backend.Services.Interface;
@@ -18,6 +19,12 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 var app = builder.Build();
 

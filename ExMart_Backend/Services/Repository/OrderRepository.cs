@@ -1,4 +1,5 @@
 ﻿using ExMart_Backend.Data;
+using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -15,63 +16,49 @@ namespace ExMart_Backend.Services.Repository
         }
         public async Task<Order> AddOrder(Order order)
         {
-            // Validate the order object
+            // Validate if the order is null before proceeding
             if (order == null)
             {
                 throw new ArgumentNullException(nameof(order), "Order cannot be null.");
             }
-            // Ensure required fields are set
-            if (order.UserId <= 0)
-            {
-                throw new ArgumentException("Invalid User ID.", nameof(order.UserId));
-            }
 
-            if (order.AddressId <= 0)
-            {
-                throw new ArgumentException("Invalid Address ID.", nameof(order.AddressId));
-            }
-
+            // Ensure OrderItems are present and valid
             if (order.OrderItems == null || !order.OrderItems.Any())
             {
                 throw new ArgumentException("Order must contain at least one order item.", nameof(order.OrderItems));
             }
 
-            // Validate each order item
-            foreach (var orderItem in order.OrderItems)
-            {
-                orderItem.OrderItemId = await _db.OrderItems
-                                              .OrderByDescending(item => item.OrderItemId)
-                                              .Select(item => item.OrderItemId)
-                                              .FirstOrDefaultAsync() + 1;
-                if (orderItem.ProductId <= 0)
-                {
-                    throw new ArgumentException("Invalid Product ID in order item.");
-                }
-
-                if (orderItem.ProductRateId <= 0)
-                {
-                    throw new ArgumentException("Invalid Product Rate ID in order item.");
-                }
-
-                if (orderItem.SizeId <= 0)
-                {
-                    throw new ArgumentException("Invalid Size ID in order item.");
-                }
-
-                if (orderItem.ColorId <= 0)
-                {
-                    throw new ArgumentException("Invalid Color ID in order item.");
-                }
-            }
+            // Assign OrderId and other necessary properties if needed
             order.OrderId = await _db.Orders
-                                     .OrderByDescending(o => o.OrderId)
-                                     .Select(o => o.OrderId)
-                                     .FirstOrDefaultAsync() + 1;
+                                    .OrderByDescending(o => o.OrderId)
+                                    .Select(o => o.OrderId)
+                                    .FirstOrDefaultAsync() + 1;
+
+            // Set the CreatedAt property
             order.CreatedAt = DateTime.UtcNow;
 
-
-            _db.Orders.Add(order);
+            // Save the Order to the database
+            await _db.Orders.AddAsync(order);
             await _db.SaveChangesAsync();
+
+            // Assign OrderItemIds for each OrderItem and save them
+            foreach (var orderItem in order.OrderItems)
+            {
+                // Assign a new OrderItemId by getting the last one and adding 1
+                orderItem.OrderItemId = await _db.OrderItems
+                                                  .OrderByDescending(item => item.OrderItemId)
+                                                  .Select(item => item.OrderItemId)
+                                                  .FirstOrDefaultAsync() + 1;
+                orderItem.OrderId = order.OrderId; // Set the OrderId for each OrderItem
+
+                // Save the OrderItem to the database
+                await _db.OrderItems.AddAsync(orderItem);
+            }
+
+            // Save changes for OrderItems
+            await _db.SaveChangesAsync();
+
+            // Return the saved Order with associated OrderItems
             return order;
         }
 

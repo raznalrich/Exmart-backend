@@ -20,5 +20,8 @@ namespace ExMart_Backend.Model
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public int CreatedBy { get; set; }
+
+        // Navigation Properties
+        public ICollection<OrderItem> OrderItems { get; set; }
     }
 }

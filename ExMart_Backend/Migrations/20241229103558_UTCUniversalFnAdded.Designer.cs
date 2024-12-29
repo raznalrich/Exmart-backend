@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ExMart_Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExMart_Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241229103558_UTCUniversalFnAdded")]
+    partial class UTCUniversalFnAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -508,7 +511,7 @@ namespace ExMart_Backend.Migrations
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2024, 12, 29, 10, 40, 37, 49, DateTimeKind.Utc).AddTicks(2758),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             Email = "johndoe@example.com",
                             Name = "John Doe",
                             Phone = "1234567890"
@@ -516,7 +519,7 @@ namespace ExMart_Backend.Migrations
                         new
                         {
                             UserId = 2,
-                            CreatedAt = new DateTime(2024, 12, 29, 10, 40, 37, 49, DateTimeKind.Utc).AddTicks(2762),
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             Email = "janesmith@example.com",
                             Name = "Jane Smith",
                             Phone = "0987654321"
@@ -524,7 +527,7 @@ namespace ExMart_Backend.Migrations
                         new
                         {
                             UserId = 3,
-                            CreatedAt = new DateTime(2024, 12, 29, 10, 40, 37, 49, DateTimeKind.Utc).AddTicks(2763),
+                            CreatedAt = new DateTime(2024, 12, 29, 12, 0, 0, 0, DateTimeKind.Utc),
                             Email = "alicebrown@example.com",
                             Name = "Alice Brown",
                             Phone = "1122334455"

@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using ExMart_Backend.Model;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 //Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext;
@@ -13,12 +14,18 @@ namespace ExMart_Backend.Data
         }
 
         public DbSet<Product> Products { get; set; }
+
         public DbSet<ColourMaster> ColourMaster { get; set; }
         public DbSet<SizeMaster> SizeMaster { get; set; }
 
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<StatusMaster> StatusMaster { get; set; }
+        public DbSet<User> Users { get; set; }
+
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,12 +49,88 @@ namespace ExMart_Backend.Data
     new ColourMaster { ColorId = 7, ColorName = "yellow", ColorCode = "#FFFF00" }
                 );
 
-            // Configure the one-to-many relationship
+            modelBuilder.Entity<StatusMaster>().HasData(
+       new StatusMaster { Product_StatusId = 1, StatusName = "Pending" },
+       new StatusMaster { Product_StatusId = 2, StatusName = "Shipped" },
+       new StatusMaster { Product_StatusId = 3, StatusName = "Delivered" }
+   );
+
+            // Order to OrderItems (Cascade Delete)
             modelBuilder.Entity<Order>()
                 .HasMany(o => o.OrderItems)
-                .WithOne()
+                .WithOne(oi => oi.Order)
                 .HasForeignKey(oi => oi.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Order to User (Restrict Delete)
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Order to ProductStatus (Restrict Delete)
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.ProductStatus)
+                .WithMany(ps => ps.Orders)
+                .HasForeignKey(o => o.Product_StatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // OrderItem to Product (Restrict Delete)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Product)
+                .WithMany(p => p.OrderItems)
+                .HasForeignKey(oi => oi.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // OrderItem to Size (Restrict Delete)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Size)
+                .WithMany(s => s.OrderItems)
+                .HasForeignKey(oi => oi.SizeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // OrderItem to Color (Restrict Delete)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Color)
+                .WithMany(c => c.OrderItems)
+                .HasForeignKey(oi => oi.ColorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+           
+        
+           
+
+            // Seeding the User table
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    UserId = 1,
+                    Name = "John Doe",
+                    Email = "johndoe@example.com",
+                    Phone = "1234567890",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new User
+                {
+                    UserId = 2,
+                    Name = "Jane Smith",
+                    Email = "janesmith@example.com",
+                    Phone = "0987654321",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new User
+                {
+                    UserId = 3,
+                    Name = "Alice Brown",
+                    Email = "alicebrown@example.com",
+                    Phone = "1122334455",
+                    CreatedAt =  DateTime.UtcNow // Specific UTC DateTime
+                }
+            );
+
+
 
             modelBuilder.Entity<Product>().HasData(
                 new Product
