@@ -74,5 +74,35 @@ namespace ExMart_Backend.Controllers
         //        return StatusCode(500, "An error occurred while adding the product.");
         //    } 
         //}
+
+        [HttpPut("toggle-status/{id}")]
+        public async Task<IActionResult> ToggleProductStatus(int id)
+        {
+            try
+            {
+                var newStatus = await _productRepository.DeactivateProductAsync(id);
+                return Ok(new
+                {
+                    success = true,
+                    message = $"Product status successfully updated to {(newStatus ? "active" : "inactive")}"
+                });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "An error occurred while updating the product status"
+                });
+            }
+        }
     }
 }

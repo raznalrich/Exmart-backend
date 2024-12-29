@@ -38,6 +38,21 @@ namespace ExMart_Backend.Services.Repository
             }
         }
 
+        public async Task<bool> DeactivateProductAsync(int id)
+        {
+            var product =await _db.Products.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (product == null)
+                throw new KeyNotFoundException($"Product with ID {id} not found");
+
+            // Toggle the IsActive status
+            product.IsActive = !product.IsActive;
+            product.UpdatedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+            return product.IsActive;
+        }
+
         public Task<Product> GetProductById(int id)
         {
             throw new NotImplementedException();
