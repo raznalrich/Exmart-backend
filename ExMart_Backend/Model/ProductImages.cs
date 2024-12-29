@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ExMart_Backend.Model
 {
@@ -7,13 +8,11 @@ namespace ExMart_Backend.Model
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //[Column(Order = 1, TypeName = "Serial")]
         public int ImageId { get; set; }
         public string ImageUrl { get; set; }
         public int ProductId { get; set; }
-        
-        //public bool IsPrimary { get; set; }
         [ForeignKey("ProductId")]
-        public virtual Product Product { get; set; }
+        [JsonIgnore]
+        public virtual Product? Product { get; set; }
     }
 }

@@ -68,8 +68,6 @@ namespace ExMart_Backend.Services.Repository
                                      .Select(o => o.OrderId)
                                      .FirstOrDefaultAsync() + 1;
             order.CreatedAt = DateTime.UtcNow;
-
-
             _db.Orders.Add(order);
             await _db.SaveChangesAsync();
             return order;

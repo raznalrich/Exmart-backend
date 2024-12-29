@@ -16,20 +16,24 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<Product> AddProductAsync(Product product)
         {
-            try { 
+            product.IsActive = true;
+            try
+            {
                 if (product.ProductImages != null && product.ProductImages.Any())
-                { 
+                {
                     foreach (var image in product.ProductImages)
-                    { 
-                        image.Product = product; 
-                    } 
+                    {
+                        //image.ProductId = product.Id;
+                        image.Product = product;
+
+                    }
                 }
                 _db.Products.Add(product);
                 await _db.SaveChangesAsync();
                 return product;
-            } 
+            }
             catch
-            { 
+            {
                 throw new Exception("An error occurred while adding the product.");
             }
         }

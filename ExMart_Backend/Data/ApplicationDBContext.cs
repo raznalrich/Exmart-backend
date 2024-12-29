@@ -149,7 +149,6 @@ namespace ExMart_Backend.Data
                     Price = 399.99m,
                     VendorId = 1,
                     PrimaryImageUrl = "https://media.karousell.com/media/photos/products/2023/4/29/gildan_zipup_hoodie_1682750904_29598b39.jpg",
-
                     CategoryId = 1,
                     Size = new List<string> { "Standard" },
                     Color = new List<string> { "white" },
@@ -177,7 +176,7 @@ namespace ExMart_Backend.Data
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
                     CreatedBy = 1,
-                    IsActive = true,
+                    IsActive = true
                 },
                 new Product
                 {

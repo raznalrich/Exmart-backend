@@ -1,4 +1,6 @@
-﻿using ExMart_Backend.Data;
+﻿using AutoMapper;
+using ExMart_Backend.Data;
+using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +13,13 @@ namespace ExMart_Backend.Controllers
     {
         private IProductRepository _productRepository;
         private DBDataInitializer _dbInitializer;
-        public ProductController(IProductRepository productRepository, DBDataInitializer dbInitializer)
+        //new 
+        private readonly IMapper _mapper;
+        public ProductController(IProductRepository productRepository, DBDataInitializer dbInitializer, IMapper mapper)
         {
             _productRepository = productRepository;
             _dbInitializer = dbInitializer;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -32,22 +37,42 @@ namespace ExMart_Backend.Controllers
         }
 
         [HttpPost]
-        [Route("add-product")] 
-        public async Task<IActionResult> AddProduct([FromBody] Product product) 
-        { 
-            if (product == null) 
-            { 
+        [Route("add-product")]
+        public async Task<IActionResult> AddProduct([FromBody] AddProductDTO addProductDTO)
+        {
+            Product product = _mapper.Map<Product>(addProductDTO);
+            if (product == null)
+            {
                 return BadRequest("Product data is null.");
-            } 
-            try 
-            { 
+            }
+            try
+            {
                 var newProduct = await _productRepository.AddProductAsync(product);
                 return Ok(newProduct);
-            } 
-            catch 
-            { 
+            }
+            catch
+            {
                 return StatusCode(500, "An error occurred while adding the product.");
-            } 
+            }
         }
+
+        //[HttpPost]
+        //[Route("add-product")] 
+        //public async Task<IActionResult> AddProduct([FromBody] Product product) 
+        //{ 
+        //    if (product == null) 
+        //    { 
+        //        return BadRequest("Product data is null.");
+        //    } 
+        //    try 
+        //    { 
+        //        var newProduct = await _productRepository.AddProductAsync(product);
+        //        return Ok(newProduct);
+        //    } 
+        //    catch 
+        //    { 
+        //        return StatusCode(500, "An error occurred while adding the product.");
+        //    } 
+        //}
     }
 }
