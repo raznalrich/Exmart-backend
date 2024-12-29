@@ -42,12 +42,7 @@ namespace ExMart_Backend.Controllers
             else
             {
                 return Ok(cart);
-            }
-
-            
+            }            
         }
-
-
-
     }
 }
