@@ -23,6 +23,40 @@ namespace ExMart_Backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ExMart_Backend.Model.AddressType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddressTypeName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AddressTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddressTypeName = "Home"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressTypeName = "Office"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AddressTypeName = "Other"
+                        });
+                });
+
             modelBuilder.Entity("ExMart_Backend.Model.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -713,7 +747,7 @@ namespace ExMart_Backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -731,6 +765,88 @@ namespace ExMart_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            Email = "robert.brown@example.com",
+                            Name = "Robert Brown",
+                            Phone = "+91 9998887766"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            Email = "emily.white@example.com",
+                            Name = "Emily White",
+                            Phone = "+91 9876543210"
+                        });
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.UserAddress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddressLine")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("AddressTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressTypeId");
+
+                    b.ToTable("UserAddresses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddressLine = "Gayathri Building",
+                            AddressTypeId = 2,
+                            City = "Kazhakuttam",
+                            IsPrimary = true,
+                            State = "Kerala",
+                            UserId = 1,
+                            ZipCode = "683102"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressLine = "Athulya Building",
+                            AddressTypeId = 2,
+                            City = "Kakkanad",
+                            IsPrimary = false,
+                            State = "Kerala",
+                            UserId = 1,
+                            ZipCode = "682018"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -949,6 +1065,17 @@ namespace ExMart_Backend.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ExMart_Backend.Model.UserAddress", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.AddressType", "AddressType")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("AddressTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddressType");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -998,6 +1125,11 @@ namespace ExMart_Backend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.AddressType", b =>
+                {
+                    b.Navigation("UserAddresses");
                 });
 
             modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
