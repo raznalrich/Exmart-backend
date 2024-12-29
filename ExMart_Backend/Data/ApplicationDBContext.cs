@@ -3,6 +3,7 @@ using ExMart_Backend.Model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Net.WebRequestMethods;
 
 namespace ExMart_Backend.Data
 {
@@ -64,11 +65,36 @@ namespace ExMart_Backend.Data
                     ImageId = 1,
                     ImageUrl = " https://assets.ajio.com/medias/sys_master/root/20240202/XzVa/65bd163a8cdf1e0df5e313a0/-1117Wx1400H-442273276-black-MODEL7.jpg",
                     ProductId = 1,
+                }, 
+                new ProductImages
+                {
+                    ImageId = 11,
+                    ImageUrl = "https://assets.ajio.com/medias/sys_master/root/20240202/T3LR/65bd18b616fd2c6e6ad4ea90/-473Wx593H-442273276-black-MODEL2.jpg",
+                    ProductId = 1,
                 },
+                new ProductImages
+                {
+                    ImageId = 12,
+                    ImageUrl = "https://assets.ajio.com/medias/sys_master/root/20240202/0iIg/65bd0e568cdf1e0df5e2e7f1/-473Wx593H-442273276-black-MODEL6.jpg",
+                    ProductId = 1,
+                },
+
                 new ProductImages
                 {
                     ImageId = 2,
                     ImageUrl = " https://m.media-amazon.com/images/I/51XQKBTbJ7L._SX569_.jpg",
+                    ProductId = 2,
+                },
+                new ProductImages
+                {
+                    ImageId = 13,
+                    ImageUrl = " https://m.media-amazon.com/images/I/51U6dpsRaFL._SX569_.jpg",
+                    ProductId = 2,
+                },
+                new ProductImages
+                {
+                    ImageId = 14,
+                    ImageUrl = " https://m.media-amazon.com/images/I/51Nd4BLQelL._SX569_.jpg",
                     ProductId = 2,
                 },
                  new ProductImages
@@ -77,16 +103,52 @@ namespace ExMart_Backend.Data
                      ImageUrl = "https://m.media-amazon.com/images/I/915Qebmr9XL._SX679_.jpg",
                      ProductId = 3,
                  },
+                 new ProductImages
+                 {
+                     ImageId = 15,
+                     ImageUrl = "https://m.media-amazon.com/images/I/915Qebmr9XL._SX679_.jpg",
+                     ProductId = 3,
+                 },
+                 new ProductImages
+                 {
+                     ImageId = 16,
+                     ImageUrl = "https://m.media-amazon.com/images/I/91RWzNCIEhL._SX679_.jpg",
+                     ProductId = 3,
+                 },
                   new ProductImages
                   {
                       ImageId = 4,
                       ImageUrl = "https://m.media-amazon.com/images/I/61F5lcvJHLL._SX522_.jpg",
+                      ProductId = 4,
+                  }, 
+                  new ProductImages
+                  {
+                      ImageId = 17,
+                      ImageUrl = "https://m.media-amazon.com/images/I/61vBE3t4x1L._SX522_.jpg",
+                      ProductId = 4,
+                  }, 
+                  new ProductImages
+                  {
+                      ImageId = 18,
+                      ImageUrl = "https://m.media-amazon.com/images/I/71QZbcvD65L._SX522_.jpg",
                       ProductId = 4,
                   },
                    new ProductImages
                    {
                        ImageId = 5,
                        ImageUrl = "https://m.media-amazon.com/images/I/51caXIXHv0L._SX679_.jpg",
+                       ProductId = 5,
+                   }, 
+                   new ProductImages
+                   {
+                       ImageId = 19,
+                       ImageUrl = "https://m.media-amazon.com/images/I/614uQNgsIbL._SX679_.jpg",
+                       ProductId = 5,
+                   }, 
+                   new ProductImages
+                   {
+                       ImageId = 20,
+                       ImageUrl = "https://m.media-amazon.com/images/I/616+eQhVmFL._SX679_.jpg",
                        ProductId = 5,
                    },
                     new ProductImages
@@ -95,16 +157,52 @@ namespace ExMart_Backend.Data
                         ImageUrl = "https://m.media-amazon.com/images/I/51zrU3wXApL._SX679_.jpg",
                         ProductId = 6,
                     },
+                    new ProductImages
+                    {
+                        ImageId = 21,
+                        ImageUrl = "https://m.media-amazon.com/images/I/61h02o8qvAL._SX679_.jpg",
+                        ProductId = 6,
+                    },
+                    new ProductImages
+                    {
+                        ImageId = 22,
+                        ImageUrl = "https://m.media-amazon.com/images/I/71kg31YtFHL._SX679_.jpg",
+                        ProductId = 6,
+                    },
                      new ProductImages
                      {
                          ImageId = 7,
                          ImageUrl = "https://m.media-amazon.com/images/I/61ZkbRBEBvL._SY675_.jpg",
+                         ProductId = 7,
+                     }, 
+                     new ProductImages
+                     {
+                         ImageId = 23,
+                         ImageUrl = "https://m.media-amazon.com/images/I/81rLH99Wj2L._SY675_.jpg",
+                         ProductId = 7,
+                     }, 
+                     new ProductImages
+                     {
+                         ImageId = 24,
+                         ImageUrl = "https://m.media-amazon.com/images/I/61R2cfPmcSL._SY675_.jpg",
                          ProductId = 7,
                      },
                       new ProductImages
                       {
                           ImageId = 8,
                           ImageUrl = "https://m.media-amazon.com/images/I/61lEskbCaoL._SY450_.jpg",
+                          ProductId = 8,
+                      }, 
+                      new ProductImages
+                      {
+                          ImageId = 25,
+                          ImageUrl = "https://m.media-amazon.com/images/I/51wp23mi8qL._SY450_.jpg",
+                          ProductId = 8,
+                      }, 
+                      new ProductImages
+                      {
+                          ImageId = 26,
+                          ImageUrl = "https://m.media-amazon.com/images/I/71YCCEPBguL._SY450_.jpg",
                           ProductId = 8,
                       },
                        new ProductImages
@@ -113,10 +211,34 @@ namespace ExMart_Backend.Data
                            ImageUrl = "https://m.media-amazon.com/images/I/516HwL0zZhL._SY450_.jpg",
                            ProductId = 9,
                        },
+                       new ProductImages
+                       {
+                           ImageId = 27,
+                           ImageUrl = "https://m.media-amazon.com/images/I/6190STfffwL._SY450_.jpg",
+                           ProductId = 9,
+                       },
+                       new ProductImages
+                       {
+                           ImageId = 28,
+                           ImageUrl = "https://m.media-amazon.com/images/I/61Lo553SSIL._SY450_.jpg",
+                           ProductId = 9,
+                       },
                         new ProductImages
                         {
                             ImageId = 10,
                             ImageUrl = "https://example.com/gproxsuperlight_1.jpg",
+                            ProductId = 10,
+                        },
+                        new ProductImages
+                        {
+                            ImageId = 29,
+                            ImageUrl = "https://example.com/gproxsuperlight_1.jpg",
+                            ProductId = 10,
+                        },
+                        new ProductImages
+                        {
+                            ImageId = 30,
+                            ImageUrl = "https://example.com/gproxsuperlight_2.jpg",
                             ProductId = 10,
                         }
                 );
@@ -310,10 +432,6 @@ namespace ExMart_Backend.Data
                     CreatedBy = 1,
                     IsActive = true,
                 }
-
-
-   
-
                 );
             modelBuilder.Entity<Category>().HasData(
                 new Category

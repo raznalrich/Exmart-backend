@@ -13,10 +13,11 @@ namespace ExMart_Backend.Controllers
     {
         private IProductRepository _productRepository;
         private DBDataInitializer _dbInitializer;
-        //new 
+
         private readonly IMapper _mapper;
         public ProductController(IProductRepository productRepository, DBDataInitializer dbInitializer, IMapper mapper)
         {
+
             _productRepository = productRepository;
             _dbInitializer = dbInitializer;
             _mapper = mapper;
