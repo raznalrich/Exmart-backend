@@ -293,23 +293,6 @@ namespace ExMart_Backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 12,
-                            Brand = "VAFS",
-                            CategoryId = 1,
-                            Color = new List<string> { "Blue", "Green" },
-                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
-                            CreatedBy = 1,
-                            Description = "Ergonomic wireless mouse with 2.4 GHz connectivity",
-                            IsActive = false,
-                            Name = "Wireless Mouse",
-                            Price = 25m,
-                            Size = new List<string> { "XS", "S", "M" },
-                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
-                            VendorId = 1,
-                            Weight = 250m
-                        },
-                        new
-                        {
                             Id = 1,
                             Brand = "Experion",
                             CategoryId = 1,
