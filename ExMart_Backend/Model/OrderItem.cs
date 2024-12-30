@@ -14,5 +14,14 @@
 
         // Foreign key to the related Order
         public int OrderId { get; set; }
+
+        public int Quantity { get; set; } // Quantity of the product in this order item
+
+        // Navigation Properties
+        public Product Product { get; set; }
+        public SizeMaster Size { get; set; }
+        public ColourMaster Color { get; set; }
+        public Order Order { get; set; }
+
     }
 }

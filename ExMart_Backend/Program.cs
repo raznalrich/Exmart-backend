@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using ExMart_Backend;
 using ExMart_Backend.Data;
 using ExMart_Backend.Interface;
@@ -37,6 +38,12 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 var app = builder.Build();
 

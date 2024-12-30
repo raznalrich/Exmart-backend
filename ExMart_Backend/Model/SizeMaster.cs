@@ -8,6 +8,9 @@ namespace ExMart_Backend.Model
 
         public int SizeId { get; set; }
         public string Size { get; set; }
-      
+
+        // Navigation Properties
+        public ICollection<OrderItem> OrderItems { get; set; }
+
     }
 }
