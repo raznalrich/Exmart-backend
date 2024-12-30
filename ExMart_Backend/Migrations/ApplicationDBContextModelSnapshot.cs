@@ -271,7 +271,6 @@ namespace ExMart_Backend.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("PrimaryImageUrl")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<List<string>>("Size")
@@ -292,6 +291,23 @@ namespace ExMart_Backend.Migrations
                     b.ToTable("Products");
 
                     b.HasData(
+                        new
+                        {
+                            Id = 12,
+                            Brand = "VAFS",
+                            CategoryId = 1,
+                            Color = new List<string> { "Blue", "Green" },
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            CreatedBy = 1,
+                            Description = "Ergonomic wireless mouse with 2.4 GHz connectivity",
+                            IsActive = false,
+                            Name = "Wireless Mouse",
+                            Price = 25m,
+                            Size = new List<string> { "XS", "S", "M" },
+                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
+                            VendorId = 1,
+                            Weight = 250m
+                        },
                         new
                         {
                             Id = 1,
@@ -785,66 +801,28 @@ namespace ExMart_Backend.Migrations
 
             modelBuilder.Entity("ExMart_Backend.Model.User", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
-
-                    b.Property<DateTime?>("CreatedAt");
-                    modelBuilder.Entity("ExMart_Backend.Model.User", b =>
-                        {
-                            b.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                            b.Property<string>("Email")
-                                .IsRequired()
-                                .HasColumnType("text");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                            b.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("text");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                            b.Property<string>("Phone")
-                                .IsRequired()
-                                .HasColumnType("text");
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                            b.HasKey("UserId");
-
-                            b.ToTable("Users");
-
-                            b.HasData(
-                                new
-                                {
-                                    UserId = 1,
-                                    CreatedAt = new DateTime(2024, 12, 29, 10, 40, 37, 49, DateTimeKind.Utc).AddTicks(2758),
-                                    Email = "johndoe@example.com",
-                                    Name = "John Doe",
-                                    Phone = "1234567890"
-                                },
-                                new
-                                {
-                                    UserId = 2,
-                                    CreatedAt = new DateTime(2024, 12, 29, 10, 40, 37, 49, DateTimeKind.Utc).AddTicks(2762),
-                                    Email = "janesmith@example.com",
-                                    Name = "Jane Smith",
-                                    Phone = "0987654321"
-                                },
-                                new
-                                {
-                                    UserId = 3,
-                                    CreatedAt = new DateTime(2024, 12, 29, 10, 40, 37, 49, DateTimeKind.Utc).AddTicks(2763),
-                                    Email = "alicebrown@example.com",
-                                    Name = "Alice Brown",
-                                    Phone = "1122334455"
-                                });
-                            b.HasKey("Id");
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
 
@@ -931,266 +909,266 @@ namespace ExMart_Backend.Migrations
                         });
                 });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                        {
-                            b.Property<string>("Id")
-                                .HasColumnType("text");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
-                            b.Property<string>("ConcurrencyStamp")
-                                .IsConcurrencyToken()
-                                .HasColumnType("text");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
 
-                            b.Property<string>("Name")
-                                .HasMaxLength(256)
-                                .HasColumnType("character varying(256)");
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
-                            b.Property<string>("NormalizedName")
-                                .HasMaxLength(256)
-                                .HasColumnType("character varying(256)");
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
-                            b.HasKey("Id");
+                    b.HasKey("Id");
 
-                            b.HasIndex("NormalizedName")
-                                .IsUnique()
-                                .HasDatabaseName("RoleNameIndex");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
 
-                            b.ToTable("AspNetRoles", (string)null);
-                        });
+                    b.ToTable("AspNetRoles", (string)null);
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                        {
-                            b.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                            b.Property<string>("ClaimType")
-                                .HasColumnType("text");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
 
-                            b.Property<string>("ClaimValue")
-                                .HasColumnType("text");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
 
-                            b.Property<string>("RoleId")
-                                .IsRequired()
-                                .HasColumnType("text");
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                            b.HasKey("Id");
+                    b.HasKey("Id");
 
-                            b.HasIndex("RoleId");
+                    b.HasIndex("RoleId");
 
-                            b.ToTable("AspNetRoleClaims", (string)null);
-                        });
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                        {
-                            b.Property<string>("Id")
-                                .HasColumnType("text");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
-                            b.Property<int>("AccessFailedCount")
-                                .HasColumnType("integer");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
 
-                            b.Property<string>("ConcurrencyStamp")
-                                .IsConcurrencyToken()
-                                .HasColumnType("text");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
 
-                            b.Property<string>("Email")
-                                .HasMaxLength(256)
-                                .HasColumnType("character varying(256)");
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
-                            b.Property<bool>("EmailConfirmed")
-                                .HasColumnType("boolean");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
 
-                            b.Property<bool>("LockoutEnabled")
-                                .HasColumnType("boolean");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
 
-                            b.Property<DateTimeOffset?>("LockoutEnd")
-                                .HasColumnType("timestamp with time zone");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
 
-                            b.Property<string>("NormalizedEmail")
-                                .HasMaxLength(256)
-                                .HasColumnType("character varying(256)");
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
-                            b.Property<string>("NormalizedUserName")
-                                .HasMaxLength(256)
-                                .HasColumnType("character varying(256)");
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
-                            b.Property<string>("PasswordHash")
-                                .HasColumnType("text");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
 
-                            b.Property<string>("PhoneNumber")
-                                .HasColumnType("text");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
 
-                            b.Property<bool>("PhoneNumberConfirmed")
-                                .HasColumnType("boolean");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
 
-                            b.Property<string>("SecurityStamp")
-                                .HasColumnType("text");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
 
-                            b.Property<bool>("TwoFactorEnabled")
-                                .HasColumnType("boolean");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
 
-                            b.Property<string>("UserName")
-                                .HasMaxLength(256)
-                                .HasColumnType("character varying(256)");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
-                            b.HasKey("Id");
+                    b.HasKey("Id");
 
-                            b.HasIndex("NormalizedEmail")
-                                .HasDatabaseName("EmailIndex");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
 
-                            b.HasIndex("NormalizedUserName")
-                                .IsUnique()
-                                .HasDatabaseName("UserNameIndex");
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
 
-                            b.ToTable("AspNetUsers", (string)null);
-                        });
+                    b.ToTable("AspNetUsers", (string)null);
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                        {
-                            b.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                            b.Property<string>("ClaimType")
-                                .HasColumnType("text");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
 
-                            b.Property<string>("ClaimValue")
-                                .HasColumnType("text");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
 
-                            b.Property<string>("UserId")
-                                .IsRequired()
-                                .HasColumnType("text");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                            b.HasKey("Id");
+                    b.HasKey("Id");
 
-                            b.HasIndex("UserId");
+                    b.HasIndex("UserId");
 
-                            b.ToTable("AspNetUserClaims", (string)null);
-                        });
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                        {
-                            b.Property<string>("LoginProvider")
-                                .HasColumnType("text");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
 
-                            b.Property<string>("ProviderKey")
-                                .HasColumnType("text");
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("text");
 
-                            b.Property<string>("ProviderDisplayName")
-                                .HasColumnType("text");
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("text");
 
-                            b.Property<string>("UserId")
-                                .IsRequired()
-                                .HasColumnType("text");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                            b.HasKey("LoginProvider", "ProviderKey");
+                    b.HasKey("LoginProvider", "ProviderKey");
 
-                            b.HasIndex("UserId");
+                    b.HasIndex("UserId");
 
-                            b.ToTable("AspNetUserLogins", (string)null);
-                        });
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                        {
-                            b.Property<string>("UserId")
-                                .HasColumnType("text");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
-                            b.Property<string>("RoleId")
-                                .HasColumnType("text");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("text");
 
-                            b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId", "RoleId");
 
-                            b.HasIndex("RoleId");
+                    b.HasIndex("RoleId");
 
-                            b.ToTable("AspNetUserRoles", (string)null);
-                        });
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                        {
-                            b.Property<string>("UserId")
-                                .HasColumnType("text");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
-                            b.Property<string>("LoginProvider")
-                                .HasColumnType("text");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
 
-                            b.Property<string>("Name")
-                                .HasColumnType("text");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                            b.Property<string>("Value")
-                                .HasColumnType("text");
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
 
-                            b.HasKey("UserId", "LoginProvider", "Name");
+                    b.HasKey("UserId", "LoginProvider", "Name");
 
-                            b.ToTable("AspNetUserTokens", (string)null);
-                        });
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
 
-                    modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
-                        {
-                            b.HasOne("ExMart_Backend.Model.StatusMaster", "ProductStatus")
-                                .WithMany("Orders")
-                                .HasForeignKey("Product_StatusId")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+            modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.StatusMaster", "ProductStatus")
+                        .WithMany("Orders")
+                        .HasForeignKey("Product_StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.HasOne("ExMart_Backend.Model.User", "User")
-                                .WithMany("Orders")
-                                .HasForeignKey("UserId")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+                    b.HasOne("ExMart_Backend.Model.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.Navigation("ProductStatus");
+                    b.Navigation("ProductStatus");
 
-                            b.Navigation("User");
-                        });
+                    b.Navigation("User");
+                });
 
-                    modelBuilder.Entity("ExMart_Backend.Model.OrderItem", b =>
-                        {
-                            b.HasOne("ExMart_Backend.Model.ColourMaster", "Color")
-                                .WithMany("OrderItems")
-                                .HasForeignKey("ColorId")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+            modelBuilder.Entity("ExMart_Backend.Model.OrderItem", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.ColourMaster", "Color")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.HasOne("ExMart_Backend.Model.Order", "Order")
-                                .WithMany("OrderItems")
-                                .HasForeignKey("OrderId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+                    b.HasOne("ExMart_Backend.Model.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b.HasOne("ExMart_Backend.Model.Product", "Product")
-                                .WithMany("OrderItems")
-                                .HasForeignKey("ProductId")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+                    b.HasOne("ExMart_Backend.Model.Product", "Product")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.HasOne("ExMart_Backend.Model.SizeMaster", "Size")
-                                .WithMany("OrderItems")
-                                .HasForeignKey("SizeId")
-                                .OnDelete(DeleteBehavior.Restrict)
-                                .IsRequired();
+                    b.HasOne("ExMart_Backend.Model.SizeMaster", "Size")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                            b.Navigation("Color");
+                    b.Navigation("Color");
 
-                            b.Navigation("Order");
+                    b.Navigation("Order");
 
-                            b.Navigation("Product");
+                    b.Navigation("Product");
 
-                            b.Navigation("Size");
-                        });
+                    b.Navigation("Size");
+                });
 
-                    modelBuilder.Entity("ExMart_Backend.Model.ProductImages", b =>
-                        {
-                            b.HasOne("ExMart_Backend.Model.Product", "Product")
-                                .WithMany("ProductImages")
-                                .HasForeignKey("ProductId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+            modelBuilder.Entity("ExMart_Backend.Model.ProductImages", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.Product", "Product")
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b.Navigation("Product");
-                        });
+                    b.Navigation("Product");
+                });
 
             modelBuilder.Entity("ExMart_Backend.Model.UserAddress", b =>
                 {
@@ -1212,51 +1190,56 @@ namespace ExMart_Backend.Migrations
                         .IsRequired();
                 });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                        {
-                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
-                                .WithMany()
-                                .HasForeignKey("UserId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-                        });
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                        {
-                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
-                                .WithMany()
-                                .HasForeignKey("UserId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-                        });
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                        {
-                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                                .WithMany()
-                                .HasForeignKey("RoleId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
-                                .WithMany()
-                                .HasForeignKey("UserId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-                        });
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                        {
-                            b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
-                                .WithMany()
-                                .HasForeignKey("UserId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-                        });
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
             modelBuilder.Entity("ExMart_Backend.Model.AddressType", b =>
                 {
                     b.Navigation("UserAddresses");
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.ColourMaster", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
@@ -1264,28 +1247,28 @@ namespace ExMart_Backend.Migrations
                     b.Navigation("OrderItems");
                 });
 
-                    modelBuilder.Entity("ExMart_Backend.Model.Product", b =>
-                        {
-                            b.Navigation("OrderItems");
-                        });
+            modelBuilder.Entity("ExMart_Backend.Model.Product", b =>
+                {
+                    b.Navigation("OrderItems");
 
-                    modelBuilder.Entity("ExMart_Backend.Model.SizeMaster", b =>
-                        {
-                            b.Navigation("OrderItems");
-                        });
-
-                    modelBuilder.Entity("ExMart_Backend.Model.StatusMaster", b =>
-                        {
-                            b.Navigation("Orders");
-                        });
-
-                    modelBuilder.Entity("ExMart_Backend.Model.User", b =>
-                        {
-                            b.Navigation("Orders");
-                            b.Navigation("ProductImages");
-                        });
-#pragma warning restore 612, 618
+                    b.Navigation("ProductImages");
                 });
+
+            modelBuilder.Entity("ExMart_Backend.Model.SizeMaster", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.StatusMaster", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.User", b =>
+                {
+                    b.Navigation("Orders");
+                });
+#pragma warning restore 612, 618
         }
     }
 }
