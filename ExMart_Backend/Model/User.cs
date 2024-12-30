@@ -8,9 +8,7 @@ namespace ExMart_Backend.Model
         public string Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-
-        [Column(TypeName = "timestamp with time zone")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
 
 
