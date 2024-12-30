@@ -15,7 +15,7 @@ namespace ExMart_Backend.Data
         }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImages> Images { get; set; }
-        public DbSet<ProductStatus> Status { get; set; }
+        //public DbSet<ProductStatus> Status { get; set; }
         public DbSet<Category> addToCategories { get; set; }
 
         public DbSet<ColourMaster> ColourMaster { get; set; }
@@ -301,7 +301,7 @@ namespace ExMart_Backend.Data
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
-                    UserId = 1,
+                    Id = 1,
                     Name = "John Doe",
                     Email = "johndoe@example.com",
                     Phone = "1234567890",
@@ -309,7 +309,7 @@ namespace ExMart_Backend.Data
                 },
                 new User
                 {
-                    UserId = 2,
+                    Id = 2,
                     Name = "Jane Smith",
                     Email = "janesmith@example.com",
                     Phone = "0987654321",
@@ -317,7 +317,7 @@ namespace ExMart_Backend.Data
                 },
                 new User
                 {
-                    UserId = 3,
+                    Id = 3,
                     Name = "Alice Brown",
                     Email = "alicebrown@example.com",
                     Phone = "1122334455",
