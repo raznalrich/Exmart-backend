@@ -18,12 +18,15 @@ namespace ExMart_Backend.Model
         public int CategoryId { get; set; }
         public List<string> Size { get; set; }
         public List<string> Color { get; set; }
-        public string PrimaryImageUrl { get; set; }
+        public string? PrimaryImageUrl { get; set; }
         public decimal Weight { get; set; }
         public decimal Price { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public int CreatedBy { get; set; }
+
+        // Navigation Properties
+        public ICollection<OrderItem> OrderItems { get; set; }
         public bool IsActive {  get; set; }
 
         public virtual ICollection<ProductImages> ProductImages { get; set; }

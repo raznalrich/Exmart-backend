@@ -19,15 +19,15 @@ namespace ExMart_Backend.Data
         public DbSet<ProductImages> Images { get; set; }
         public DbSet<ProductStatus> Status { get; set; }
         public DbSet<Category> addToCategories { get; set; }
+
         public DbSet<ColourMaster> ColourMaster { get; set; }
         public DbSet<SizeMaster> SizeMaster { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<StatusMaster> StatusMaster { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<AddressType> AddressTypes { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
-
-        //public DbSet<ProductImage> ProductImages { get; set; }
-        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,10 +57,16 @@ namespace ExMart_Backend.Data
     new ColourMaster { ColorId = 7, ColorName = "yellow", ColorCode = "#FFFF00" }
                 );
 
-            // Configure the one-to-many relationship
+            modelBuilder.Entity<StatusMaster>().HasData(
+       new StatusMaster { Product_StatusId = 1, StatusName = "Pending" },
+       new StatusMaster { Product_StatusId = 2, StatusName = "Shipped" },
+       new StatusMaster { Product_StatusId = 3, StatusName = "Delivered" }
+   );
+
+            // Order to OrderItems (Cascade Delete)
             modelBuilder.Entity<Order>()
                 .HasMany(o => o.OrderItems)
-                .WithOne()
+                .WithOne(oi => oi.Order)
                 .HasForeignKey(oi => oi.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -248,7 +254,60 @@ namespace ExMart_Backend.Data
                         }
                 );
 
+            //modelBuilder.Entity<Product>().HasData(
+            // Order to User (Restrict Delete)
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Order to ProductStatus (Restrict Delete)
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.ProductStatus)
+                .WithMany(ps => ps.Orders)
+                .HasForeignKey(o => o.Product_StatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // OrderItem to Product (Restrict Delete)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Product)
+                .WithMany(p => p.OrderItems)
+                .HasForeignKey(oi => oi.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // OrderItem to Size (Restrict Delete)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Size)
+                .WithMany(s => s.OrderItems)
+                .HasForeignKey(oi => oi.SizeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // OrderItem to Color (Restrict Delete)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Color)
+                .WithMany(c => c.OrderItems)
+                .HasForeignKey(oi => oi.ColorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
             modelBuilder.Entity<Product>().HasData(
+                new Product
+                {
+                    Id = 12,
+                    Name = "Wireless Mouse",
+                    Description = "Ergonomic wireless mouse with 2.4 GHz connectivity",
+                    Brand = "VAFS",
+                    Price = 25,
+                    VendorId = 1,
+                    CategoryId = 001,
+                    Size = ["XS", "S", "M"],
+                    Color = ["Blue", "Green"],
+                    Weight = 250,
+                    CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+                    UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
+                    CreatedBy = 1
+                },
                 new Product
                 {
                     Id = 1,
