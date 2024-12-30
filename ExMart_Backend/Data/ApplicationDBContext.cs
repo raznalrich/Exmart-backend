@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using System.Numerics;
+using System.Xml.Linq;
 using ExMart_Backend.Model;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -24,12 +26,8 @@ namespace ExMart_Backend.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<StatusMaster> StatusMaster { get; set; }
         public DbSet<User> Users { get; set; }
-
-
-
-
-        //public DbSet<ProductImage> ProductImages { get; set; }
-        //public DbSet<User> Users { get; set; }
+        public DbSet<AddressType> AddressTypes { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -293,40 +291,6 @@ namespace ExMart_Backend.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
 
-           
-        
-           
-
-            // Seeding the User table
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    UserId = 1,
-                    Name = "John Doe",
-                    Email = "johndoe@example.com",
-                    Phone = "1234567890",
-                    CreatedAt = DateTime.UtcNow
-                },
-                new User
-                {
-                    UserId = 2,
-                    Name = "Jane Smith",
-                    Email = "janesmith@example.com",
-                    Phone = "0987654321",
-                    CreatedAt = DateTime.UtcNow
-                },
-                new User
-                {
-                    UserId = 3,
-                    Name = "Alice Brown",
-                    Email = "alicebrown@example.com",
-                    Phone = "1122334455",
-                    CreatedAt =  DateTime.UtcNow // Specific UTC DateTime
-                }
-            );
-
-
-
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {
@@ -555,10 +519,59 @@ namespace ExMart_Backend.Data
 
                  }
             );
+
+            base.OnModelCreating(modelBuilder);
+
+            // Seed AddressType data
+            modelBuilder.Entity<AddressType>().HasData(
+                new AddressType { Id = 1, AddressTypeName = "Home" },
+                new AddressType { Id = 2, AddressTypeName = "Office" },
+                new AddressType { Id = 3, AddressTypeName = "Other" }
+            );
+
+            // Seed User data
+            modelBuilder.Entity<User>().HasData(
+              new User {
+                Id = 1,
+                Name = "Robert Brown",
+                Email = "robert.brown@example.com",
+                Phone = "+91 9998887766",
+                  CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+              },
+              new User {
+                Id = 2,
+                Name = "Emily White",
+                Email = "emily.white@example.com",
+                Phone = "+91 9876543210",
+                CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+              }
+           );
+            modelBuilder.Entity<UserAddress>().HasData(
+               new UserAddress
+               {
+                   Id = 1,
+                   UserId = 1,
+                   AddressTypeId = 2,
+                   IsPrimary = true,
+                   AddressLine = "Gayathri Building",
+                   City = "Kazhakuttam",
+                   State = "Kerala",
+                   ZipCode = "683102"
+               },
+               new UserAddress
+               {
+                   Id = 2,
+                   UserId = 1,
+                   AddressTypeId = 2,
+                   IsPrimary = false,
+                   AddressLine = "Athulya Building",
+                   City = "Kakkanad",
+                   State = "Kerala",
+                   ZipCode = "682018"
+               }
+           );
         }
 
-
-        
 
 
 
