@@ -24,6 +24,7 @@ namespace ExMart_Backend.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<StatusMaster> StatusMaster { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
 
 
@@ -555,10 +556,28 @@ namespace ExMart_Backend.Data
 
                  }
             );
-        }
+
+            modelBuilder.Entity<Feedback>().HasData(
+                new Feedback
+                { 
+                    FeedBackId = 1,
+                    UserId = 1,
+                    ProductName = "bag",
+                    FeedBack = "Very good quality "
+                }
+
+                );
+
+                    modelBuilder.Entity<Feedback>()
+            .HasOne(f => f.User) // Reference the navigation property in Feedback
+            .WithMany(u => u.Feedbacks) // Reference the navigation property in User
+            .HasForeignKey(f => f.UserId); // Specify the foreign key property
 
 
-        
+                }
+
+
+
 
 
 
