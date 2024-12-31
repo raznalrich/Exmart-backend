@@ -165,8 +165,11 @@ namespace ExMart_Backend.Migrations
 
             modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
                 {
-                    b.Property<string>("OrderId")
-                        .HasColumnType("text");
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderId"));
 
                     b.Property<int>("AddressId")
                         .HasColumnType("integer");
@@ -200,9 +203,8 @@ namespace ExMart_Backend.Migrations
                     b.Property<int>("ColorId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("OrderId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
@@ -286,23 +288,6 @@ namespace ExMart_Backend.Migrations
                     b.ToTable("Products");
 
                     b.HasData(
-                        new
-                        {
-                            Id = 12,
-                            Brand = "VAFS",
-                            CategoryId = 1,
-                            Color = new List<string> { "Blue", "Green" },
-                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
-                            CreatedBy = 1,
-                            Description = "Ergonomic wireless mouse with 2.4 GHz connectivity",
-                            IsActive = false,
-                            Name = "Wireless Mouse",
-                            Price = 25m,
-                            Size = new List<string> { "XS", "S", "M" },
-                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
-                            VendorId = 1,
-                            Weight = 250m
-                        },
                         new
                         {
                             Id = 1,
@@ -754,7 +739,7 @@ namespace ExMart_Backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -777,26 +762,90 @@ namespace ExMart_Backend.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 12, 30, 8, 2, 8, 374, DateTimeKind.Utc).AddTicks(3858),
-                            Email = "johndoe@example.com",
-                            Name = "John Doe",
-                            Phone = "1234567890"
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            Email = "robert.brown@example.com",
+                            Name = "Robert Brown",
+                            Phone = "+91 9998887766"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 12, 30, 8, 2, 8, 374, DateTimeKind.Utc).AddTicks(3863),
-                            Email = "janesmith@example.com",
-                            Name = "Jane Smith",
-                            Phone = "0987654321"
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            Email = "emily.white@example.com",
+                            Name = "Emily White",
+                            Phone = "+91 9876543210"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 12, 30, 8, 2, 8, 374, DateTimeKind.Utc).AddTicks(3865),
+                            CreatedAt = new DateTime(2024, 12, 31, 4, 37, 37, 106, DateTimeKind.Utc).AddTicks(9570),
                             Email = "alicebrown@example.com",
                             Name = "Alice Brown",
                             Phone = "1122334455"
+                        });
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.UserAddress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddressLine")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("AddressTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressTypeId");
+
+                    b.ToTable("UserAddresses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddressLine = "Gayathri Building",
+                            AddressTypeId = 2,
+                            City = "Kazhakuttam",
+                            IsPrimary = true,
+                            State = "Kerala",
+                            UserId = 1,
+                            ZipCode = "683102"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressLine = "Athulya Building",
+                            AddressTypeId = 2,
+                            City = "Kakkanad",
+                            IsPrimary = false,
+                            State = "Kerala",
+                            UserId = 1,
+                            ZipCode = "682018"
                         });
                 });
 
@@ -1061,6 +1110,17 @@ namespace ExMart_Backend.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ExMart_Backend.Model.UserAddress", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.AddressType", "AddressType")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("AddressTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddressType");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1110,6 +1170,11 @@ namespace ExMart_Backend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.AddressType", b =>
+                {
+                    b.Navigation("UserAddresses");
                 });
 
             modelBuilder.Entity("ExMart_Backend.Model.ColourMaster", b =>
