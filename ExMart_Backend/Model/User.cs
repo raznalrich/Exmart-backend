@@ -4,13 +4,11 @@ namespace ExMart_Backend.Model
 {
     public class User
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-
-        [Column(TypeName = "timestamp with time zone")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
 
 

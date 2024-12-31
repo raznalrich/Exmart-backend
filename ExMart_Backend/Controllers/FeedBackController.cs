@@ -32,14 +32,29 @@ namespace ExMart_Backend.Controllers
 
         //add feedbacks
         [HttpPost]
-        
-        public async Task<ActionResult<Feedback>> AddFeedback(Feedback feedback)
-        {
-            if (feedback == null)
-                return BadRequest();
 
+        public async Task<ActionResult<Feedback>> AddFeedback([FromBody] CreateFeedBackDTO createFeedBackDTO)
+        {
+            // Validate the input
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Map DTO to Model
+            var feedback = new Feedback
+            {
+                UserId = createFeedBackDTO.UserId,
+                ProductName = createFeedBackDTO.ProductName,
+                FeedBack = createFeedBackDTO.FeedBack
+            };
+
+            // Add feedback to repository (database)
             var createdFeedback = await _repository.AddFeedbackAsync(feedback);
+
+            // Return response
             return CreatedAtAction(nameof(AddFeedback), new { id = createdFeedback.FeedBackId }, createdFeedback);
         }
     }
 }
+

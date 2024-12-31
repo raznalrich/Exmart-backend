@@ -34,8 +34,10 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<Feedback> AddFeedbackAsync(Feedback feedback)
         {
+            // Add the feedback to the database
             _context.Feedbacks.Add(feedback);
             await _context.SaveChangesAsync();
+
             return feedback;
         }
     }

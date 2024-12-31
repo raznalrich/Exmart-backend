@@ -24,13 +24,9 @@ namespace ExMart_Backend.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<StatusMaster> StatusMaster { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<AddressType> AddressTypes { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
-
-
-
-
-        //public DbSet<ProductImage> ProductImages { get; set; }
-        //public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,7 +44,8 @@ namespace ExMart_Backend.Data
                 new SizeMaster { SizeId = 4,Size="L"},
                 new SizeMaster { SizeId = 5,Size="XL"},
                 new SizeMaster { SizeId = 6,Size="XXL"},
-                new SizeMaster { SizeId = 7,Size="XXXL"}
+                new SizeMaster { SizeId = 7,Size="XXXL"},
+                new SizeMaster { SizeId = 8,Size="Free Size"}
                 );
             modelBuilder.Entity<ColourMaster>().HasData(
                 new ColourMaster { ColorId = 1, ColorName = "red", ColorCode = "#FF0000" },
@@ -183,24 +180,9 @@ namespace ExMart_Backend.Data
                         ImageUrl = "https://m.media-amazon.com/images/I/71kg31YtFHL._SX679_.jpg",
                         ProductId = 6,
                     },
-                     new ProductImages
-                     {
-                         ImageId = 7,
-                         ImageUrl = "https://m.media-amazon.com/images/I/61ZkbRBEBvL._SY675_.jpg",
-                         ProductId = 7,
-                     }, 
-                     new ProductImages
-                     {
-                         ImageId = 23,
-                         ImageUrl = "https://m.media-amazon.com/images/I/81rLH99Wj2L._SY675_.jpg",
-                         ProductId = 7,
-                     }, 
-                     new ProductImages
-                     {
-                         ImageId = 24,
-                         ImageUrl = "https://m.media-amazon.com/images/I/61R2cfPmcSL._SY675_.jpg",
-                         ProductId = 7,
-                     },
+                  
+                  
+                   
                       new ProductImages
                       {
                           ImageId = 8,
@@ -294,57 +276,8 @@ namespace ExMart_Backend.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
 
-           
-        
-           
-
-            // Seeding the User table
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    UserId = 1,
-                    Name = "John Doe",
-                    Email = "johndoe@example.com",
-                    Phone = "1234567890",
-                    CreatedAt = DateTime.UtcNow
-                },
-                new User
-                {
-                    UserId = 2,
-                    Name = "Jane Smith",
-                    Email = "janesmith@example.com",
-                    Phone = "0987654321",
-                    CreatedAt = DateTime.UtcNow
-                },
-                new User
-                {
-                    UserId = 3,
-                    Name = "Alice Brown",
-                    Email = "alicebrown@example.com",
-                    Phone = "1122334455",
-                    CreatedAt =  DateTime.UtcNow // Specific UTC DateTime
-                }
-            );
-
-
-
             modelBuilder.Entity<Product>().HasData(
-                new Product
-                {
-                    Id = 12,
-                    Name = "Wireless Mouse",
-                    Description = "Ergonomic wireless mouse with 2.4 GHz connectivity",
-                    Brand = "VAFS",
-                    Price = 25,
-                    VendorId = 1,
-                    CategoryId = 001,
-                    Size = ["XS", "S", "M"],
-                    Color = ["Blue", "Green"],
-                    Weight = 250,
-                    CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
-                    UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
-                    CreatedBy = 1
-                },
+               
                 new Product
                 {
                     Id = 1,
@@ -355,8 +288,8 @@ namespace ExMart_Backend.Data
                     VendorId = 1,
                     PrimaryImageUrl= "staticimages/pro_tshirt.png",
                     CategoryId = 1,
-                    Size = new List<string> { "15.6 inches" },
-                    Color = new List<string> { "red", "black" },
+                    SizeId = new List<int> { 1, 2, 3, 4, 5},
+                    ColorId = new List<int> { 4, 3,2 },
                     Weight = 500m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
@@ -373,8 +306,8 @@ namespace ExMart_Backend.Data
                     VendorId = 1,
                     PrimaryImageUrl = "https://media.karousell.com/media/photos/products/2023/4/29/gildan_zipup_hoodie_1682750904_29598b39.jpg",
                     CategoryId = 1,
-                    Size = new List<string> { "Standard" },
-                    Color = new List<string> { "white" },
+                    SizeId = new List<int> { 1,2,3,4,5,6 },
+                    ColorId = new List<int> { 4,3 },
                     Weight = 600m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
@@ -393,8 +326,8 @@ namespace ExMart_Backend.Data
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/51C2ieRiU9L.jpg",
 
                     CategoryId = 1,
-                    Size = new List<string> { "40mm", "44mm" },
-                    Color = new List<string> { "black", "red" },
+                    SizeId = new List<int> { 1, 2, 3, 4, 5, 6 },
+                    ColorId = new List<int> { 4, 3,1,2 },
                     Weight = 400m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
@@ -412,8 +345,8 @@ namespace ExMart_Backend.Data
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/71RFdy6y6LL._SL1500_.jpg",
 
                     CategoryId = 3,
-                    Size = new List<string> { "Standard" },
-                    Color = new List<string> { "white", "blue" },
+                    SizeId = new List<int> { 8 },
+                    ColorId = new List<int> { 1, 6 },
                     Weight = 50m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
@@ -431,8 +364,8 @@ namespace ExMart_Backend.Data
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/71zFvtVuP1L._SL1500_.jpg",
 
                     CategoryId = 2,
-                    Size = new List<string> { "41mm", "45mm" },
-                    Color = new List<string> { "blue", "white", "green" },
+                    SizeId = new List<int> { 8 },
+                    ColorId = new List<int> { 3,4 },
                     Weight = 300m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
@@ -450,33 +383,15 @@ namespace ExMart_Backend.Data
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/41W9B1Ri4hL.jpg",
 
                     CategoryId = 2,
-                    Size = new List<string> { "Standard" },
-                    Color = new List<string> { "Black", "red" },
+                    SizeId = new List<int> { 8 },
+                    ColorId = new List<int> { 3, 4 },
                     Weight = 400m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
                     CreatedBy = 1,
                     IsActive = true,
                 },
-                new Product
-                {
-                    Id = 7,
-                    Name = "Nike Air Force 1",
-                    Description = "Nike Air Force 1 sneakers",
-                    Brand = "Nike",
-                    Price = 99.99m,
-                    VendorId = 1,
-                    PrimaryImageUrl = "https://m.media-amazon.com/images/I/61t0gIsFpjL._SY675_.jpg",
-
-                    CategoryId = 2,
-                    Size = new List<string> { "5", "6", "7", "8", "9", "10", "11", "12" },
-                    Color = new List<string> { "White", "Black", "Red" },
-                    Weight = 800m,
-                    CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
-                    UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
-                    CreatedBy = 1,
-                    IsActive = true,
-                },
+                
                 new Product
                 {
                     Id = 8,
@@ -488,8 +403,8 @@ namespace ExMart_Backend.Data
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/61KVX-MbIUL._SL1500_.jpg",
 
                     CategoryId = 3,
-                    Size = new List<string> { "Standard" },
-                    Color = new List<string> { "black", "White" },
+                    SizeId = new List<int> { 8 },
+                    ColorId = new List<int> { 3, 4 },
                     Weight = 50m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, DateTimeKind.Utc),
@@ -507,8 +422,8 @@ namespace ExMart_Backend.Data
                     PrimaryImageUrl = "https://m.media-amazon.com/images/I/61eYApdaTDL._SL1100_.jpg",
 
                     CategoryId = 2,
-                    Size = new List<string> { "Standard" },
-                    Color = new List<string> { "Black", "White" },
+                    SizeId = new List<int> { 8 },
+                    ColorId = new List<int> { 3, 4 },
                     Weight = 200m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
@@ -519,14 +434,14 @@ namespace ExMart_Backend.Data
                     Id = 10,
                     Name = "BackPack",
                     Description = "Multi-purpose backpack",
-                    Brand = "VAFS",
+                    Brand = "WildCraft",
                     Price = 149.99m,
                     VendorId = 1,
                     PrimaryImageUrl = "staticimages/pro_bag.png",
 
                     CategoryId = 2,
-                    Size = new List<string> { "Standard" },
-                    Color = new List<string> { "Black", "White" },
+                    SizeId = new List<int> { 8 },
+                    ColorId = new List<int> { 3, 4 },
                     Weight = 700m,
                     CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
                     UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
@@ -574,14 +489,62 @@ namespace ExMart_Backend.Data
             .HasForeignKey(f => f.UserId); // Specify the foreign key property
 
 
-                }
 
+            // Seed AddressType data
+            modelBuilder.Entity<AddressType>().HasData(
+                new AddressType { Id = 1, AddressTypeName = "Home" },
+                new AddressType { Id = 2, AddressTypeName = "Office" },
+                new AddressType { Id = 3, AddressTypeName = "Other" }
+            );
 
-
-
-
-
-
+            // Seed User data
+            modelBuilder.Entity<User>().HasData(
+              new User {
+                Id = 1,
+                Name = "Robert Brown",
+                Email = "robert.brown@example.com",
+                Phone = "+91 9998887766",
+                  CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+              },
+              new User {
+                Id = 2,
+                Name = "Emily White",
+                Email = "emily.white@example.com",
+                Phone = "+91 9876543210",
+                CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+              }
+           );
+            modelBuilder.Entity<UserAddress>().HasData(
+               new UserAddress
+               {
+                   Id = 1,
+                   UserId = 1,
+                   AddressTypeId = 2,
+                   IsPrimary = true,
+                   AddressLine = "Gayathri Building",
+                   City = "Kazhakuttam",
+                   State = "Kerala",
+                   ZipCode = "683102"
+               },
+               new UserAddress
+               {
+                   Id = 2,
+                   UserId = 1,
+                   AddressTypeId = 2,
+                   IsPrimary = false,
+                   AddressLine = "Athulya Building",
+                   City = "Kakkanad",
+                   State = "Kerala",
+                   ZipCode = "682018"
+               }
+           );
+        }
 
     }
+
+
+
+
+
 }
+

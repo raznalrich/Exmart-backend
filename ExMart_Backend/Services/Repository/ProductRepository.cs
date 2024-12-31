@@ -62,5 +62,21 @@ namespace ExMart_Backend.Services.Repository
         {
             return await _db.Products.ToListAsync();
         }
+
+        public async Task<IEnumerable<Product>> GetProductsByNameAsync(string productName)
+        {
+            if (string.IsNullOrWhiteSpace(productName))
+            {
+                return Enumerable.Empty<Product>();
+            }
+
+            var products = await _db.Products
+                .Where(p => p.Name.ToLower().Contains(productName.ToLower()))
+                .ToListAsync();
+
+            return products;
+        }
+
+
     }
 }

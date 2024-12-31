@@ -10,7 +10,7 @@ namespace ExMart_Backend.Model
         public string ProductName { get; set; }
         public string FeedBack { get; set; }
 
-        [JsonIgnore]
+        
         public User User { get; set; }
 
     }
