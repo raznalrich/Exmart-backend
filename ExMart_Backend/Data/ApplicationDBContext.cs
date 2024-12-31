@@ -15,7 +15,7 @@ namespace ExMart_Backend.Data
         }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImages> Images { get; set; }
-        public DbSet<ProductStatus> Status { get; set; }
+        //public DbSet<ProductStatus> Status { get; set; }
         public DbSet<Category> addToCategories { get; set; }
 
         public DbSet<ColourMaster> ColourMaster { get; set; }
@@ -276,6 +276,40 @@ namespace ExMart_Backend.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
 
+           
+        
+           
+
+            // Seeding the User table
+            //modelBuilder.Entity<User>().HasData(
+            //    new User
+            //    {
+            //        Id = 1,
+            //        Name = "John Doe",
+            //        Email = "johndoe@example.com",
+            //        Phone = "1234567890",
+            //        CreatedAt = DateTime.UtcNow
+            //    },
+            //    new User
+            //    {
+            //        Id = 2,
+            //        Name = "Jane Smith",
+            //        Email = "janesmith@example.com",
+            //        Phone = "0987654321",
+            //        CreatedAt = DateTime.UtcNow
+            //    },
+            //    new User
+            //    {
+            //        Id = 3,
+            //        Name = "Alice Brown",
+            //        Email = "alicebrown@example.com",
+            //        Phone = "1122334455",
+            //        CreatedAt =  DateTime.UtcNow // Specific UTC DateTime
+            //    }
+            //);
+
+
+
             modelBuilder.Entity<Product>().HasData(
                
                 new Product
@@ -497,23 +531,34 @@ namespace ExMart_Backend.Data
                 new AddressType { Id = 3, AddressTypeName = "Other" }
             );
 
-            // Seed User data
+            //Seed User data
             modelBuilder.Entity<User>().HasData(
-              new User {
-                Id = 1,
-                Name = "Robert Brown",
-                Email = "robert.brown@example.com",
-                Phone = "+91 9998887766",
+              new User
+              {
+                  Id = 1,
+                  Name = "Robert Brown",
+                  Email = "robert.brown@example.com",
+                  Phone = "+91 9998887766",
                   CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
               },
-              new User {
-                Id = 2,
-                Name = "Emily White",
-                Email = "emily.white@example.com",
-                Phone = "+91 9876543210",
-                CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
-              }
+              new User
+              {
+                  Id = 2,
+                  Name = "Emily White",
+                  Email = "emily.white@example.com",
+                  Phone = "+91 9876543210",
+                  CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+              },
+                new User
+                {
+                    Id = 3,
+                    Name = "Alice Brown",
+                    Email = "alicebrown@example.com",
+                    Phone = "1122334455",
+                    CreatedAt = DateTime.UtcNow // Specific UTC DateTime
+                }
            );
+
             modelBuilder.Entity<UserAddress>().HasData(
                new UserAddress
                {

@@ -244,9 +244,6 @@ namespace ExMart_Backend.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProductRateId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
@@ -676,23 +673,6 @@ namespace ExMart_Backend.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ExMart_Backend.Model.ProductStatus", b =>
-                {
-                    b.Property<int>("ProductStatusID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProductStatusID"));
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ProductStatusID");
-
-                    b.ToTable("Status");
-                });
-
             modelBuilder.Entity("ExMart_Backend.Model.SizeMaster", b =>
                 {
                     b.Property<int>("SizeId")
@@ -829,6 +809,14 @@ namespace ExMart_Backend.Migrations
                             Email = "emily.white@example.com",
                             Name = "Emily White",
                             Phone = "+91 9876543210"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2024, 12, 31, 4, 37, 37, 106, DateTimeKind.Utc).AddTicks(9570),
+                            Email = "alicebrown@example.com",
+                            Name = "Alice Brown",
+                            Phone = "1122334455"
                         });
                 });
 
