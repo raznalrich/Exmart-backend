@@ -4,6 +4,7 @@ using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExMart_Backend.Controllers
 {
@@ -24,44 +25,67 @@ namespace ExMart_Backend.Controllers
         [Route("placeorder")]
         public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderDTO placeOrderDTO)
         {
-
-            // Map the PlaceOrderDTO to Order entity
-            var order = _mapper.Map<Order>(placeOrderDTO);
-
-            // Map OrderItems from PlaceOrderDTO to OrderItem entities
-            var orderItems = new List<OrderItem>();
-            foreach (var itemDTO in placeOrderDTO.OrderItems)
+            if (!ModelState.IsValid)
             {
-                var orderItem = new OrderItem
-                {
-                    ProductId = itemDTO.ProductId,
-                    ProductRateId = itemDTO.ProductRateId,
-                    SizeId = itemDTO.SizeId,
-                    ColorId = itemDTO.ColorId,
-                    Quantity = 1 // Default quantity, you may adjust this as needed
-                };
-                orderItems.Add(orderItem);
+                return BadRequest(ModelState);
             }
-
-            // Assign the OrderItems to the Order entity
-            order.OrderItems = orderItems;
-
-            // Set other required properties for the order, such as Product_StatusId and CreatedAt
-            //order.Product_StatusId = placeOrderDTO.Product_StatusId;
-            order.CreatedAt = DateTime.UtcNow;
 
             try
             {
-                // Call the AddOrder function in the repository
-                Order resOrder = await _orderRepository.AddOrder(order);
+                //var orderId = await _orderRepository.GenerateOrderId();
+                // Explicitly create new Order without using AutoMapper
+                var order = new Order
+                {
+                    //OrderId = orderId,
+                    UserId = placeOrderDTO.UserId,
+                    AddressId = placeOrderDTO.AddressId,
+                    Product_StatusId = 1,
+                    CreatedAt = DateTime.UtcNow,
+                    // Initialize a new list for OrderItems
+                    OrderItems = new List<OrderItem>()
+                };
 
-                // Return a successful response with the created order
-                return Ok(resOrder);
+                // Explicitly create OrderItems
+                foreach (var itemDTO in placeOrderDTO.OrderItems)
+                {
+                    var orderItem = new OrderItem
+                    {
+                        ProductId = itemDTO.ProductId,
+                        Quantity = itemDTO.Quantity,
+                        SizeId = itemDTO.SizeId,
+                        ColorId = itemDTO.ColorId
+                    };
+                    order.OrderItems.Add(orderItem);
+                }
+
+                var result = await _orderRepository.AddOrder(order);
+
+                //return Ok(result);
+                // Load and return the complete order with details
+
+                var orderWithDetails = await _orderRepository.GetOrderWithDetails(result.OrderId);
+                return CreatedAtAction(nameof(_orderRepository.GetOrderById), new { id = orderWithDetails.OrderId }, orderWithDetails);
+
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "Database error occurred while placing the order",
+                    error = ex.InnerException?.Message ?? ex.Message
+                });
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that occur during order creation
-                return StatusCode((int)HttpStatusCode.InternalServerError, $"Error placing order: {ex.Message}");
+                return StatusCode(500, new
+                {
+                    message = "An unexpected error occurred while processing your order",
+                    error = ex.Message
+                });
             }
         }
 
@@ -80,6 +104,20 @@ namespace ExMart_Backend.Controllers
         {
             var order = await _orderRepository.GetOrderById(id);
             return Ok(order);
+        }
+
+        [HttpGet("orders/details")]
+        public async Task<IActionResult> GetOrderDetails()
+        {
+            try
+            {
+                var orderDetails = await _orderRepository.GetOrderDetails();
+                return Ok(orderDetails);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error retrieving order details", error = ex.Message });
+            }
         }
     }
 }
