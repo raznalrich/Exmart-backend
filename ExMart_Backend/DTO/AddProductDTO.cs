@@ -11,7 +11,7 @@ namespace ExMart_Backend.DTO
         public int CategoryId { get; set; }
         public List<string> Size { get; set; }
         public List<string> Color { get; set; }
-        public string PrimaryImageUrl { get; set; }
+        public string? PrimaryImageUrl { get; set; }
         public decimal Weight { get; set; }
         public decimal Price { get; set; }
         public int CreatedBy { get; set; }

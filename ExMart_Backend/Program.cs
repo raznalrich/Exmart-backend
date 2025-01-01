@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+using System.Reflection;
 using ExMart_Backend;
 using ExMart_Backend.Data;
 using ExMart_Backend.Interface;
@@ -6,29 +6,35 @@ using ExMart_Backend.Repository;
 using ExMart_Backend.Services.Interface;
 using ExMart_Backend.Services.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using YourNamespace.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDBContext>
     (options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddControllers();
 
-   
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddTransient<IMailRepository, MailRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IAddToCartRepository, AddToCartRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IImageUpload, ImageUploadRepository>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options =>
+builder.Services.AddSwaggerGen(c =>
+{
+
+    // Enable Swagger to handle IFormFile
+    c.OperationFilter<FileUploadOperation>();
+}); builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
@@ -40,23 +46,21 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    });
-
 var app = builder.Build();
+app.UseCors("AllowAngularApp");
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ExMart_Backend v1");
+    });
 }
 app.UseHttpsRedirection();
 // Apply CORS policy globally
-app.UseCors("AllowAngularApp");
 app.UseAuthorization();
 
 app.MapControllers();
