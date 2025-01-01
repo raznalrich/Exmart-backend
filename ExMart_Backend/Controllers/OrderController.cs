@@ -119,5 +119,19 @@ namespace ExMart_Backend.Controllers
                 return StatusCode(500, new { message = "Error retrieving order details", error = ex.Message });
             }
         }
+
+        [HttpPut("updatestatus")]
+        public async Task<IActionResult> UpdateOrderStatus( [FromBody] UpdateOrderStatusRequest request)
+        {
+            try
+            {
+                var result = await _orderRepository.UpdateOrderStatus(request);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the order status");
+            }
+        }
     }
 }

@@ -141,11 +141,40 @@ namespace ExMart_Backend.Services.Repository
                     OrderId = o.OrderId,
                     OrderDate = o.CreatedAt,
                     CustomerName = o.User.Name,
-                    Status = o.ProductStatus.StatusName,
+                    Status = o.ProductStatus.Product_StatusId,
                     TotalAmount = o.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price),
                     TotalItems = o.OrderItems.Sum(oi => oi.Quantity)
                 })
                 .ToListAsync();
+        }
+
+       public async Task<object>UpdateOrderStatus(UpdateOrderStatusRequest request)
+        {
+            {
+                var order = await _db.Orders
+                    .Include(o => o.ProductStatus)
+                    .FirstOrDefaultAsync(o => o.OrderId == request.OrderId);
+
+                if (order == null)
+                {
+                    throw new Exception($"Order with ID {request.OrderId} not found");
+                }
+
+                var newStatus = await _db.StatusMaster
+                    .FirstOrDefaultAsync(s => s.Product_StatusId == request.ProductStatusId);
+
+                if (newStatus == null)
+                {
+                    throw new Exception($"Status with ID {request.ProductStatusId} not found");
+                }
+
+                order.Product_StatusId = request.ProductStatusId;
+
+                await _db.SaveChangesAsync();
+
+                return order;
+               
+            }
         }
     }
 }
