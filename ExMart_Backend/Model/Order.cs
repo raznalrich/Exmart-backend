@@ -8,7 +8,6 @@
         public int AddressId { get; set; }
         public int Product_StatusId { get; set; }
         public DateTime? CreatedAt { get; set; }
-
         public ICollection<OrderItem> OrderItems { get; set; }
     }
 }
