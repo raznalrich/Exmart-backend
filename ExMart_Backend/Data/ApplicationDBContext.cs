@@ -1,6 +1,4 @@
 ﻿using System.Drawing;
-using System.Numerics;
-using System.Xml.Linq;
 using ExMart_Backend.Model;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -28,6 +26,7 @@ namespace ExMart_Backend.Data
         public DbSet<User> Users { get; set; }
         public DbSet<AddressType> AddressTypes { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -281,34 +280,7 @@ namespace ExMart_Backend.Data
         
            
 
-            // Seeding the User table
-            //modelBuilder.Entity<User>().HasData(
-            //    new User
-            //    {
-            //        Id = 1,
-            //        Name = "John Doe",
-            //        Email = "johndoe@example.com",
-            //        Phone = "1234567890",
-            //        CreatedAt = DateTime.UtcNow
-            //    },
-            //    new User
-            //    {
-            //        Id = 2,
-            //        Name = "Jane Smith",
-            //        Email = "janesmith@example.com",
-            //        Phone = "0987654321",
-            //        CreatedAt = DateTime.UtcNow
-            //    },
-            //    new User
-            //    {
-            //        Id = 3,
-            //        Name = "Alice Brown",
-            //        Email = "alicebrown@example.com",
-            //        Phone = "1122334455",
-            //        CreatedAt =  DateTime.UtcNow // Specific UTC DateTime
-            //    }
-            //);
-
+          
 
 
             modelBuilder.Entity<Product>().HasData(
@@ -507,7 +479,23 @@ namespace ExMart_Backend.Data
                  }
             );
 
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Feedback>().HasData(
+                new Feedback
+                { 
+                    FeedBackId = 1,
+                    UserId = 1,
+                    ProductName = "bag",
+                    FeedBack = "Very good quality "
+                }
+
+                );
+
+                    modelBuilder.Entity<Feedback>()
+            .HasOne(f => f.User) // Reference the navigation property in Feedback
+            .WithMany(u => u.Feedbacks) // Reference the navigation property in User
+            .HasForeignKey(f => f.UserId); // Specify the foreign key property
+
+
 
             // Seed AddressType data
             modelBuilder.Entity<AddressType>().HasData(
@@ -541,6 +529,14 @@ namespace ExMart_Backend.Data
                     Email = "alicebrown@example.com",
                     Phone = "1122334455",
                     CreatedAt = DateTime.UtcNow // Specific UTC DateTime
+                },
+                new User
+                { 
+                    Id = 4,
+                    Name = "John Wick",
+                    Email = "jhonwick@example.com",
+                    Phone = "+91 9873876210",
+                    CreatedAt = DateTime.UtcNow
                 }
            );
 
@@ -570,10 +566,11 @@ namespace ExMart_Backend.Data
            );
         }
 
-
-
-
-
-
     }
+
+
+
+
+
 }
+

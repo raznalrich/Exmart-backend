@@ -19,13 +19,13 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddTransient<IMailRepository, MailRepository>();
+builder.Services.AddTransient<IConfigRepository, ConfigRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IAddToCartRepository, AddToCartRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IConfigRepository, ConfigRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IFeedBackRepository,FeedbackRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>

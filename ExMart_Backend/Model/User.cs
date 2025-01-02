@@ -14,5 +14,6 @@ namespace ExMart_Backend.Model
 
         // Navigation Properties
         public ICollection<Order> Orders { get; set; }
+        public ICollection<Feedback> Feedbacks { get; set; }
     }
 }
