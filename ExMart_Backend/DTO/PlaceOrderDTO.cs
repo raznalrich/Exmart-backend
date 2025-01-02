@@ -4,7 +4,7 @@
     {
         public int UserId { get; set; }
         public int AddressId { get; set; }
-        public int Product_StatusId { get; set; }
+        
         public List<OrderItemDTO> OrderItems { get; set; }
     }
 }

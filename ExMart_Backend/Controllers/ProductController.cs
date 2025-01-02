@@ -105,5 +105,22 @@ namespace ExMart_Backend.Controllers
                 });
             }
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> GetProductsByName([FromQuery] string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest("Product name cannot be empty.");
+            }
+
+            var products = await _productRepository.GetProductsByNameAsync(name);
+            if (products == null || !products.Any())
+            {
+                return NotFound("No products found.");
+            }
+
+            return Ok(products);
+        }
     }
 }

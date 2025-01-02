@@ -7,7 +7,7 @@ namespace ExMart_Backend.Model
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(Order = 1, TypeName = "Serial")]
+        //[Column(Order = 1, TypeName = "Serial")]
         public int CartId { get; set; }
         public int ProductId { get; set; }
         public int UserId { get; set; }

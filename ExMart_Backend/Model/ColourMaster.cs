@@ -7,6 +7,9 @@ namespace ExMart_Backend.Model
         [Key]
         public int ColorId { get; set; }
         public string ColorName { get; set; }    
-        public string ColorCode { get; set; }    
+        public string ColorCode { get; set; }
+
+        // Navigation Properties
+        public ICollection<OrderItem> OrderItems { get; set; }
     }
 }

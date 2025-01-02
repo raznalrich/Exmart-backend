@@ -4,5 +4,6 @@
     {
         public int Id { get; set; }
         public string AddressTypeName { get; set; }
+        public ICollection<UserAddress> UserAddresses { get; set; }
     }
 }

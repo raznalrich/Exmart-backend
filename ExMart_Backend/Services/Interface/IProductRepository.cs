@@ -8,5 +8,6 @@ namespace ExMart_Backend.Services.Interface
         Task<IEnumerable<object>> GetProducts();
         Task<Product> AddProductAsync(Product product);
         Task<bool> DeactivateProductAsync(int id);
+        Task<IEnumerable<Product>> GetProductsByNameAsync(string productName);
     }
 }

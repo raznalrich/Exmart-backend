@@ -23,6 +23,40 @@ namespace ExMart_Backend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ExMart_Backend.Model.AddressType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddressTypeName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AddressTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddressTypeName = "Home"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressTypeName = "Office"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AddressTypeName = "Other"
+                        });
+                });
+
             modelBuilder.Entity("ExMart_Backend.Model.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -129,6 +163,41 @@ namespace ExMart_Backend.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ExMart_Backend.Model.Feedback", b =>
+                {
+                    b.Property<int>("FeedBackId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FeedBackId"));
+
+                    b.Property<string>("FeedBack")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("FeedBackId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Feedbacks");
+
+                    b.HasData(
+                        new
+                        {
+                            FeedBackId = 1,
+                            FeedBack = "Very good quality ",
+                            ProductName = "bag",
+                            UserId = 1
+                        });
+                });
+
             modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
                 {
                     b.Property<int>("OrderId")
@@ -143,9 +212,6 @@ namespace ExMart_Backend.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Order_ItemId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("Product_StatusId")
                         .HasColumnType("integer");
 
@@ -153,6 +219,10 @@ namespace ExMart_Backend.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("Product_StatusId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -174,7 +244,7 @@ namespace ExMart_Backend.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProductRateId")
+                    b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
                     b.Property<int>("SizeId")
@@ -182,7 +252,13 @@ namespace ExMart_Backend.Migrations
 
                     b.HasKey("OrderItemId");
 
+                    b.HasIndex("ColorId");
+
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeId");
 
                     b.ToTable("OrderItems");
                 });
@@ -202,9 +278,9 @@ namespace ExMart_Backend.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
-                    b.Property<List<string>>("Color")
+                    b.Property<List<int>>("ColorId")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("integer[]");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -227,12 +303,11 @@ namespace ExMart_Backend.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("PrimaryImageUrl")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<List<string>>("Size")
+                    b.Property<List<int>>("SizeId")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("integer[]");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -253,7 +328,7 @@ namespace ExMart_Backend.Migrations
                             Id = 1,
                             Brand = "Experion",
                             CategoryId = 1,
-                            Color = new List<string> { "red", "black" },
+                            ColorId = new List<int> { 4, 3, 2 },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Experion branded t-shirt",
@@ -261,7 +336,7 @@ namespace ExMart_Backend.Migrations
                             Name = "Experion Tshirt",
                             Price = 1499.00m,
                             PrimaryImageUrl = "staticimages/pro_tshirt.png",
-                            Size = new List<string> { "15.6 inches" },
+                            SizeId = new List<int> { 1, 2, 3, 4, 5 },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 500m
@@ -271,7 +346,7 @@ namespace ExMart_Backend.Migrations
                             Id = 2,
                             Brand = "Experion",
                             CategoryId = 1,
-                            Color = new List<string> { "white" },
+                            ColorId = new List<int> { 4, 3 },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Experion branded hoodie",
@@ -279,7 +354,7 @@ namespace ExMart_Backend.Migrations
                             Name = "Hoody Experion brand",
                             Price = 399.99m,
                             PrimaryImageUrl = "https://media.karousell.com/media/photos/products/2023/4/29/gildan_zipup_hoodie_1682750904_29598b39.jpg",
-                            Size = new List<string> { "Standard" },
+                            SizeId = new List<int> { 1, 2, 3, 4, 5, 6 },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 600m
@@ -289,7 +364,7 @@ namespace ExMart_Backend.Migrations
                             Id = 3,
                             Brand = "Experion",
                             CategoryId = 1,
-                            Color = new List<string> { "black", "red" },
+                            ColorId = new List<int> { 4, 3, 1, 2 },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Experion branded jersey",
@@ -297,7 +372,7 @@ namespace ExMart_Backend.Migrations
                             Name = "Jersey Experion branded",
                             Price = 399.99m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/51C2ieRiU9L.jpg",
-                            Size = new List<string> { "40mm", "44mm" },
+                            SizeId = new List<int> { 1, 2, 3, 4, 5, 6 },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 400m
@@ -307,7 +382,7 @@ namespace ExMart_Backend.Migrations
                             Id = 4,
                             Brand = "Swiss Military",
                             CategoryId = 3,
-                            Color = new List<string> { "white", "blue" },
+                            ColorId = new List<int> { 1, 6 },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Swiss military branded earpods",
@@ -315,7 +390,7 @@ namespace ExMart_Backend.Migrations
                             Name = "Earpods Swiss military",
                             Price = 349.99m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/71RFdy6y6LL._SL1500_.jpg",
-                            Size = new List<string> { "Standard" },
+                            SizeId = new List<int> { 8 },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 50m
@@ -325,7 +400,7 @@ namespace ExMart_Backend.Migrations
                             Id = 5,
                             Brand = "VAFS",
                             CategoryId = 2,
-                            Color = new List<string> { "blue", "white", "green" },
+                            ColorId = new List<int> { 3, 4 },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Reusable water bottle",
@@ -333,7 +408,7 @@ namespace ExMart_Backend.Migrations
                             Name = "Water Bottle",
                             Price = 399.00m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/71zFvtVuP1L._SL1500_.jpg",
-                            Size = new List<string> { "41mm", "45mm" },
+                            SizeId = new List<int> { 8 },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 300m
@@ -343,7 +418,7 @@ namespace ExMart_Backend.Migrations
                             Id = 6,
                             Brand = "VAFS",
                             CategoryId = 2,
-                            Color = new List<string> { "Black", "red" },
+                            ColorId = new List<int> { 3, 4 },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Insulated flask",
@@ -351,35 +426,17 @@ namespace ExMart_Backend.Migrations
                             Name = "Flask",
                             Price = 349.99m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/41W9B1Ri4hL.jpg",
-                            Size = new List<string> { "Standard" },
+                            SizeId = new List<int> { 8 },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 400m
                         },
                         new
                         {
-                            Id = 7,
-                            Brand = "Nike",
-                            CategoryId = 2,
-                            Color = new List<string> { "White", "Black", "Red" },
-                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
-                            CreatedBy = 1,
-                            Description = "Nike Air Force 1 sneakers",
-                            IsActive = true,
-                            Name = "Nike Air Force 1",
-                            Price = 99.99m,
-                            PrimaryImageUrl = "https://m.media-amazon.com/images/I/61t0gIsFpjL._SY675_.jpg",
-                            Size = new List<string> { "5", "6", "7", "8", "9", "10", "11", "12" },
-                            UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
-                            VendorId = 1,
-                            Weight = 800m
-                        },
-                        new
-                        {
                             Id = 8,
                             Brand = "Samsung",
                             CategoryId = 3,
-                            Color = new List<string> { "black", "White" },
+                            ColorId = new List<int> { 3, 4 },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Samsung wireless earbuds",
@@ -387,7 +444,7 @@ namespace ExMart_Backend.Migrations
                             Name = "Samsung Galaxy Buds 2 Pro",
                             Price = 1999.99m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/61KVX-MbIUL._SL1500_.jpg",
-                            Size = new List<string> { "Standard" },
+                            SizeId = new List<int> { 8 },
                             UpdatedAt = new DateTime(2023, 11, 23, 15, 22, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 50m
@@ -397,7 +454,7 @@ namespace ExMart_Backend.Migrations
                             Id = 9,
                             Brand = "VAFS",
                             CategoryId = 2,
-                            Color = new List<string> { "Black", "White" },
+                            ColorId = new List<int> { 3, 4 },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Personal diary",
@@ -405,7 +462,7 @@ namespace ExMart_Backend.Migrations
                             Name = "Diary",
                             Price = 149.99m,
                             PrimaryImageUrl = "https://m.media-amazon.com/images/I/61eYApdaTDL._SL1100_.jpg",
-                            Size = new List<string> { "Standard" },
+                            SizeId = new List<int> { 8 },
                             UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 200m
@@ -413,9 +470,9 @@ namespace ExMart_Backend.Migrations
                         new
                         {
                             Id = 10,
-                            Brand = "VAFS",
+                            Brand = "WildCraft",
                             CategoryId = 2,
-                            Color = new List<string> { "Black", "White" },
+                            ColorId = new List<int> { 3, 4 },
                             CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             CreatedBy = 1,
                             Description = "Multi-purpose backpack",
@@ -423,7 +480,7 @@ namespace ExMart_Backend.Migrations
                             Name = "BackPack",
                             Price = 149.99m,
                             PrimaryImageUrl = "staticimages/pro_bag.png",
-                            Size = new List<string> { "Standard" },
+                            SizeId = new List<int> { 8 },
                             UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
                             VendorId = 1,
                             Weight = 700m
@@ -562,24 +619,6 @@ namespace ExMart_Backend.Migrations
                         },
                         new
                         {
-                            ImageId = 7,
-                            ImageUrl = "https://m.media-amazon.com/images/I/61ZkbRBEBvL._SY675_.jpg",
-                            ProductId = 7
-                        },
-                        new
-                        {
-                            ImageId = 23,
-                            ImageUrl = "https://m.media-amazon.com/images/I/81rLH99Wj2L._SY675_.jpg",
-                            ProductId = 7
-                        },
-                        new
-                        {
-                            ImageId = 24,
-                            ImageUrl = "https://m.media-amazon.com/images/I/61R2cfPmcSL._SY675_.jpg",
-                            ProductId = 7
-                        },
-                        new
-                        {
                             ImageId = 8,
                             ImageUrl = "https://m.media-amazon.com/images/I/61lEskbCaoL._SY450_.jpg",
                             ProductId = 8
@@ -634,23 +673,6 @@ namespace ExMart_Backend.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ExMart_Backend.Model.ProductStatus", b =>
-                {
-                    b.Property<int>("ProductStatusID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProductStatusID"));
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ProductStatusID");
-
-                    b.ToTable("Status");
-                });
-
             modelBuilder.Entity("ExMart_Backend.Model.SizeMaster", b =>
                 {
                     b.Property<int>("SizeId")
@@ -702,6 +724,45 @@ namespace ExMart_Backend.Migrations
                         {
                             SizeId = 7,
                             Size = "XXXL"
+                        },
+                        new
+                        {
+                            SizeId = 8,
+                            Size = "Free Size"
+                        });
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.StatusMaster", b =>
+                {
+                    b.Property<int>("Product_StatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Product_StatusId"));
+
+                    b.Property<string>("StatusName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Product_StatusId");
+
+                    b.ToTable("StatusMaster");
+
+                    b.HasData(
+                        new
+                        {
+                            Product_StatusId = 1,
+                            StatusName = "Pending"
+                        },
+                        new
+                        {
+                            Product_StatusId = 2,
+                            StatusName = "Shipped"
+                        },
+                        new
+                        {
+                            Product_StatusId = 3,
+                            StatusName = "Delivered"
                         });
                 });
 
@@ -713,7 +774,7 @@ namespace ExMart_Backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
@@ -731,6 +792,96 @@ namespace ExMart_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            Email = "robert.brown@example.com",
+                            Name = "Robert Brown",
+                            Phone = "+91 9998887766"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, 0, DateTimeKind.Utc),
+                            Email = "emily.white@example.com",
+                            Name = "Emily White",
+                            Phone = "+91 9876543210"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2024, 12, 31, 4, 37, 37, 106, DateTimeKind.Utc).AddTicks(9570),
+                            Email = "alicebrown@example.com",
+                            Name = "Alice Brown",
+                            Phone = "1122334455"
+                        });
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.UserAddress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddressLine")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("AddressTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressTypeId");
+
+                    b.ToTable("UserAddresses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddressLine = "Gayathri Building",
+                            AddressTypeId = 2,
+                            City = "Kazhakuttam",
+                            IsPrimary = true,
+                            State = "Kerala",
+                            UserId = 1,
+                            ZipCode = "683102"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressLine = "Athulya Building",
+                            AddressTypeId = 2,
+                            City = "Kakkanad",
+                            IsPrimary = false,
+                            State = "Kerala",
+                            UserId = 1,
+                            ZipCode = "682018"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -929,13 +1080,69 @@ namespace ExMart_Backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ExMart_Backend.Model.Feedback", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.User", "User")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.StatusMaster", "ProductStatus")
+                        .WithMany("Orders")
+                        .HasForeignKey("Product_StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ExMart_Backend.Model.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProductStatus");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ExMart_Backend.Model.OrderItem", b =>
                 {
-                    b.HasOne("ExMart_Backend.Model.Order", null)
+                    b.HasOne("ExMart_Backend.Model.ColourMaster", "Color")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ExMart_Backend.Model.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ExMart_Backend.Model.Product", "Product")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ExMart_Backend.Model.SizeMaster", "Size")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Color");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Size");
                 });
 
             modelBuilder.Entity("ExMart_Backend.Model.ProductImages", b =>
@@ -947,6 +1154,17 @@ namespace ExMart_Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.UserAddress", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.AddressType", "AddressType")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("AddressTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddressType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1000,6 +1218,16 @@ namespace ExMart_Backend.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ExMart_Backend.Model.AddressType", b =>
+                {
+                    b.Navigation("UserAddresses");
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.ColourMaster", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
             modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
                 {
                     b.Navigation("OrderItems");
@@ -1007,7 +1235,26 @@ namespace ExMart_Backend.Migrations
 
             modelBuilder.Entity("ExMart_Backend.Model.Product", b =>
                 {
+                    b.Navigation("OrderItems");
+
                     b.Navigation("ProductImages");
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.SizeMaster", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.StatusMaster", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("ExMart_Backend.Model.User", b =>
+                {
+                    b.Navigation("Feedbacks");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

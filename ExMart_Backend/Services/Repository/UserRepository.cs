@@ -1,6 +1,9 @@
-﻿using ExMart_Backend.Data;
+﻿using System.Net;
+using ExMart_Backend.Data;
+using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExMart_Backend.Services.Repository
 {
@@ -26,6 +29,32 @@ namespace ExMart_Backend.Services.Repository
                 Console.WriteLine(ex.Message);
                 return false;
             }
+        }
+        public async Task AddAddress(AddAddressDTO addAddressDTO)
+        {
+            var userAddress = new UserAddress
+            {
+                UserId = addAddressDTO.UserId,
+                AddressTypeId = addAddressDTO.AddressTypeId,
+                IsPrimary = addAddressDTO.IsPrimary,
+                AddressLine = addAddressDTO.AddressLine,
+                City = addAddressDTO.City,
+                State = addAddressDTO.State,
+                ZipCode = addAddressDTO.ZipCode
+            };
+
+
+            _db.UserAddresses.Add(userAddress);
+            await _db.SaveChangesAsync();
+        }
+
+
+
+        public Task<List<UserAddress>> GetAddressByUserId(int userId)
+        {
+            return _db.UserAddresses
+                .Where(a => a.UserId == userId)
+                .ToListAsync();
         }
     }
 }
