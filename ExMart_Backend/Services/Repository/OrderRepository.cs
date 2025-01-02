@@ -129,7 +129,7 @@ namespace ExMart_Backend.Services.Repository
             return order;
         }
 
-        public async Task<List<OrderListDTO>> GetOrderDetails()
+        public async Task<List<OrderListDTO>> GetOrderToList()
         {
             return await _db.Orders
                 .Include(o => o.User)
@@ -148,7 +148,24 @@ namespace ExMart_Backend.Services.Repository
                 .ToListAsync();
         }
 
-       public async Task<object>UpdateOrderStatus(UpdateOrderStatusRequest request)
+        async Task<OrderDetailByOrderDTO> IOrderRepository.GetOrderDetailsById(int orderId)
+        {
+            return await _db.Orders.Where(o => o.OrderId == orderId).Select(o => new OrderDetailByOrderDTO
+            {
+                Name = o.User.Name,
+                Email = o.User.Email,
+                Phone = o.User.Phone,
+                OrderId = o.OrderId,
+                CreatedAt = o.CreatedAt,
+                TotalAmount = o.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price),
+                AddressLine = o.UserAddress.AddressLine,
+                City = o.UserAddress.City,
+                State = o.UserAddress.State,
+                ZipCode = o.UserAddress.ZipCode,
+            }).FirstOrDefaultAsync();
+        }
+
+        public async Task<object>UpdateOrderStatus(UpdateOrderStatusRequest request)
         {
             {
                 var order = await _db.Orders
@@ -176,7 +193,5 @@ namespace ExMart_Backend.Services.Repository
                
             }
         }
-
-
     }
 }

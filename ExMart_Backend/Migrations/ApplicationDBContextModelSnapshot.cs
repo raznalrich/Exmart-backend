@@ -171,13 +171,13 @@ namespace ExMart_Backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderId"));
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Product_StatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("UserAddressId")
                         .HasColumnType("integer");
 
                     b.Property<int>("UserId")
@@ -186,6 +186,8 @@ namespace ExMart_Backend.Migrations
                     b.HasKey("OrderId");
 
                     b.HasIndex("Product_StatusId");
+
+                    b.HasIndex("UserAddressId");
 
                     b.HasIndex("UserId");
 
@@ -778,7 +780,7 @@ namespace ExMart_Backend.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 12, 31, 4, 37, 37, 106, DateTimeKind.Utc).AddTicks(9570),
+                            CreatedAt = new DateTime(2025, 1, 2, 7, 40, 25, 966, DateTimeKind.Utc).AddTicks(6799),
                             Email = "alicebrown@example.com",
                             Name = "Alice Brown",
                             Phone = "1122334455"
@@ -1053,6 +1055,10 @@ namespace ExMart_Backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ExMart_Backend.Model.UserAddress", "UserAddress")
+                        .WithMany()
+                        .HasForeignKey("UserAddressId");
+
                     b.HasOne("ExMart_Backend.Model.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
@@ -1062,6 +1068,8 @@ namespace ExMart_Backend.Migrations
                     b.Navigation("ProductStatus");
 
                     b.Navigation("User");
+
+                    b.Navigation("UserAddress");
                 });
 
             modelBuilder.Entity("ExMart_Backend.Model.OrderItem", b =>
