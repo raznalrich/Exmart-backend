@@ -163,6 +163,41 @@ namespace ExMart_Backend.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ExMart_Backend.Model.Feedback", b =>
+                {
+                    b.Property<int>("FeedBackId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FeedBackId"));
+
+                    b.Property<string>("FeedBack")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("FeedBackId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Feedbacks");
+
+                    b.HasData(
+                        new
+                        {
+                            FeedBackId = 1,
+                            FeedBack = "Very good quality ",
+                            ProductName = "bag",
+                            UserId = 1
+                        });
+                });
+
             modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
                 {
                     b.Property<int>("OrderId")
@@ -778,10 +813,20 @@ namespace ExMart_Backend.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 1, 2, 13, 51, 40, 443, DateTimeKind.Utc).AddTicks(9750),
+
+                            CreatedAt = new DateTime(2025, 1, 2, 9, 6, 52, 478, DateTimeKind.Utc).AddTicks(8801),
+
                             Email = "alicebrown@example.com",
                             Name = "Alice Brown",
                             Phone = "1122334455"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2025, 1, 1, 8, 48, 0, 672, DateTimeKind.Utc).AddTicks(9863),
+                            Email = "jhonwick@example.com",
+                            Name = "John Wick",
+                            Phone = "+91 9873876210"
                         });
                 });
 
@@ -1045,6 +1090,17 @@ namespace ExMart_Backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ExMart_Backend.Model.Feedback", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.User", "User")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
                 {
                     b.HasOne("ExMart_Backend.Model.StatusMaster", "ProductStatus")
@@ -1206,6 +1262,8 @@ namespace ExMart_Backend.Migrations
 
             modelBuilder.Entity("ExMart_Backend.Model.User", b =>
                 {
+                    b.Navigation("Feedbacks");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

@@ -36,6 +36,7 @@ builder.Services.AddScoped<IImageUpload, ImageUploadRepository>();
 //builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 //builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 //builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+builder.Services.AddScoped<IFeedBackRepository,FeedbackRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
