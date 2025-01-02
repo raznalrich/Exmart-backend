@@ -163,6 +163,41 @@ namespace ExMart_Backend.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ExMart_Backend.Model.Feedback", b =>
+                {
+                    b.Property<int>("FeedBackId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FeedBackId"));
+
+                    b.Property<string>("FeedBack")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("FeedBackId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Feedbacks");
+
+                    b.HasData(
+                        new
+                        {
+                            FeedBackId = 1,
+                            FeedBack = "Very good quality ",
+                            ProductName = "bag",
+                            UserId = 1
+                        });
+                });
+
             modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
                 {
                     b.Property<int>("OrderId")
@@ -1045,6 +1080,17 @@ namespace ExMart_Backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ExMart_Backend.Model.Feedback", b =>
+                {
+                    b.HasOne("ExMart_Backend.Model.User", "User")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ExMart_Backend.Model.Order", b =>
                 {
                     b.HasOne("ExMart_Backend.Model.StatusMaster", "ProductStatus")
@@ -1206,6 +1252,8 @@ namespace ExMart_Backend.Migrations
 
             modelBuilder.Entity("ExMart_Backend.Model.User", b =>
                 {
+                    b.Navigation("Feedbacks");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
