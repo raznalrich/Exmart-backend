@@ -280,34 +280,7 @@ namespace ExMart_Backend.Data
         
            
 
-            // Seeding the User table
-            //modelBuilder.Entity<User>().HasData(
-            //    new User
-            //    {
-            //        Id = 1,
-            //        Name = "John Doe",
-            //        Email = "johndoe@example.com",
-            //        Phone = "1234567890",
-            //        CreatedAt = DateTime.UtcNow
-            //    },
-            //    new User
-            //    {
-            //        Id = 2,
-            //        Name = "Jane Smith",
-            //        Email = "janesmith@example.com",
-            //        Phone = "0987654321",
-            //        CreatedAt = DateTime.UtcNow
-            //    },
-            //    new User
-            //    {
-            //        Id = 3,
-            //        Name = "Alice Brown",
-            //        Email = "alicebrown@example.com",
-            //        Phone = "1122334455",
-            //        CreatedAt =  DateTime.UtcNow // Specific UTC DateTime
-            //    }
-            //);
-
+          
 
 
             modelBuilder.Entity<Product>().HasData(
