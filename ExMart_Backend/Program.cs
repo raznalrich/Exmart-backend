@@ -6,6 +6,7 @@ using ExMart_Backend.Repository;
 using ExMart_Backend.Services.Interface;
 using ExMart_Backend.Services.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 using YourNamespace.Repositories;
 
@@ -21,6 +22,8 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddTransient<IMailRepository, MailRepository>();
+builder.Services.AddTransient<IConfigRepository, ConfigRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IAddToCartRepository, AddToCartRepository>();
@@ -28,13 +31,19 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IImageUpload, ImageUploadRepository>();
+//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
 
     // Enable Swagger to handle IFormFile
-    c.OperationFilter<FileUploadOperation>();
-}); builder.Services.AddCors(options =>
+    //c.OperationFilter<FileUploadOperation>();
+});
+builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
@@ -48,11 +57,26 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 var app = builder.Build();
 app.UseCors("AllowAngularApp");
+app.UseStaticFiles();
+var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads"
+});
+
+app.UseRouting();
 
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {

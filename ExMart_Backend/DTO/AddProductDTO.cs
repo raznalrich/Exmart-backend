@@ -9,8 +9,8 @@ namespace ExMart_Backend.DTO
         public string Brand { get; set; }
         public int VendorId { get; set; }
         public int CategoryId { get; set; }
-        public List<string> Size { get; set; }
-        public List<string> Color { get; set; }
+        public List<int> Size { get; set; }
+        public List<int> Color { get; set; }
         public string? PrimaryImageUrl { get; set; }
         public decimal Weight { get; set; }
         public decimal Price { get; set; }
