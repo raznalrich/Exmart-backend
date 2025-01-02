@@ -19,6 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddTransient<IMailRepository, MailRepository>();
+builder.Services.AddTransient<IConfigRepository, ConfigRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IAddToCartRepository, AddToCartRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();

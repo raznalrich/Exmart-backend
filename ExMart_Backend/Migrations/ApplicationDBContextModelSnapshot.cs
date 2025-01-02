@@ -813,7 +813,9 @@ namespace ExMart_Backend.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 1, 1, 8, 48, 0, 672, DateTimeKind.Utc).AddTicks(9860),
+
+                            CreatedAt = new DateTime(2025, 1, 2, 9, 6, 52, 478, DateTimeKind.Utc).AddTicks(8801),
+
                             Email = "alicebrown@example.com",
                             Name = "Alice Brown",
                             Phone = "1122334455"
