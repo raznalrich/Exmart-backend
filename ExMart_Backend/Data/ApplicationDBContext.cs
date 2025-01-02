@@ -529,6 +529,14 @@ namespace ExMart_Backend.Data
                     Email = "alicebrown@example.com",
                     Phone = "1122334455",
                     CreatedAt = DateTime.UtcNow // Specific UTC DateTime
+                },
+                new User
+                { 
+                    Id = 4,
+                    Name = "John Wick",
+                    Email = "jhonwick@example.com",
+                    Phone = "+91 9873876210",
+                    CreatedAt = DateTime.UtcNow
                 }
            );
 
