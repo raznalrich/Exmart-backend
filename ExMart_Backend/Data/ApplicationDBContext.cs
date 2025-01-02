@@ -1,6 +1,4 @@
 ﻿using System.Drawing;
-using System.Numerics;
-using System.Xml.Linq;
 using ExMart_Backend.Model;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -28,6 +26,7 @@ namespace ExMart_Backend.Data
         public DbSet<User> Users { get; set; }
         public DbSet<AddressType> AddressTypes { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -480,7 +479,23 @@ namespace ExMart_Backend.Data
                  }
             );
 
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Feedback>().HasData(
+                new Feedback
+                { 
+                    FeedBackId = 1,
+                    UserId = 1,
+                    ProductName = "bag",
+                    FeedBack = "Very good quality "
+                }
+
+                );
+
+                    modelBuilder.Entity<Feedback>()
+            .HasOne(f => f.User) // Reference the navigation property in Feedback
+            .WithMany(u => u.Feedbacks) // Reference the navigation property in User
+            .HasForeignKey(f => f.UserId); // Specify the foreign key property
+
+
 
             // Seed AddressType data
             modelBuilder.Entity<AddressType>().HasData(
@@ -543,10 +558,11 @@ namespace ExMart_Backend.Data
            );
         }
 
-
-
-
-
-
     }
+
+
+
+
+
 }
+
