@@ -512,31 +512,31 @@ namespace ExMart_Backend.Migrations
                         new
                         {
                             ImageId = 1,
-                            ImageUrl = " https://assets.ajio.com/medias/sys_master/root/20240202/XzVa/65bd163a8cdf1e0df5e313a0/-1117Wx1400H-442273276-black-MODEL7.jpg",
+                            ImageUrl = "https://www.jennyschwarz.com/wp-content/uploads/2015/10/compress_black_t-shirt_F1.jpg",
                             ProductId = 1
                         },
                         new
                         {
                             ImageId = 11,
-                            ImageUrl = "https://assets.ajio.com/medias/sys_master/root/20240202/T3LR/65bd18b616fd2c6e6ad4ea90/-473Wx593H-442273276-black-MODEL2.jpg",
+                            ImageUrl = "https://i5.walmartimages.com/asr/3c92c819-468f-4edd-8098-551a16ea9f1c.a8809b55a1038c8f51139443cd9e92db.jpeg",
                             ProductId = 1
                         },
                         new
                         {
                             ImageId = 12,
-                            ImageUrl = "https://assets.ajio.com/medias/sys_master/root/20240202/0iIg/65bd0e568cdf1e0df5e2e7f1/-473Wx593H-442273276-black-MODEL6.jpg",
+                            ImageUrl = "https://th.bing.com/th/id/OIP._44iycGAG8p-g2esvGniVQHaHa?rs=1&pid=ImgDetMain",
                             ProductId = 1
                         },
                         new
                         {
                             ImageId = 2,
-                            ImageUrl = " https://m.media-amazon.com/images/I/51XQKBTbJ7L._SX569_.jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/51XQKBTbJ7L._SX569_.jpg",
                             ProductId = 2
                         },
                         new
                         {
                             ImageId = 13,
-                            ImageUrl = " https://m.media-amazon.com/images/I/51U6dpsRaFL._SX569_.jpg",
+                            ImageUrl = "https://m.media-amazon.com/images/I/51U6dpsRaFL._SX569_.jpg",
                             ProductId = 2
                         },
                         new
@@ -813,7 +813,7 @@ namespace ExMart_Backend.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 1, 2, 9, 6, 52, 478, DateTimeKind.Utc).AddTicks(8801),
+                            CreatedAt = new DateTime(2025, 1, 2, 10, 20, 45, 50, DateTimeKind.Utc).AddTicks(1690),
                             Email = "alicebrown@example.com",
                             Name = "Alice Brown",
                             Phone = "1122334455"
