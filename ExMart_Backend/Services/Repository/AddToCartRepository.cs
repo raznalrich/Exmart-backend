@@ -21,5 +21,15 @@ namespace ExMart_Backend.Services.Repository
         {
             return DBDataInitializer.cartList.ToList();
         }
+        public bool DeleteCartList(int productId, int userId)
+        {
+            var itemToRemove = DBDataInitializer.cartList.FirstOrDefault(cart => cart.ProductId == productId && cart.UserId == userId);
+            if (itemToRemove != null)
+            {
+                DBDataInitializer.cartList.Remove(itemToRemove);
+                return true;
+            }
+            return false;
+        }
     }
 }
