@@ -129,7 +129,7 @@ namespace ExMart_Backend.Services.Repository
             return order;
         }
 
-        public async Task<List<OrderListDTO>> GetOrderDetails()
+        public async Task<List<OrderListDTO>> GetOrderToList()
         {
             return await _db.Orders
                 .Include(o => o.User)
@@ -141,11 +141,61 @@ namespace ExMart_Backend.Services.Repository
                     OrderId = o.OrderId,
                     OrderDate = o.CreatedAt,
                     CustomerName = o.User.Name,
-                    Status = o.ProductStatus.StatusName,
+
+                    Status = o.ProductStatus.Product_StatusId,
+
+                    UserId = o.User.Id,
+
                     TotalAmount = o.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price),
                     TotalItems = o.OrderItems.Sum(oi => oi.Quantity)
                 })
                 .ToListAsync();
+        }
+
+        async Task<OrderDetailByOrderDTO> IOrderRepository.GetOrderDetailsById(int orderId)
+        {
+            return await _db.Orders.Where(o => o.OrderId == orderId).Select(o => new OrderDetailByOrderDTO
+            {
+                Name = o.User.Name,
+                Email = o.User.Email,
+                Phone = o.User.Phone,
+                OrderId = o.OrderId,
+                CreatedAt = o.CreatedAt,
+                TotalAmount = o.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price),
+                AddressLine = o.UserAddress.AddressLine,
+                City = o.UserAddress.City,
+                State = o.UserAddress.State,
+                ZipCode = o.UserAddress.ZipCode,
+            }).FirstOrDefaultAsync();
+        }
+
+        public async Task<object>UpdateOrderStatus(UpdateOrderStatusRequest request)
+        {
+            {
+                var order = await _db.Orders
+                    .Include(o => o.ProductStatus)
+                    .FirstOrDefaultAsync(o => o.OrderId == request.OrderId);
+
+                if (order == null)
+                {
+                    throw new Exception($"Order with ID {request.OrderId} not found");
+                }
+
+                var newStatus = await _db.StatusMaster
+                    .FirstOrDefaultAsync(s => s.Product_StatusId == request.ProductStatusId);
+
+                if (newStatus == null)
+                {
+                    throw new Exception($"Status with ID {request.ProductStatusId} not found");
+                }
+
+                order.Product_StatusId = request.ProductStatusId;
+
+                await _db.SaveChangesAsync();
+
+                return order;
+               
+            }
         }
     }
 }
