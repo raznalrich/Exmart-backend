@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExMart_Backend.Model
 {
@@ -15,8 +16,8 @@ namespace ExMart_Backend.Model
         public string Brand { get; set; }
         public int VendorId { get; set; }
         public int CategoryId { get; set; }
-        public List<int> Size { get; set; }
-        public List<int> Color { get; set; }
+        public List<int> SizeId { get; set; }
+        public List<int> ColorId { get; set; }
         public string? PrimaryImageUrl { get; set; }
         public decimal Weight { get; set; }
         public decimal Price { get; set; }
