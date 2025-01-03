@@ -141,7 +141,11 @@ namespace ExMart_Backend.Services.Repository
                     OrderId = o.OrderId,
                     OrderDate = o.CreatedAt,
                     CustomerName = o.User.Name,
+
                     Status = o.ProductStatus.Product_StatusId,
+
+                    UserId = o.User.Id,
+
                     TotalAmount = o.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price),
                     TotalItems = o.OrderItems.Sum(oi => oi.Quantity)
                 })
