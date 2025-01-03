@@ -44,5 +44,20 @@ namespace ExMart_Backend.Controllers
                 return Ok(cart);
             }            
         }
+
+        [HttpDelete("DeleteCart")] 
+        public async Task<IActionResult> 
+            DeleteCart(int productId, int userId) { 
+            if (productId <= 0 || userId <= 0) 
+            { 
+                return BadRequest("Invalid productId or userId.");
+            } 
+            var isDeleted = _addToCartRepository.DeleteCartList(productId, userId);
+            if (isDeleted) { 
+                return Ok(new {
+                    Message = "Product removed from cart successfully." });
+            } 
+            return NotFound(new { Message = "Product not found in cart." });
+        }
     }
 }
