@@ -125,7 +125,7 @@ namespace ExMart_Backend.Controllers
         {
             try
             {
-                OrderDetailByOrderDTO orderDetails = await _orderRepository.GetOrderDetailsById(orderid);
+                OrderDetailByOrderIdDTO orderDetails = await _orderRepository.GetOrderDetailsById(orderid);
                 return Ok(orderDetails);
             }
             catch (Exception ex)

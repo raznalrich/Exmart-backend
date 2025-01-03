@@ -152,9 +152,9 @@ namespace ExMart_Backend.Services.Repository
                 .ToListAsync();
         }
 
-        async Task<OrderDetailByOrderDTO> IOrderRepository.GetOrderDetailsById(int orderId)
+        async Task<OrderDetailByOrderIdDTO> IOrderRepository.GetOrderDetailsById(int orderId)
         {
-            return await _db.Orders.Where(o => o.OrderId == orderId).Select(o => new OrderDetailByOrderDTO
+            return await _db.Orders.Where(o => o.OrderId == orderId).Select(o => new OrderDetailByOrderIdDTO
             {
                 Name = o.User.Name,
                 Email = o.User.Email,
@@ -166,6 +166,16 @@ namespace ExMart_Backend.Services.Repository
                 City = o.UserAddress.City,
                 State = o.UserAddress.State,
                 ZipCode = o.UserAddress.ZipCode,
+                OrderItems = o.OrderItems.Select(oi => new OrderItemDTO
+                {
+                    ProductId = oi.ProductId,
+                    ProductName = oi.Product.Name,
+                    Quantity = oi.Quantity,
+                    SizeName = oi.Size.Size,
+                    ColorName = oi.Color.ColorName,
+                    Price = oi.Product.Price,
+                    SubTotal = oi.Quantity * oi.Product.Price
+                }).ToList()
             }).FirstOrDefaultAsync();
         }
 
