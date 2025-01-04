@@ -549,8 +549,13 @@ namespace ExMart_Backend.Data
                    IsPrimary = true,
                    AddressLine = "Gayathri Building",
                    City = "Kazhakuttam",
+                   District = "Trivandrum",
                    State = "Kerala",
-                   ZipCode = "683102"
+                   ZipCode = "683102",
+                   CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+                   UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+                   CreatedBy = 1,
+                   IsActive = true,
                },
                new UserAddress
                {
@@ -560,8 +565,13 @@ namespace ExMart_Backend.Data
                    IsPrimary = false,
                    AddressLine = "Athulya Building",
                    City = "Kakkanad",
+                   District = "Ernakulam",
                    State = "Kerala",
-                   ZipCode = "682018"
+                   ZipCode = "682018",
+                   CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+                   UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+                   CreatedBy = 1,
+                   IsActive = true,
                }
            );
         }

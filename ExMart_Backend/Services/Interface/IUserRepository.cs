@@ -8,6 +8,6 @@ namespace ExMart_Backend.Services.Interface
         Task<bool> AddUser(User user);
         Task AddAddress(AddAddressDTO addAddressDTO);
         Task<List<UserAddress>> GetAddressByUserId(int userId);
-
+        Task<bool> EditAddressById(int id, AddAddressDTO editAddressDTO);
     }
 }

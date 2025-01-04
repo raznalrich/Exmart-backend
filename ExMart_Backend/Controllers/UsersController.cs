@@ -45,7 +45,7 @@ namespace ExMart_Backend.Controllers
             }
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("getAddress/{userId}")]
         public async Task<IActionResult> GetUserAddresses(int userId)
         {
             var userAddresses = await _userRepository.GetAddressByUserId(userId);
@@ -62,6 +62,7 @@ namespace ExMart_Backend.Controllers
                 AddressLine = address.AddressLine,
                 City = address.City,
                 State = address.State,
+                District = address.District,
                 ZipCode = address.ZipCode,
                 AddressTypeName = address.AddressType?.AddressTypeName
             }).ToList();
@@ -69,6 +70,28 @@ namespace ExMart_Backend.Controllers
             return Ok(AddressDTOs);
         }
 
+        [HttpPut("EditAddress")]
+        public async Task<IActionResult> EditAddress(int id, [FromBody] AddAddressDTO editAddressDTO)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Invalid Address ID.");
+            }
+
+            if (editAddressDTO == null)
+            {
+                return BadRequest("Address data cannot be null.");
+            }
+
+            var isUpdated = await _userRepository.EditAddressById(id, editAddressDTO);
+
+            if (!isUpdated)
+            {
+                return NotFound($"No address found with ID {id}.");
+            }
+
+            return Ok("Address updated successfully.");
+        }
 
 
     }

@@ -6,6 +6,7 @@
         public bool IsPrimary { get; set; }
         public string AddressLine { get; set; }
         public string City { get; set; }
+        public string District { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
         public string AddressTypeName { get; set; }
@@ -18,6 +19,7 @@
         public bool IsPrimary { get; set; }
         public string AddressLine { get; set; }
         public string City { get; set; }
+        public string District { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
     }

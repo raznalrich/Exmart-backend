@@ -39,6 +39,7 @@ namespace ExMart_Backend.Services.Repository
                 IsPrimary = addAddressDTO.IsPrimary,
                 AddressLine = addAddressDTO.AddressLine,
                 City = addAddressDTO.City,
+                District = addAddressDTO.District,
                 State = addAddressDTO.State,
                 ZipCode = addAddressDTO.ZipCode
             };
@@ -57,5 +58,29 @@ namespace ExMart_Backend.Services.Repository
                 .Where(a => a.UserId == userId)
                 .ToListAsync();
         }
+
+        public async Task<bool> EditAddressById(int id, AddAddressDTO editAddressDTO)
+        {
+            var existingAddress = await _db.UserAddresses.FindAsync(id);
+
+            if (existingAddress == null)
+            {
+                return false; // Address not found
+            }
+
+            // Update fields
+            existingAddress.AddressLine = editAddressDTO.AddressLine ?? existingAddress.AddressLine;
+            existingAddress.City = editAddressDTO.City ?? existingAddress.City;
+            existingAddress.District = editAddressDTO.District ?? existingAddress.District;
+            existingAddress.State = editAddressDTO.State ?? existingAddress.State;
+            existingAddress.ZipCode = editAddressDTO.ZipCode ?? existingAddress.ZipCode;
+            existingAddress.IsPrimary = editAddressDTO.IsPrimary;
+
+            _db.UserAddresses.Update(existingAddress);
+            await _db.SaveChangesAsync();
+
+            return true; // Address updated successfully
+        }
+
     }
 }
