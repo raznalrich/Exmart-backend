@@ -25,6 +25,8 @@ namespace ExMart_Backend.Services.Repository
             smtpClient.Credentials = new NetworkCredential(email, password);
 
             var message = new MailMessage(email!, recepter, subject, body);
+            message.IsBodyHtml = true;
+
             await smtpClient.SendMailAsync(message);
         }
     }
