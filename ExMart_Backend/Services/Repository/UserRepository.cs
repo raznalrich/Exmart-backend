@@ -41,7 +41,9 @@ namespace ExMart_Backend.Services.Repository
                 City = addAddressDTO.City,
                 District = addAddressDTO.District,
                 State = addAddressDTO.State,
-                ZipCode = addAddressDTO.ZipCode
+                ZipCode = addAddressDTO.ZipCode,
+                CreatedAt = DateTime.UtcNow,
+                //CreatedBy = currentUserId
             };
 
 
@@ -50,12 +52,11 @@ namespace ExMart_Backend.Services.Repository
         }
 
 
-
         public Task<List<UserAddress>> GetAddressByUserId(int userId)
         {
             return _db.UserAddresses
                 .Include(address => address.AddressType)
-                .Where(a => a.UserId == userId)
+                .Where(a => a.UserId == userId && a.IsActive)
                 .ToListAsync();
         }
 
@@ -65,22 +66,38 @@ namespace ExMart_Backend.Services.Repository
 
             if (existingAddress == null)
             {
-                return false; // Address not found
+                return false; 
             }
 
-            // Update fields
             existingAddress.AddressLine = editAddressDTO.AddressLine ?? existingAddress.AddressLine;
             existingAddress.City = editAddressDTO.City ?? existingAddress.City;
             existingAddress.District = editAddressDTO.District ?? existingAddress.District;
             existingAddress.State = editAddressDTO.State ?? existingAddress.State;
             existingAddress.ZipCode = editAddressDTO.ZipCode ?? existingAddress.ZipCode;
             existingAddress.IsPrimary = editAddressDTO.IsPrimary;
-
+            existingAddress.UpdatedAt = DateTime.UtcNow;
+            
             _db.UserAddresses.Update(existingAddress);
             await _db.SaveChangesAsync();
 
-            return true; // Address updated successfully
+            return true; 
         }
 
+        public async Task<bool> DeleteAddressById(int id)
+        {
+            var address = await _db.UserAddresses.FirstOrDefaultAsync(a => a.Id == id && a.IsActive);
+
+            if (address == null)
+            {
+                return false; // Address not found or already inactive
+            }
+
+            address.IsActive = false;
+            address.UpdatedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+            return true;
+        }
     }
 }
+

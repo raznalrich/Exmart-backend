@@ -93,6 +93,18 @@ namespace ExMart_Backend.Controllers
             return Ok("Address updated successfully.");
         }
 
+        [HttpDelete("DeleteAddress/{id}")]
+        public async Task<IActionResult> DeleteAddressById(int id)
+        {
+            var result = await _userRepository.DeleteAddressById(id);
+
+            if (!result)
+            {
+                return NotFound(new { message = "Address not found or already deleted." });
+            }
+
+            return Ok(new { message = "Address deleted successfully." });
+        }
 
     }
 }
