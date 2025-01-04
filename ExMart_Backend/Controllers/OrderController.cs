@@ -39,7 +39,6 @@ namespace ExMart_Backend.Controllers
                     //OrderId = orderId,
                     UserId = placeOrderDTO.UserId,
                     UserAddressId = placeOrderDTO.AddressId,
-                    Product_StatusId = 1,
                     CreatedAt = DateTime.UtcNow,
                     // Initialize a new list for OrderItems
                     OrderItems = new List<OrderItem>()
@@ -51,6 +50,7 @@ namespace ExMart_Backend.Controllers
                     var orderItem = new OrderItem
                     {
                         ProductId = itemDTO.ProductId,
+                        Product_StatusId = 1,
                         Quantity = itemDTO.Quantity,
                         SizeId = itemDTO.SizeId,
                         ColorId = itemDTO.ColorId
@@ -117,6 +117,20 @@ namespace ExMart_Backend.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Error retrieving order List", error = ex.Message });
+            }
+        }
+
+        [HttpGet("orderItem/List")]
+        public async Task<IActionResult> GetOrderItemList()
+        {
+            try
+            {
+                var orderItemList = await _orderRepository.GetOrderItemToList();
+                return Ok(orderItemList);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error retrieving order item list", error = ex.Message });
             }
         }
 
