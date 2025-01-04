@@ -1,4 +1,5 @@
-﻿using ExMart_Backend.Data;
+﻿using System.Drawing;
+using ExMart_Backend.Data;
 using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
@@ -69,11 +70,14 @@ namespace ExMart_Backend.Services.Repository
                 await _db.Orders.AddAsync(order);
                 await _db.SaveChangesAsync();
 
-                // Assign a new OrderItemId by getting the last one and adding 1
+                //Assign a new OrderItemId by getting the last one and adding 1
+                //var lastOrderItemId = await _db.OrderItems
+                //                                  .OrderByDescending(item => item.OrderItemId)
+                //                                  .Select(item => item.OrderItemId)
+                //                                  .FirstOrDefaultAsync();
+
                 var lastOrderItemId = await _db.OrderItems
-                                                  .OrderByDescending(item => item.OrderItemId)
-                                                  .Select(item => item.OrderItemId)
-                                                  .FirstOrDefaultAsync();
+                               .MaxAsync(item => item.OrderItemId);
 
                 // Clear existing OrderItems collection and add fresh items
                 var orderItems = order.OrderItems.ToList();
@@ -81,16 +85,18 @@ namespace ExMart_Backend.Services.Repository
 
                 foreach (var item in orderItems)
                 {
-                    lastOrderItemId++;
+                    lastOrderItemId ++;
                     var newItem = new OrderItem
                     {
                         OrderItemId = lastOrderItemId,
                         OrderId = order.OrderId,
+                        Product_StatusId = item.Product_StatusId,
                         ProductId = item.ProductId,
                         Quantity = item.Quantity,
                         SizeId = item.SizeId,
                         ColorId = item.ColorId
                     };
+                    
                     await _db.OrderItems.AddAsync(newItem);
                 }
 
@@ -112,7 +118,6 @@ namespace ExMart_Backend.Services.Repository
                 .AsNoTracking()
                 .Include(o => o.OrderItems)
                 .Include(o => o.User)
-                .Include(o => o.ProductStatus)
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
         }
 
@@ -133,16 +138,16 @@ namespace ExMart_Backend.Services.Repository
         {
             return await _db.Orders
                 .Include(o => o.User)
-                .Include(o => o.ProductStatus)
                 .Include(o => o.OrderItems)
                     .ThenInclude(oi => oi.Product)
                 .Select(o => new OrderListDTO
                 {
                     OrderId = o.OrderId,
                     OrderDate = o.CreatedAt,
+                    CustomerId = o.User.Id,
                     CustomerName = o.User.Name,
 
-                    Status = o.ProductStatus.Product_StatusId,
+                   
 
                     UserId = o.User.Id,
 
@@ -150,6 +155,20 @@ namespace ExMart_Backend.Services.Repository
                     TotalItems = o.OrderItems.Sum(oi => oi.Quantity)
                 })
                 .ToListAsync();
+        }
+
+        async Task<List<OrderItemListDTO>> IOrderRepository.GetOrderItemToList()
+        {
+            return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).Select(o => new OrderItemListDTO
+            {
+                OrderItemId = o.OrderItemId,
+                OrderDate = o.Order.CreatedAt,
+                ProductName = o.Product.Name,
+                Status = o.Product_StatusId,
+                Amount =  o.Product.Price * o.Quantity,
+                Quantity = o.Quantity,
+                OrderId = o.OrderId,
+            }).ToListAsync();
         }
 
         async Task<OrderDetailByOrderIdDTO> IOrderRepository.GetOrderDetailsById(int orderId)
@@ -182,7 +201,7 @@ namespace ExMart_Backend.Services.Repository
         public async Task<object>UpdateOrderStatus(UpdateOrderStatusRequest request)
         {
             {
-                var order = await _db.Orders
+                var order = await _db.OrderItems
                     .Include(o => o.ProductStatus)
                     .FirstOrDefaultAsync(o => o.OrderId == request.OrderId);
 
@@ -207,5 +226,7 @@ namespace ExMart_Backend.Services.Repository
                
             }
         }
+
+       
     }
 }

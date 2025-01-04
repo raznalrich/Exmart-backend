@@ -248,9 +248,9 @@ namespace ExMart_Backend.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Order to ProductStatus (Restrict Delete)
-            modelBuilder.Entity<Order>()
+            modelBuilder.Entity<OrderItem>()
                 .HasOne(o => o.ProductStatus)
-                .WithMany(ps => ps.Orders)
+                .WithMany(ps => ps.OrderItems)
                 .HasForeignKey(o => o.Product_StatusId)
                 .OnDelete(DeleteBehavior.Restrict);
 
