@@ -15,11 +15,10 @@ namespace ExMart_Backend.Services.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<FeedBackDTO>> GetFeedbacksByUserIdAsync(int userId)
+        public async Task<IEnumerable<FeedBackDTO>> GetFeedbacksByUserIdAsync()
         {
             return await _context.Feedbacks
                 .Include(f => f.User)
-                .Where(f => f.UserId == userId)
                 .Select(f => new FeedBackDTO
                 {
                     FeedBackId = f.FeedBackId,

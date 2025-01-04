@@ -5,7 +5,7 @@ namespace ExMart_Backend.Services.Interface
 {
     public interface IFeedBackRepository
     {
-        Task<IEnumerable<FeedBackDTO>> GetFeedbacksByUserIdAsync(int userId);
+        Task<IEnumerable<FeedBackDTO>> GetFeedbacksByUserIdAsync();
         Task<Feedback> AddFeedbackAsync(Feedback feedback);
     }
 }

@@ -53,6 +53,7 @@ namespace ExMart_Backend.Services.Repository
         public Task<List<UserAddress>> GetAddressByUserId(int userId)
         {
             return _db.UserAddresses
+                .Include(address => address.AddressType)
                 .Where(a => a.UserId == userId)
                 .ToListAsync();
         }

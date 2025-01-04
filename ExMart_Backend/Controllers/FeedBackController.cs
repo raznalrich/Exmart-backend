@@ -17,14 +17,14 @@ namespace ExMart_Backend.Controllers
             _repository = repository;
         }
 
-        //Get feedbacks by id
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<IEnumerable<FeedBackDTO>>> GetFeedBacksByUserId(int userId)
+        //Get feedbacks 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<FeedBackDTO>>> GetFeedBacksByUserId()
         {
-            var feedbacks = await _repository.GetFeedbacksByUserIdAsync(userId);
+            var feedbacks = await _repository.GetFeedbacksByUserIdAsync();
             if (feedbacks == null || !feedbacks.Any())
             {
-                return NotFound($"No feedbacks found for user with ID {userId}");
+                return NotFound($"No feedbacks found for user with ID ");
             }
             return Ok(feedbacks);
         }
