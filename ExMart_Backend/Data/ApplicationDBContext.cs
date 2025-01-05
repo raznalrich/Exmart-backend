@@ -27,6 +27,8 @@ namespace ExMart_Backend.Data
         public DbSet<AddressType> AddressTypes { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<AdminMembers> AdminMembers { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +38,11 @@ namespace ExMart_Backend.Data
             .WithOne(pi => pi.Product)
             .HasForeignKey(pi => pi.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AdminMembers>()
+               .HasOne(a => a.User)
+               .WithMany() // Not adding reverse navigation to User for simplicity
+               .HasForeignKey(a => a.UserId);
 
             modelBuilder.Entity<SizeMaster>().HasData(
                 new SizeMaster { SizeId = 1,Size="XS"},

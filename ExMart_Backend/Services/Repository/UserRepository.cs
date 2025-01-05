@@ -98,6 +98,15 @@ namespace ExMart_Backend.Services.Repository
             await _db.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> IsUserExisted(int userId)
+        {
+            if (await _db.Users.AnyAsync(m => m.Id == userId))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
 
