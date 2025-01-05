@@ -118,6 +118,16 @@ namespace ExMart_Backend.Controllers
 
             return Ok(new { message = "user existed" });
         }
+        [HttpGet("ReturnIdfromemail/{email}")]
+        public async Task<IActionResult> ReturnIdfromEmail(string email)
+        {
+            int? userid = await _userRepository.ReturnIdbyEmail(email);
+            if (userid == 0)
+            {
+                return BadRequest(null);
+            }
+            return Ok(userid);
 
+        }
     }
 }

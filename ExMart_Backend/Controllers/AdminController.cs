@@ -12,28 +12,31 @@ namespace ExMart_Backend.Controllers
         {
             _adminRepository = adminRepository;
         }
-        [HttpPost("add")]
-        public async Task<IActionResult> AddAdminMember([FromBody] int userId)
+        [HttpPost("add/{userId}")]
+        public async Task<IActionResult> AddAdminMember(int userId)
         {
-            var isAdded = _adminRepository.AddAdminMember(userId);
-            if (isAdded != null)
+            var isAdded = await _adminRepository.AddAdminMember(userId); // Await the repository method
+
+            if (isAdded)
             {
-                return StatusCode(StatusCodes.Status201Created);
+                return StatusCode(StatusCodes.Status201Created, "User added as admin successfully.");
             }
-            return BadRequest("Something went wrong");
+
+            return BadRequest("User could not be added as admin. Either the user does not exist or is already an admin.");
         }
-        [HttpGet("Check")]
-        public async Task<IActionResult> CheckAdminExisted([FromBody] int userId)
+        [HttpGet("Check/{userId}")]
+        public async Task<IActionResult> CheckAdminExisted(int userId)
         {
-            var isExisted = _adminRepository.CheckAdminMembers(userId);
-            if (isExisted != null)
+            var result = await _adminRepository.CheckAdminMembers(userId);
+            if (!result)
             {
-                return StatusCode(StatusCodes.Status201Created);
+                return NotFound(new { message = "admin not founded" });
             }
-            return BadRequest("Something went wrong");
+
+            return Ok(new { message = "admin existed" });
         }
         [HttpDelete("remove/{userId}")]
-        public async Task<IActionResult> RemoveAdminMember([FromBody] int userId)
+        public async Task<IActionResult> RemoveAdminMember(int userId)
         {
             var isDeleted = _adminRepository.DeleteAdminMember(userId);
             if (isDeleted != null)

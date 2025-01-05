@@ -15,24 +15,31 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<bool> AddAdminMember(int userId)
         {
+            // Check if the user exists
             var user = await _db.Users.FindAsync(userId);
             if (user == null)
             {
                 return false;
             }
-            if(await _db.AdminMembers.AnyAsync(m => m.UserId == userId))
+
+            // Check if the user is already an admin
+            if (await _db.AdminMembers.AnyAsync(m => m.UserId == userId))
             {
                 return false;
             }
+
+            // Add the user to the AdminMembers table
             var adminMember = new AdminMembers
             {
-                UserId = userId
+                UserId = userId,
+                AddedDate = DateTime.UtcNow
             };
+
             _db.AdminMembers.Add(adminMember);
             await _db.SaveChangesAsync();
+
             return true;
         }
-
         public async Task<bool> CheckAdminMembers(int userId)
         {
             if (await _db.AdminMembers.AnyAsync(m => m.UserId == userId))
