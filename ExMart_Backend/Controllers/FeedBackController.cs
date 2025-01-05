@@ -55,6 +55,19 @@ namespace ExMart_Backend.Controllers
             // Return response
             return CreatedAtAction(nameof(AddFeedback), new { id = createdFeedback.FeedBackId }, createdFeedback);
         }
+
+        // Get all feedbacks without requiring ProductId
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<FeedBackDTO>>> GetAllFeedbacks()
+        {
+            var feedbacks = await _repository.GetAllFeedbacksAsync();
+            if (feedbacks == null || !feedbacks.Any())
+            {
+                return NotFound("No feedbacks found.");
+            }
+            return Ok(feedbacks);
+        }
+
     }
 }
 
