@@ -30,6 +30,8 @@ namespace ExMart_Backend.Data
         public DbSet<AdminMembers> AdminMembers { get; set; }
 
 
+        public DbSet<Banner> Banners { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
