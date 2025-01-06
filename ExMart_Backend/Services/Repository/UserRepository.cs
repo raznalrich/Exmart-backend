@@ -98,6 +98,22 @@ namespace ExMart_Backend.Services.Repository
             await _db.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> IsUserExisted(int userId)
+        {
+            if (await _db.Users.AnyAsync(m => m.Id == userId))
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<int?> ReturnIdbyEmail(string email)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(m => m.Email == email);
+
+            // If the user exists, return their ID, otherwise return null
+            return user?.Id;
+        }
     }
 }
 
