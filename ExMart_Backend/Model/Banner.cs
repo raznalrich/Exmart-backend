@@ -11,9 +11,12 @@ namespace ExMart_Backend.Model
 
         public int BannerId { get; set; }
         public string ImageUrl { get; set; }
+        public string ProductName { get; set; }
+
         [ForeignKey("ProductId")]
 
         public int ProductId { get; set; }
+
 
         
 
