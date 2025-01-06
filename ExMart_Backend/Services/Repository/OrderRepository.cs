@@ -190,6 +190,7 @@ namespace ExMart_Backend.Services.Repository
                 {
                     ProductId = oi.ProductId,
                     ProductName = oi.Product.Name,
+                    ProductImageUrl = oi.Product.PrimaryImageUrl,
                     Quantity = oi.Quantity,
                     SizeName = oi.Size.Size,
                     ColorName = oi.Color.ColorName,
@@ -203,11 +204,11 @@ namespace ExMart_Backend.Services.Repository
         public async Task<object>UpdateOrderStatus(UpdateOrderStatusRequest request)
         {
             {
-                var order = await _db.OrderItems
+                var orderItem = await _db.OrderItems
                     .Include(o => o.ProductStatus)
                     .FirstOrDefaultAsync(o => o.OrderItemId == request.OrderItemId);
 
-                if (order == null)
+                if (orderItem == null)
                 {
                     throw new Exception($"Order with ID {request.OrderItemId} not found");
                 }
@@ -220,15 +221,41 @@ namespace ExMart_Backend.Services.Repository
                     throw new Exception($"Status with ID {request.ProductStatusId} not found");
                 }
 
-                order.Product_StatusId = request.ProductStatusId;
+                orderItem.Product_StatusId = request.ProductStatusId;
 
                 await _db.SaveChangesAsync();
 
-                return order;
+                return orderItem;
                
             }
         }
 
-       
+       public async Task<object>UpdateOrderStatusByIdOnly(int orderitemid)
+        {
+           var orderItem = await _db.OrderItems.FirstOrDefaultAsync(o =>  o.OrderItemId == orderitemid);
+
+            if (orderItem == null)
+            {
+                throw new Exception($"Order with ID {orderitemid} not found");
+            }
+
+            switch (orderItem.Product_StatusId)
+            {
+                case 1:
+                    orderItem.Product_StatusId = 2;
+                    break;
+
+                case 2:
+                    orderItem.Product_StatusId= 3; 
+                    break;
+
+                default:
+                    throw new Exception("Invalid status or no update needed");
+            }
+
+            await _db.SaveChangesAsync();
+
+            return orderItem.Product_StatusId;
+        }
     }
 }
