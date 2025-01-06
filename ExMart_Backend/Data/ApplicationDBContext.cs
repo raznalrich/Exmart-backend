@@ -27,6 +27,8 @@ namespace ExMart_Backend.Data
         public DbSet<AddressType> AddressTypes { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<AdminMembers> AdminMembers { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +38,11 @@ namespace ExMart_Backend.Data
             .WithOne(pi => pi.Product)
             .HasForeignKey(pi => pi.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<AdminMembers>()
+               .HasOne(a => a.User)
+               .WithMany() // Not adding reverse navigation to User for simplicity
+               .HasForeignKey(a => a.UserId);
 
             modelBuilder.Entity<SizeMaster>().HasData(
                 new SizeMaster { SizeId = 1,Size="XS"},
@@ -549,8 +556,13 @@ namespace ExMart_Backend.Data
                    IsPrimary = true,
                    AddressLine = "Gayathri Building",
                    City = "Kazhakuttam",
+                   District = "Trivandrum",
                    State = "Kerala",
-                   ZipCode = "683102"
+                   ZipCode = "683102",
+                   CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+                   UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+                   CreatedBy = 1,
+                   IsActive = true,
                },
                new UserAddress
                {
@@ -560,8 +572,13 @@ namespace ExMart_Backend.Data
                    IsPrimary = false,
                    AddressLine = "Athulya Building",
                    City = "Kakkanad",
+                   District = "Ernakulam",
                    State = "Kerala",
-                   ZipCode = "682018"
+                   ZipCode = "682018",
+                   CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+                   UpdatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
+                   CreatedBy = 1,
+                   IsActive = true,
                }
            );
         }
