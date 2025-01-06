@@ -2,7 +2,7 @@
 {
     public class UpdateOrderStatusRequest
     {
-        public int OrderId { get; set; }
+        public int OrderItemId { get; set; }
         public int ProductStatusId { get; set; }
     }
 }

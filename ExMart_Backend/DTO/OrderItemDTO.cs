@@ -9,7 +9,7 @@
         public string SizeName { get; set; }
         public int ColorId { get; set; }
         public string ColorName { get; set; }
-
+        public int? shippingCharge { get; set; }
         public decimal Price { get; set; }
 
         public decimal SubTotal { get; set; }

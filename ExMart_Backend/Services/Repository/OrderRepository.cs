@@ -92,6 +92,7 @@ namespace ExMart_Backend.Services.Repository
                         OrderId = order.OrderId,
                         Product_StatusId = item.Product_StatusId,
                         ProductId = item.ProductId,
+                        shippingCharge = 49,
                         Quantity = item.Quantity,
                         SizeId = item.SizeId,
                         ColorId = item.ColorId
@@ -158,7 +159,7 @@ namespace ExMart_Backend.Services.Repository
 
         async Task<List<OrderItemListDTO>> IOrderRepository.GetOrderItemToList()
         {
-            return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).Select(o => new OrderItemListDTO
+            return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).OrderBy(o => o.Order.CreatedAt).Select(o => new OrderItemListDTO
             {
                 OrderItemId = o.OrderItemId,
                 OrderDate = o.Order.CreatedAt,
@@ -191,6 +192,7 @@ namespace ExMart_Backend.Services.Repository
                     Quantity = oi.Quantity,
                     SizeName = oi.Size.Size,
                     ColorName = oi.Color.ColorName,
+                    shippingCharge = oi.shippingCharge,
                     Price = oi.Product.Price,
                     SubTotal = oi.Quantity * oi.Product.Price
                 }).ToList()
@@ -202,11 +204,11 @@ namespace ExMart_Backend.Services.Repository
             {
                 var order = await _db.OrderItems
                     .Include(o => o.ProductStatus)
-                    .FirstOrDefaultAsync(o => o.OrderId == request.OrderId);
+                    .FirstOrDefaultAsync(o => o.OrderItemId == request.OrderItemId);
 
                 if (order == null)
                 {
-                    throw new Exception($"Order with ID {request.OrderId} not found");
+                    throw new Exception($"Order with ID {request.OrderItemId} not found");
                 }
 
                 var newStatus = await _db.StatusMaster
