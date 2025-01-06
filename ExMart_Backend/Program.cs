@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using ExMart_Backend;
 using ExMart_Backend.Data;
 using ExMart_Backend.Interface;
+using ExMart_Backend.Model;
 using ExMart_Backend.Repository;
 using ExMart_Backend.Services.Interface;
 using ExMart_Backend.Services.Repository;
@@ -38,6 +39,8 @@ builder.Services.AddScoped<IBannerRepository, BannerRepository>();
 //builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 //builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IFeedBackRepository,FeedbackRepository>();
+builder.Services.AddScoped<Ipolicy, PolicyRepo>();
+
 builder.Services.AddScoped<IAdminRepository,AdminRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
