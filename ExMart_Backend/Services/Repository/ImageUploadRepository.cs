@@ -44,7 +44,7 @@ namespace ExMart_Backend.Services.Repository
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             // Look for endpoints with IFormFile or IFormFileCollection
-            var fileParams = context.MethodInfo.GetParameters()
+             var fileParams = context.MethodInfo.GetParameters()
                 .Where(p => p.ParameterType == typeof(IFormFile)
                          || p.ParameterType == typeof(IFormFileCollection))
                 .ToList();

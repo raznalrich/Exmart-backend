@@ -38,7 +38,7 @@ public class ImageUploadController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(ex.Message);
+              return BadRequest(ex.Message);
         }
     }
 }

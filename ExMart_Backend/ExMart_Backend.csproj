@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Test\Product_Test_Case\" />
+    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
 </Project>

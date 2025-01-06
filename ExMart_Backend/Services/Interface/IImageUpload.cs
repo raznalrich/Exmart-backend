@@ -6,6 +6,6 @@ namespace YourNamespace.Repositories
     public interface IImageUpload
     {
         
-        Task<string> UploadImageAsync(IFormFile file, string requestScheme, string requestHost);
+         Task<string> UploadImageAsync(IFormFile file, string requestScheme, string requestHost);
     }
 }
