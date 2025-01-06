@@ -2,6 +2,7 @@
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 
 namespace ExMart_Backend.Controllers
 {
@@ -116,5 +117,27 @@ namespace ExMart_Backend.Controllers
             return Ok(new { message = "Address deleted successfully." });
         }
 
+        [HttpGet("CheckUserExisted/{userId}")]
+        public async Task<IActionResult> CheckUserExisted(int userId)
+        {
+            var result = await _userRepository.IsUserExisted(userId);
+            if (!result)
+            {
+                return NotFound(new { message = "user not founded" });
+            }
+
+            return Ok(new { message = "user existed" });
+        }
+        [HttpGet("ReturnIdfromemail/{email}")]
+        public async Task<IActionResult> ReturnIdfromEmail(string email)
+        {
+            int? userid = await _userRepository.ReturnIdbyEmail(email);
+            if (userid == 0)
+            {
+                return BadRequest(null);
+            }
+            return Ok(userid);
+
+        }
     }
 }
