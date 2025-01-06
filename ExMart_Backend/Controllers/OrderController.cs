@@ -149,7 +149,7 @@ namespace ExMart_Backend.Controllers
         }
 
             [HttpPut("updatestatus")]
-            public async Task<IActionResult> UpdateOrderStatus( [FromBody] UpdateOrderStatusRequest request)
+            public async Task<IActionResult> UpdateOrderItemStatus( [FromBody] UpdateOrderStatusRequest request)
             {
                 try
                 {
@@ -161,6 +161,21 @@ namespace ExMart_Backend.Controllers
                     return StatusCode(500, "An error occurred while updating the order status");
                 }
             }
-        
+
+        [HttpPut("updatestatusbyidonly{orderitemid}")]
+        public async Task<IActionResult> UpdateOrderItemStatusByIdOnly(int orderitemid)
+        {
+            try
+            {
+                var result = await _orderRepository.UpdateOrderStatusByIdOnly(orderitemid);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the order status");
+            }
+
+        }
+
     }
 }
