@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using ExMart_Backend;
 using ExMart_Backend.Data;
 using ExMart_Backend.Interface;
+using ExMart_Backend.Model;
 using ExMart_Backend.Repository;
 using ExMart_Backend.Services.Interface;
 using ExMart_Backend.Services.Repository;
@@ -26,6 +27,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IFeedBackRepository,FeedbackRepository>();
+builder.Services.AddScoped<Ipolicy, PolicyRepo>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>

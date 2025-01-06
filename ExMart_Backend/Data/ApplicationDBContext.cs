@@ -17,7 +17,6 @@ namespace ExMart_Backend.Data
         public DbSet<ProductImages> Images { get; set; }
         //public DbSet<ProductStatus> Status { get; set; }
         public DbSet<Category> addToCategories { get; set; }
-
         public DbSet<ColourMaster> ColourMaster { get; set; }
         public DbSet<SizeMaster> SizeMaster { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -27,10 +26,20 @@ namespace ExMart_Backend.Data
         public DbSet<AddressType> AddressTypes { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Policy>  TermsAndConditions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        {   
+
+            //seeding data on policies 
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Policy>().HasData(
+                new Policy { Id =1, TndCheading = "Terms And Conditions" , TndCcontent = "Trail T & C"},
+                new Policy { Id =2, TndCheading = "Payment Policy" , TndCcontent = "Trail Payment Policy"},
+                new Policy { Id =3, TndCheading = "Shipping Policy" , TndCcontent = "Trail Shipping Policy"}
+                );
+                
+
             modelBuilder.Entity<Product>()
             .HasMany(p => p.ProductImages)    // Changed from Images to ProductImages to match the property name
             .WithOne(pi => pi.Product)
