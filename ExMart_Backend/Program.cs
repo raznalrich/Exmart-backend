@@ -31,6 +31,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IImageUpload, ImageUploadRepository>();
+builder.Services.AddScoped<IBannerRepository, BannerRepository>();
 //builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 //builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 //builder.Services.AddScoped<IAddressRepository, AddressRepository>();

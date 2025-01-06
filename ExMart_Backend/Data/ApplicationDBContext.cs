@@ -28,6 +28,8 @@ namespace ExMart_Backend.Data
         public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
 
+        public DbSet<Banner> Banners { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
