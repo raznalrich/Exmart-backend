@@ -1,4 +1,5 @@
 ﻿using ExMart_Backend.Data;
+using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +41,7 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<bool> DeactivateProductAsync(int id)
         {
-            var product =await _db.Products.FirstOrDefaultAsync(x => x.Id == id);
+            var product = await _db.Products.FirstOrDefaultAsync(x => x.Id == id);
 
             if (product == null)
                 throw new KeyNotFoundException($"Product with ID {id} not found");
@@ -74,6 +75,68 @@ namespace ExMart_Backend.Services.Repository
                 .ToListAsync();
 
             return products;
+        }
+
+        public async Task<Product> UpdateProductAsync(int productId, EditProductDTO productDTO)
+        {
+            try
+            {
+                var existingProduct = await _db.Products
+                .Include(p => p.ProductImages)
+                .FirstOrDefaultAsync(p => p.Id == productId);
+
+                if (existingProduct == null)
+                {
+                    throw new KeyNotFoundException($"Product with ID {productId} not found.");
+                }
+                // Update product fields
+                existingProduct.Name = productDTO.Name;
+                existingProduct.Description = productDTO.Description;
+                existingProduct.Brand = productDTO.Brand;
+                existingProduct.VendorId = productDTO.VendorId;
+                existingProduct.CategoryId = productDTO.CategoryId;
+                existingProduct.PrimaryImageUrl = productDTO.PrimaryImageUrl;
+                existingProduct.Weight = productDTO.Weight;
+                existingProduct.Price = productDTO.Price;
+                existingProduct.UpdatedAt = DateTime.UtcNow;
+                if (productDTO.ProductImages != null && productDTO.ProductImages.Any())
+                {
+                    var updatedImageIds = productDTO.ProductImages.Select(img => img.ImageId).ToList();
+                    var imagesToRemove = existingProduct.ProductImages
+                    .Where(img => !updatedImageIds.Contains(img.ImageId)) // Images not present in the updated list
+                    .ToList();
+                    foreach (var image in imagesToRemove)
+                    {
+                        _db.Images.Remove(image); // Remove old images
+                    }
+                    // 2. Add or update the images in the existing product
+                    foreach (var image in productDTO.ProductImages)
+                    {
+                        var existingImage = existingProduct.ProductImages.FirstOrDefault(img=>img.ImageId == image.ImageId);
+                        if (existingImage == null)
+                        {
+                            // Add a new image if it does not exist
+                            var newImage = new ProductImages
+                            {
+                                ImageUrl = image.ImageUrl,
+                                ProductId = existingProduct.Id // Link the new image to the product
+                            };
+                            _db.Images.Add(newImage);
+                        }
+                        else
+                        {
+                            existingImage.ImageUrl = image.ImageUrl;
+                        }
+                    }              
+                }
+
+                await _db.SaveChangesAsync();
+                return existingProduct;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while updating the product: {ex.Message}", ex);
+            }
         }
 
 

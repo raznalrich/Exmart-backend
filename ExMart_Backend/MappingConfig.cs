@@ -11,6 +11,7 @@ namespace ExMart_Backend
             CreateMap<Order, PlaceOrderDTO>().ReverseMap();
             CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
             CreateMap<Product, AddProductDTO>().ReverseMap();
+            CreateMap<Product, EditProductDTO>().ReverseMap();
         }
     }
 }
