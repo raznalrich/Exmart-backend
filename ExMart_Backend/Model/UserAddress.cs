@@ -11,8 +11,13 @@ namespace ExMart_Backend.Model
         public bool IsPrimary { get; set; }
         public string AddressLine { get; set; }
         public string City { get; set; }
+        public string District { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
         public AddressType AddressType { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public int CreatedBy { get; set; }
+        public bool IsActive { get; set; }
     }
 }
