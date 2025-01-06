@@ -12,6 +12,9 @@
 
         // Foreign key to the related Order
         public int OrderId { get; set; }
+        public int Product_StatusId { get; set; }
+
+        public int? shippingCharge { get; set; }
 
         public int Quantity { get; set; } // Quantity of the product in this order item
 
@@ -20,6 +23,8 @@
         public SizeMaster Size { get; set; }
         public ColourMaster Color { get; set; }
         public Order Order { get; set; }
+
+        public StatusMaster ProductStatus { get; set; }
 
     }
 }

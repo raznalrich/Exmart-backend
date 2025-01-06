@@ -8,6 +8,6 @@ namespace ExMart_Backend.Services.Interface
         //List<AddToCart> GetCartList();
         Task<ICollection<AddToCart>> GetCartList();
 
-
+        bool DeleteCartList(int productId, int userId);
     }
 }

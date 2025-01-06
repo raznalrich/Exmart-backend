@@ -19,5 +19,8 @@ namespace ExMart_Backend.Controllers
             await _mailRepository.SendEmail(receptor, subject, body);
             return Ok();
         }
+       
     }
-}
+    
+
+    }
