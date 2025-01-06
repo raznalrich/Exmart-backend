@@ -38,6 +38,28 @@ namespace ExMart_Backend.Services.Repository
                             .ToListAsync();
         }
 
+        public async Task<IEnumerable<Banner>> GetAllBannersAsync()
+        {
+            return await _db.Banners.ToListAsync();
+        }
+
+        public async Task<Banner> GetBannerByIdAsync(int id)
+        {
+            return await _db.Banners.FindAsync(id);
+        }
+
+        public async Task DeleteBannerAsync(int id)
+        {
+            var banner = await GetBannerByIdAsync(id);
+            if (banner == null)
+            {
+                throw new ArgumentException($"Banner with ID {id} not found.");
+            }
+
+            _db.Banners.Remove(banner);
+            await _db.SaveChangesAsync();
+        }
+
 
 
     }
