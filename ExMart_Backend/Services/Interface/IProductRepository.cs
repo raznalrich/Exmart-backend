@@ -1,4 +1,5 @@
-﻿using ExMart_Backend.Model;
+﻿using ExMart_Backend.DTO;
+using ExMart_Backend.Model;
 
 namespace ExMart_Backend.Services.Interface
 {
@@ -7,6 +8,7 @@ namespace ExMart_Backend.Services.Interface
         Task<Product> GetProductById(int id);
         Task<IEnumerable<object>> GetProducts();
         Task<Product> AddProductAsync(Product product);
+        Task<Product> UpdateProductAsync(int productId, EditProductDTO product);  
         Task<bool> DeactivateProductAsync(int id);
         Task<IEnumerable<Product>> GetProductsByNameAsync(string productName);
     }
