@@ -29,7 +29,7 @@ namespace ExMart_Backend.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            
             try
             {
                 //var orderId = await _orderRepository.GenerateOrderId();
@@ -43,6 +43,11 @@ namespace ExMart_Backend.Controllers
                     // Initialize a new list for OrderItems
                     OrderItems = new List<OrderItem>()
                 };
+                 int shippingCharge = 0;
+                if (placeOrderDTO.AddressId >= 3)
+                {
+                    shippingCharge = 49;
+                }
 
                 // Explicitly create OrderItems
                 foreach (var itemDTO in placeOrderDTO.OrderItems)
@@ -58,7 +63,7 @@ namespace ExMart_Backend.Controllers
                     order.OrderItems.Add(orderItem);
                 }
 
-                var result = await _orderRepository.AddOrder(order);
+                var result = await _orderRepository.AddOrder(order, shippingCharge);
 
                 return Ok(result);
 
