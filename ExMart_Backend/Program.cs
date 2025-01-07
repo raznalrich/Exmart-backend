@@ -27,6 +27,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IFeedBackRepository,FeedbackRepository>();
+builder.Services.AddScoped<IAdminRepository,AdminRepository>();
 builder.Services.AddScoped<Ipolicy, PolicyRepo>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

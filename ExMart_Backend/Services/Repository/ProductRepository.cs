@@ -45,7 +45,6 @@ namespace ExMart_Backend.Services.Repository
             if (product == null)
                 throw new KeyNotFoundException($"Product with ID {id} not found");
 
-            // Toggle the IsActive status
             product.IsActive = !product.IsActive;
             product.UpdatedAt = DateTime.UtcNow;
 

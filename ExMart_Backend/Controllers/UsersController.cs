@@ -2,6 +2,7 @@
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 
 namespace ExMart_Backend.Controllers
 {
@@ -45,7 +46,7 @@ namespace ExMart_Backend.Controllers
             }
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("getAddress/{userId}")]
         public async Task<IActionResult> GetUserAddresses(int userId)
         {
             var userAddresses = await _userRepository.GetAddressByUserId(userId);
@@ -62,6 +63,7 @@ namespace ExMart_Backend.Controllers
                 AddressLine = address.AddressLine,
                 City = address.City,
                 State = address.State,
+                District = address.District,
                 ZipCode = address.ZipCode,
                 AddressTypeName = address.AddressType?.AddressTypeName
             }).ToList();
@@ -69,7 +71,63 @@ namespace ExMart_Backend.Controllers
             return Ok(AddressDTOs);
         }
 
+        [HttpPut("EditAddress")]
+        public async Task<IActionResult> EditAddress(int id, [FromBody] AddAddressDTO editAddressDTO)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Invalid Address ID.");
+            }
 
+            if (editAddressDTO == null)
+            {
+                return BadRequest("Address data cannot be null.");
+            }
 
+            var isUpdated = await _userRepository.EditAddressById(id, editAddressDTO);
+
+            if (!isUpdated)
+            {
+                return NotFound($"No address found with ID {id}.");
+            }
+
+            return Ok("Address updated successfully.");
+        }
+
+        [HttpDelete("DeleteAddress/{id}")]
+        public async Task<IActionResult> DeleteAddressById(int id)
+        {
+            var result = await _userRepository.DeleteAddressById(id);
+
+            if (!result)
+            {
+                return NotFound(new { message = "Address not found or already deleted." });
+            }
+
+            return Ok(new { message = "Address deleted successfully." });
+        }
+
+        [HttpGet("CheckUserExisted/{userId}")]
+        public async Task<IActionResult> CheckUserExisted(int userId)
+        {
+            var result = await _userRepository.IsUserExisted(userId);
+            if (!result)
+            {
+                return NotFound(new { message = "user not founded" });
+            }
+
+            return Ok(new { message = "user existed" });
+        }
+        [HttpGet("ReturnIdfromemail/{email}")]
+        public async Task<IActionResult> ReturnIdfromEmail(string email)
+        {
+            int? userid = await _userRepository.ReturnIdbyEmail(email);
+            if (userid == 0)
+            {
+                return BadRequest(null);
+            }
+            return Ok(userid);
+
+        }
     }
 }
