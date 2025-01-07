@@ -14,5 +14,6 @@ namespace ExMart_Backend.Services.Interface
         Task<bool> EditAddressById(int id, AddAddressDTO editAddressDTO);
         Task<bool> DeleteAddressById(int id);
         Task<int?> ReturnIdbyEmail(string email);
+        Task<string?> ReturnEmailById(int id);
     }
 }
