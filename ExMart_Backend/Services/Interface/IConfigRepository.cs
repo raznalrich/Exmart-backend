@@ -1,4 +1,5 @@
-﻿using ExMart_Backend.Model;
+﻿using System.Drawing;
+using ExMart_Backend.Model;
 
 namespace ExMart_Backend.Services.Interface
 {
@@ -6,5 +7,8 @@ namespace ExMart_Backend.Services.Interface
     {
         Task<ColourMaster> GetColorById(int id);
         Task<SizeMaster> GetSizeById(int id);
+
+        Task<IEnumerable<ColourMaster>> GetAllColors();
+        Task<IEnumerable<SizeMaster>> GetAllSizes();
     }
 }

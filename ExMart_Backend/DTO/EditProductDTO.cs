@@ -2,7 +2,7 @@
 
 namespace ExMart_Backend.DTO
 {
-    public class AddProductDTO
+    public class EditProductDTO
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -11,11 +11,10 @@ namespace ExMart_Backend.DTO
         public int CategoryId { get; set; }
         public List<int> SizeId { get; set; }
         public List<int> ColorId { get; set; }
-        public string? PrimaryImageUrl { get; set; }
+        public string PrimaryImageUrl { get; set; }
         public decimal Weight { get; set; }
         public decimal Price { get; set; }
         public int CreatedBy { get; set; }
         public virtual ICollection<ProductImages> ProductImages { get; set; }
-
     }
 }

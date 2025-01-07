@@ -57,25 +57,6 @@ namespace ExMart_Backend.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("add-product")] 
-        //public async Task<IActionResult> AddProduct([FromBody] Product product) 
-        //{ 
-        //    if (product == null) 
-        //    { 
-        //        return BadRequest("Product data is null.");
-        //    } 
-        //    try 
-        //    { 
-        //        var newProduct = await _productRepository.AddProductAsync(product);
-        //        return Ok(newProduct);
-        //    } 
-        //    catch 
-        //    { 
-        //        return StatusCode(500, "An error occurred while adding the product.");
-        //    } 
-        //}
-
         [HttpPut("toggle-status/{id}")]
         public async Task<IActionResult> ToggleProductStatus(int id)
         {
@@ -121,6 +102,33 @@ namespace ExMart_Backend.Controllers
             }
 
             return Ok(products);
+        }
+
+        [HttpPut("Update/{productId}")]
+        public async Task<IActionResult> UpdateProduct(int productId, [FromBody] EditProductDTO productDTO)
+        {
+            if (productDTO == null)
+            {
+                return BadRequest("Product data cannot be null.");
+            }
+            try
+            {
+                var updatedProduct = await _productRepository.UpdateProductAsync(productId, productDTO);
+                if (updatedProduct == null)
+                {
+                    return NotFound($"Product with ID {productId} not found.");
+                }
+
+                return Ok(updatedProduct);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while updating the product: {ex.Message}");
+            }
         }
     }
 }
