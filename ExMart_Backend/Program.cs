@@ -16,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDBContext>
     (options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddControllers();
 
 
@@ -26,21 +25,14 @@ builder.Services.AddTransient<IMailRepository, MailRepository>();
 builder.Services.AddTransient<IConfigRepository, ConfigRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IAddToCartRepository, AddToCartRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IImageUpload, ImageUploadRepository>();
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IFeedBackRepository,FeedbackRepository>();
 builder.Services.AddScoped<Ipolicy, PolicyRepo>();
-
 builder.Services.AddScoped<IAdminRepository,AdminRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -58,6 +50,7 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowCredentials(); // If you're using cookies for authentication
     });
+
 });
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 

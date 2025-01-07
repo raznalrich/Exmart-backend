@@ -46,10 +46,10 @@ namespace ExMart_Backend.Controllers
             }
         }
 
-        [HttpGet("getAddressById{id}")]
+        [HttpGet("getAddressById/{id}")]
         public async Task<IActionResult> GetAddressById(int id)
         {
-            var address = await _userRepository.GetAddressById(id);
+            UserAddress address = await _userRepository.GetAddressById(id);
             if (address == null)
                 return NotFound("Address not found.");
 
