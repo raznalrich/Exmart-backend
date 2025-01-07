@@ -59,6 +59,48 @@ namespace ExMart_Backend.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllBanners()
+        {
+            try
+            {
+                var banners = await _bannerRepository.GetAllBannersAsync();
+
+                if (banners == null || !banners.Any())
+                {
+                    return NotFound("No banners found.");
+                }
+
+                return Ok(banners);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while fetching all banners: " + ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBanner(int id)
+        {
+            try
+            {
+                var banner = await _bannerRepository.GetBannerByIdAsync(id);
+                if (banner == null)
+                {
+                    return NotFound($"Banner with ID {id} not found.");
+                }
+
+                await _bannerRepository.DeleteBannerAsync(id);
+                return Ok($"Banner with ID {id} has been deleted.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while deleting the banner: " + ex.Message);
+            }
+        }
+
+
+
 
     }
 }
