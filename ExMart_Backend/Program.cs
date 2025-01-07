@@ -13,6 +13,13 @@ using YourNamespace.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder.Services.AddControllers()
+//    .AddJsonOptions(options => {
+//        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+//        options.JsonSerializerOptions.MaxDepth = 32;
+//    });
+
+
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDBContext>
     (options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
