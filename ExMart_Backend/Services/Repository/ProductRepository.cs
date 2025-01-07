@@ -53,6 +53,14 @@ namespace ExMart_Backend.Services.Repository
             return product.IsActive;
         }
 
+        public async Task<Product> DeleteProductAsync(int productId)
+        {
+            var product = await _db.Products.FirstOrDefaultAsync(u => u.Id == productId);
+            _db.Products.Remove(product);
+            await _db.SaveChangesAsync(); 
+            return product;
+        }
+
         public Task<Product> GetProductById(int id)
         {
             throw new NotImplementedException();

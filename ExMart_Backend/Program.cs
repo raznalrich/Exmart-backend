@@ -14,11 +14,11 @@ using YourNamespace.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 builder.Services.AddDbContext<ApplicationDBContext>
     (options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddControllers();
-
 
 builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
@@ -33,11 +33,6 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IImageUpload, ImageUploadRepository>();
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
-//builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IFeedBackRepository,FeedbackRepository>();
 builder.Services.AddScoped<Ipolicy, PolicyRepo>();
 
