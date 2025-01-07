@@ -40,7 +40,7 @@ namespace ExMart_Backend.Services.Repository
 
         //    return $"{APP_PREFIX}-{year}-{month}-{sequence:D4}";
         //}
-        public async Task<OrderResponseDTO> AddOrder(Order order)
+        public async Task<OrderResponseDTO> AddOrder(Order order, int shippingCharge)
         {
             if (order == null)
             {
@@ -81,14 +81,14 @@ namespace ExMart_Backend.Services.Repository
 
                 foreach (var item in orderItems)
                 {
-                    lastOrderItemId ++;
+                    
                     var newItem = new OrderItem
                     {
-                        OrderItemId = lastOrderItemId,
+                       
                         OrderId = order.OrderId,
                         Product_StatusId = item.Product_StatusId,
                         ProductId = item.ProductId,
-                        shippingCharge = 49,
+                        shippingCharge = shippingCharge,
                         Quantity = item.Quantity,
                         SizeId = item.SizeId,
                         ColorId = item.ColorId
@@ -118,8 +118,8 @@ namespace ExMart_Backend.Services.Repository
                 var responseDTO = new OrderResponseDTO
                 {
                     OrderId = completedOrder.OrderId,
-                    UserName = completedOrder.User?.Name ?? "N/A", // Adjust based on your User model
-                    Email = completedOrder.User?.Email ?? "N/A", // Adjust based on your User model
+                    UserName = completedOrder.User?.Name ?? "N/A", 
+                    Email = completedOrder.User?.Email ?? "N/A", 
                     CreatedAt = completedOrder.CreatedAt ?? DateTime.Now,
                     OrderItems = completedOrder.OrderItems.Select(item => new OrderItemResponseDTO
                     {
@@ -195,6 +195,7 @@ namespace ExMart_Backend.Services.Repository
                 Amount =  o.Product.Price * o.Quantity,
                 Quantity = o.Quantity,
                 OrderId = o.OrderId,
+                UserId = o.Order.UserId,
             }).ToListAsync();
         }
 

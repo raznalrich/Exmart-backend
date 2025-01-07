@@ -139,5 +139,16 @@ namespace ExMart_Backend.Controllers
             return Ok(userid);
 
         }
+        [HttpGet("ReturnEmailFromId/{id}")]
+        public async Task<IActionResult> ReturnEmailFromId(int id)
+        {
+            string? userEmail = await _userRepository.ReturnEmailById(id);
+            if (userEmail == null)
+            {
+                return BadRequest(null);
+            }
+            return Ok(userEmail);
+
+        }
     }
 }

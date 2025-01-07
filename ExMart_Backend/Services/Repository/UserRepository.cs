@@ -120,6 +120,13 @@ namespace ExMart_Backend.Services.Repository
             // If the user exists, return their ID, otherwise return null
             return user?.Id;
         }
+        public async Task<string?> ReturnEmailById(int id)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(m => m.Id == id);
+
+            // If the user exists, return their ID, otherwise return null
+            return user?.Email;
+        }
     }
 }
 
