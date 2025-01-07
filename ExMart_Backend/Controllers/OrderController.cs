@@ -158,7 +158,7 @@ namespace ExMart_Backend.Controllers
                 }
             }
 
-        [HttpPut("updatestatusbyidonly{orderitemid}")]
+        [HttpPut("updatestatusbyidonly/{orderitemid}")]
         public async Task<IActionResult> UpdateOrderItemStatusByIdOnly(int orderitemid)
         {
             try
