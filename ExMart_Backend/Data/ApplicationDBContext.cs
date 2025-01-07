@@ -22,6 +22,7 @@ namespace ExMart_Backend.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<StatusMaster> StatusMaster { get; set; }
+        public DbSet<Banner> Banners { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<AddressType> AddressTypes { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
