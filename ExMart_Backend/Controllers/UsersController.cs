@@ -81,7 +81,7 @@ namespace ExMart_Backend.Controllers
             return Ok(AddressDTOs);
         }
 
-        [HttpPut("EditAddress")]
+        [HttpPut("EditAddress/{id}")]
         public async Task<IActionResult> EditAddress(int id, [FromBody] AddAddressDTO editAddressDTO)
         {
             if (id <= 0)
