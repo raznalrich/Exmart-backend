@@ -122,5 +122,38 @@ namespace ExMart_Backend.Controllers
 
             return Ok(products);
         }
+
+        [HttpPut("Update/{productId}")]
+        public async Task<IActionResult> UpdateProduct(int productId, [FromBody] EditProductDTO productDTO)
+        {
+            if (productDTO == null)
+            {
+                return BadRequest("Product data cannot be null.");
+            }
+            try
+            {
+                var updatedProduct = await _productRepository.UpdateProductAsync(productId, productDTO);
+                if (updatedProduct == null)
+                {
+                    return NotFound($"Product with ID {productId} not found.");
+                }
+
+                return Ok(updatedProduct);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while updating the product: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            return Ok(await _productRepository.DeleteProductAsync(id));
+        }
     }
 }

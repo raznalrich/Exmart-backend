@@ -10,6 +10,8 @@ namespace ExMart_Backend.Model
 
         // Navigation Properties
         public ICollection<Order> Orders { get; set; }
+        [JsonIgnore]
+
         public ICollection<OrderItem> OrderItems { get; set; }
 
 
