@@ -3,6 +3,7 @@ using AutoMapper;
 using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,16 +11,20 @@ namespace ExMart_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+   
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
 
+        
         public OrderController(IOrderRepository orderRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
         }
+
+        
 
         [HttpPost]
         [Route("placeorder")]
@@ -122,6 +127,7 @@ namespace ExMart_Backend.Controllers
         }
 
         [HttpGet("orderItem/List")]
+        
         public async Task<IActionResult> GetOrderItemList()
         {
             try
