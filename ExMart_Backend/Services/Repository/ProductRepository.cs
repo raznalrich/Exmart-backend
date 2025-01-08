@@ -109,34 +109,30 @@ namespace ExMart_Backend.Services.Repository
                 existingProduct.UpdatedAt = DateTime.UtcNow;
                 if (productDTO.ProductImages != null && productDTO.ProductImages.Any())
                 {
-                    var updatedImageIds = productDTO.ProductImages.Select(img => img.ImageId).ToList();
-                    var imagesToRemove = existingProduct.ProductImages
-                    .Where(img => !updatedImageIds.Contains(img.ImageId)) // Images not present in the updated list
-                    .ToList();
-                    foreach (var image in imagesToRemove)
+                    // 1) Clear out the old images
+                    _db.Images.RemoveRange(existingProduct.ProductImages);
+                    existingProduct.ProductImages.Clear();
+
+                    // 2) Add brand-new images from the DTO
+                    foreach (var dtoImg in productDTO.ProductImages)
                     {
-                        _db.Images.Remove(image); // Remove old images
+                        var newImage = new ProductImages
+                        {
+                            ImageUrl = dtoImg.ImageUrl,
+                            ProductId = existingProduct.Id
+                        };
+                        _db.Images.Add(newImage);
+                        // or existingProduct.ProductImages.Add(newImage); 
+                        // either works if relationships are set properly
                     }
-                    // 2. Add or update the images in the existing product
-                    foreach (var image in productDTO.ProductImages)
-                    {
-                        var existingImage = existingProduct.ProductImages.FirstOrDefault(img=>img.ImageId == image.ImageId);
-                        if (existingImage == null)
-                        {
-                            // Add a new image if it does not exist
-                            var newImage = new ProductImages
-                            {
-                                ImageUrl = image.ImageUrl,
-                                ProductId = existingProduct.Id // Link the new image to the product
-                            };
-                            _db.Images.Add(newImage);
-                        }
-                        else
-                        {
-                            existingImage.ImageUrl = image.ImageUrl;
-                        }
-                    }              
                 }
+                else
+                {
+                    // If no images were sent, you might want to remove them all or do nothing.
+                    _db.Images.RemoveRange(existingProduct.ProductImages);
+                    existingProduct.ProductImages.Clear();
+                }
+
 
                 await _db.SaveChangesAsync();
                 return existingProduct;
