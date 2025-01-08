@@ -15,16 +15,16 @@ namespace ExMart_Backend.Data
 
         private void InitializeData()
         {
-            productList = _dbContext.Products.ToList();
+            //productList = _dbContext.Products.ToList();
         }
 
         public List<Product> GetProducts()
         {
-            return productList;
+            return _dbContext.Products.ToList();
         }
         public async Task<Product> GetProductById(int id)
         {
-            return productList.FirstOrDefault(p => p.Id == id);
+            return _dbContext.Products.FirstOrDefault(p => p.Id == id);
         }
     }
 }

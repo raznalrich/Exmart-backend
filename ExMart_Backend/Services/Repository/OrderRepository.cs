@@ -40,7 +40,7 @@ namespace ExMart_Backend.Services.Repository
 
         //    return $"{APP_PREFIX}-{year}-{month}-{sequence:D4}";
         //}
-        public async Task<Order> AddOrder(Order order)
+        public async Task<OrderResponseDTO> AddOrder(Order order, int shippingCharge)
         {
             if (order == null)
             {
@@ -85,13 +85,14 @@ namespace ExMart_Backend.Services.Repository
 
                 foreach (var item in orderItems)
                 {
-                    lastOrderItemId ++;
+                    
                     var newItem = new OrderItem
                     {
-                        OrderItemId = lastOrderItemId,
+                       
                         OrderId = order.OrderId,
                         Product_StatusId = item.Product_StatusId,
                         ProductId = item.ProductId,
+                        shippingCharge = shippingCharge,
                         Quantity = item.Quantity,
                         SizeId = item.SizeId,
                         ColorId = item.ColorId
@@ -103,7 +104,38 @@ namespace ExMart_Backend.Services.Repository
                 await _db.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return order;
+                // Fetch the saved order with related data
+                var completedOrder = await _db.Orders
+                    .Include(o => o.User)
+                    .Include(o => o.OrderItems)
+                        .ThenInclude(oi => oi.Product)
+                    .FirstOrDefaultAsync(o => o.OrderId == order.OrderId);
+
+                if (completedOrder == null)
+                {
+                    throw new InvalidOperationException("Failed to retrieve the saved order");
+                }
+
+
+
+                // Map to OrderResponseDTO
+                var responseDTO = new OrderResponseDTO
+                {
+                    OrderId = completedOrder.OrderId,
+                    UserName = completedOrder.User?.Name ?? "N/A", 
+                    Email = completedOrder.User?.Email ?? "N/A", 
+                    CreatedAt = completedOrder.CreatedAt ?? DateTime.Now,
+                    OrderItems = completedOrder.OrderItems.Select(item => new OrderItemResponseDTO
+                    {
+                        OrderItemId = item.OrderItemId,
+                        ProductName = item.Product?.Name ?? "Unknown Product",
+                        Quantity = item.Quantity,
+                        shippingCharge = item.shippingCharge,
+                        Price = item.Product?.Price ?? 0,
+                    }).ToList()
+                };
+
+                return responseDTO ;
             }
             catch
             {
@@ -170,6 +202,7 @@ namespace ExMart_Backend.Services.Repository
                 Amount =  o.Product.Price * o.Quantity,
                 Quantity = o.Quantity,
                 OrderId = o.OrderId,
+                UserId = o.Order.UserId,
             }).ToListAsync();
         }
 
@@ -229,6 +262,9 @@ namespace ExMart_Backend.Services.Repository
             }
         }
 
-       
+        Task IOrderRepository.UpdateOrderStatusByIdOnly(int orderitemid)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
