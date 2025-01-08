@@ -164,6 +164,8 @@ namespace ExMart_Backend.Services.Repository
                 OrderItemId = o.OrderItemId,
                 OrderDate = o.Order.CreatedAt,
                 ProductName = o.Product.Name,
+                PrimaryImageUrl = o.Product.PrimaryImageUrl,
+                ProductId = o.Product.Id,
                 Status = o.Product_StatusId,
                 Amount =  o.Product.Price * o.Quantity,
                 Quantity = o.Quantity,
