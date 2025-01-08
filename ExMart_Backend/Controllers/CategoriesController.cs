@@ -1,6 +1,8 @@
 ﻿using ExMart_Backend.Interface;
 using ExMart_Backend.Model;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ExMart_Backend.Controllers
 {
@@ -36,6 +38,29 @@ namespace ExMart_Backend.Controllers
             return CreatedAtAction(nameof(GetCategories), new { id = addedCategory.Id }, addedCategory);
         }
 
+        // PUT: api/categories/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
+        {
+            if (category == null || id != category.Id)
+            {
+                return BadRequest("Category ID mismatch or invalid data.");
+            }
+
+            if (string.IsNullOrEmpty(category.CategoryName) || string.IsNullOrEmpty(category.IconPath))
+            {
+                return BadRequest("Category name and icon path are required.");
+            }
+
+            var updatedCategory = await _categoryRepository.UpdateCategoryAsync(category);
+            if (updatedCategory == null)
+            {
+                return NotFound($"Category with ID {id} not found.");
+            }
+
+            return Ok(updatedCategory);
+        }
+
         // DELETE: api/categories/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveCategory(int id)
@@ -47,7 +72,6 @@ namespace ExMart_Backend.Controllers
             }
 
             return NoContent();
-
         }
     }
 }

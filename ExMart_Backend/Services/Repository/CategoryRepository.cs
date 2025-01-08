@@ -2,10 +2,11 @@
 using ExMart_Backend.Interface;
 using ExMart_Backend.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ExMart_Backend.Repository
 {
-    public class CategoryRepository:ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly ApplicationDBContext _context;
 
@@ -37,5 +38,23 @@ namespace ExMart_Backend.Repository
             return category;
         }
 
+        public async Task<Category> UpdateCategoryAsync(Category category)
+        {
+            var existingCategory = await _context.addToCategories.FindAsync(category.Id);
+            if (existingCategory == null)
+            {
+                return null;
+            }
+
+            // Update the properties
+            existingCategory.CategoryName = category.CategoryName;
+            existingCategory.IconPath = category.IconPath;
+            // Add any other properties that need to be updated
+
+            _context.addToCategories.Update(existingCategory);
+            await _context.SaveChangesAsync();
+
+            return existingCategory;
+        }
     }
 }
