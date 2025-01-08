@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ExMart_Backend.Model
+﻿namespace ExMart_Backend.Model
 {
     public class OrderItem
     {
-        [Key]
         public int OrderItemId { get; set; }
 
         public int ProductId { get; set; }

@@ -9,14 +9,13 @@
         public int OrderId { get; set; }
 
         public DateTime? CreatedAt { get; set; }
-       
+
         public decimal TotalAmount { get; set; }
 
         public string AddressLine { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
-        
         public List<OrderItemDTO> OrderItems { get; set; }
     }
 }
