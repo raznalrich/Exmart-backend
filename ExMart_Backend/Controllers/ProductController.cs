@@ -24,10 +24,10 @@ namespace ExMart_Backend.Controllers
             _mapper = mapper;
         }
 
-        public ProductController(ProductRepository repository)
-        {
-            this.repository = repository;
-        }
+        //public ProductController(ProductRepository repository)
+        //{
+        //    this.repository = repository;
+        //}
 
         [HttpGet]
         public IActionResult GetAllProducts()
