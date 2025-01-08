@@ -528,6 +528,7 @@ namespace ExMart_Backend.Data
                   Id = 1,
                   Name = "Robert Brown",
                   Email = "robert.brown@example.com",
+                 
                   Phone = "+91 9998887766",
                   CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
               },
@@ -536,6 +537,7 @@ namespace ExMart_Backend.Data
                   Id = 2,
                   Name = "Emily White",
                   Email = "emily.white@example.com",
+                  
                   Phone = "+91 9876543210",
                   CreatedAt = new DateTime(2023, 11, 22, 13, 37, 0, DateTimeKind.Utc),
               },
@@ -544,6 +546,7 @@ namespace ExMart_Backend.Data
                     Id = 3,
                     Name = "Alice Brown",
                     Email = "alicebrown@example.com",
+                    
                     Phone = "1122334455",
                     CreatedAt = DateTime.UtcNow // Specific UTC DateTime
                 },
@@ -552,6 +555,7 @@ namespace ExMart_Backend.Data
                     Id = 4,
                     Name = "John Wick",
                     Email = "jhonwick@example.com",
+                   
                     Phone = "+91 9873876210",
                     CreatedAt = DateTime.UtcNow
                 }
