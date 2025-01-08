@@ -3,6 +3,7 @@ using ExMart_Backend.Data;
 using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
+using ExMart_Backend.Services.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExMart_Backend.Controllers
@@ -13,7 +14,7 @@ namespace ExMart_Backend.Controllers
     {
         private IProductRepository _productRepository;
         private DBDataInitializer _dbInitializer;
-
+        private ProductRepository repository;
         private readonly IMapper _mapper;
         public ProductController(IProductRepository productRepository, DBDataInitializer dbInitializer, IMapper mapper)
         {
@@ -21,6 +22,11 @@ namespace ExMart_Backend.Controllers
             _productRepository = productRepository;
             _dbInitializer = dbInitializer;
             _mapper = mapper;
+        }
+
+        public ProductController(ProductRepository repository)
+        {
+            this.repository = repository;
         }
 
         [HttpGet]
@@ -56,6 +62,25 @@ namespace ExMart_Backend.Controllers
                 return StatusCode(500, "An error occurred while adding the product.");
             }
         }
+
+        //[HttpPost]
+        //[Route("add-product")] 
+        //public async Task<IActionResult> AddProduct([FromBody] Product product) 
+        //{ 
+        //    if (product == null) 
+        //    { 
+        //        return BadRequest("Product data is null.");
+        //    } 
+        //    try 
+        //    { 
+        //        var newProduct = await _productRepository.AddProductAsync(product);
+        //        return Ok(newProduct);
+        //    } 
+        //    catch 
+        //    { 
+        //        return StatusCode(500, "An error occurred while adding the product.");
+        //    } 
+        //}
 
         [HttpPut("toggle-status/{id}")]
         public async Task<IActionResult> ToggleProductStatus(int id)

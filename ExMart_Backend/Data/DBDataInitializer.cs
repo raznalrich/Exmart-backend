@@ -13,7 +13,7 @@ namespace ExMart_Backend.Data
             InitializeData();
         }
 
-        private void InitializeData()
+        public void InitializeData()
         {
             productList = _dbContext.Products.ToList();
         }

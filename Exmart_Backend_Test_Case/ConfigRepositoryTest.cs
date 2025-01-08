@@ -7,6 +7,7 @@
 
 namespace Exmart_Backend_Test_Case
 {
+    [TestFixture]
     public class ConfigRepositoryTests
         {
             private readonly ApplicationDBContext _db;
