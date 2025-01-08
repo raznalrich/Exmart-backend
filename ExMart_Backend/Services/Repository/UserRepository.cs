@@ -43,7 +43,8 @@ namespace ExMart_Backend.Services.Repository
                 State = addAddressDTO.State,
                 ZipCode = addAddressDTO.ZipCode,
                 CreatedAt = DateTime.UtcNow,
-                //CreatedBy = currentUserId
+                IsActive = true,
+                CreatedBy = addAddressDTO.UserId
             };
 
 
