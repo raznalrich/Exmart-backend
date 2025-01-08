@@ -10,8 +10,10 @@ namespace ExMart_Backend.Services.Interface
         Task<bool> IsUserExisted(int userId);
         Task AddAddress(AddAddressDTO addAddressDTO);
         Task<List<UserAddress>> GetAddressByUserId(int userId);
+        Task<UserAddress> GetAddressById(int id);
         Task<bool> EditAddressById(int id, AddAddressDTO editAddressDTO);
         Task<bool> DeleteAddressById(int id);
         Task<int?> ReturnIdbyEmail(string email);
+        Task<string?> ReturnEmailById(int id);
     }
 }

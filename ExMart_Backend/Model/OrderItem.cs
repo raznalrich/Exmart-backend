@@ -1,7 +1,10 @@
-﻿namespace ExMart_Backend.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ExMart_Backend.Model
 {
     public class OrderItem
     {
+        [Key]
         public int OrderItemId { get; set; }
 
         public int ProductId { get; set; }

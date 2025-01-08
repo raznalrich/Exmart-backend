@@ -123,11 +123,10 @@ namespace ExMart_Backend.Services.Repository
                         var existingImage = existingProduct.ProductImages.FirstOrDefault(img=>img.ImageId == image.ImageId);
                         if (existingImage == null)
                         {
-                            // Add a new image if it does not exist
                             var newImage = new ProductImages
                             {
                                 ImageUrl = image.ImageUrl,
-                                ProductId = existingProduct.Id // Link the new image to the product
+                                ProductId = existingProduct.Id
                             };
                             _db.Images.Add(newImage);
                         }
