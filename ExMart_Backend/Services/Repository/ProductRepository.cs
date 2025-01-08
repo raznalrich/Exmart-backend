@@ -1,5 +1,4 @@
 ﻿using ExMart_Backend.Data;
-using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +40,7 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<bool> DeactivateProductAsync(int id)
         {
-            var product = await _db.Products.FirstOrDefaultAsync(x => x.Id == id);
+            var product =await _db.Products.FirstOrDefaultAsync(x => x.Id == id);
 
             if (product == null)
                 throw new KeyNotFoundException($"Product with ID {id} not found");
@@ -51,6 +50,14 @@ namespace ExMart_Backend.Services.Repository
 
             await _db.SaveChangesAsync();
             return product.IsActive;
+        }
+
+        public async Task<Product> DeleteProductAsync(int productId)
+        {
+            var product = await _db.Products.FirstOrDefaultAsync(u => u.Id == productId);
+            _db.Products.Remove(product);
+            await _db.SaveChangesAsync(); 
+            return product;
         }
 
         public Task<Product> GetProductById(int id)
@@ -77,6 +84,7 @@ namespace ExMart_Backend.Services.Repository
             return products;
         }
 
+
         public async Task<Product> UpdateProductAsync(int productId, EditProductDTO productDTO)
         {
             try
@@ -101,34 +109,30 @@ namespace ExMart_Backend.Services.Repository
                 existingProduct.UpdatedAt = DateTime.UtcNow;
                 if (productDTO.ProductImages != null && productDTO.ProductImages.Any())
                 {
-                    var updatedImageIds = productDTO.ProductImages.Select(img => img.ImageId).ToList();
-                    var imagesToRemove = existingProduct.ProductImages
-                    .Where(img => !updatedImageIds.Contains(img.ImageId)) // Images not present in the updated list
-                    .ToList();
-                    foreach (var image in imagesToRemove)
+                    // 1) Clear out the old images
+                    _db.Images.RemoveRange(existingProduct.ProductImages);
+                    existingProduct.ProductImages.Clear();
+
+                    // 2) Add brand-new images from the DTO
+                    foreach (var dtoImg in productDTO.ProductImages)
                     {
-                        _db.Images.Remove(image); // Remove old images
+                        var newImage = new ProductImages
+                        {
+                            ImageUrl = dtoImg.ImageUrl,
+                            ProductId = existingProduct.Id
+                        };
+                        _db.Images.Add(newImage);
+                        // or existingProduct.ProductImages.Add(newImage); 
+                        // either works if relationships are set properly
                     }
-                    // 2. Add or update the images in the existing product
-                    foreach (var image in productDTO.ProductImages)
-                    {
-                        var existingImage = existingProduct.ProductImages.FirstOrDefault(img=>img.ImageId == image.ImageId);
-                        if (existingImage == null)
-                        {
-                            // Add a new image if it does not exist
-                            var newImage = new ProductImages
-                            {
-                                ImageUrl = image.ImageUrl,
-                                ProductId = existingProduct.Id // Link the new image to the product
-                            };
-                            _db.Images.Add(newImage);
-                        }
-                        else
-                        {
-                            existingImage.ImageUrl = image.ImageUrl;
-                        }
-                    }              
                 }
+                else
+                {
+                    // If no images were sent, you might want to remove them all or do nothing.
+                    _db.Images.RemoveRange(existingProduct.ProductImages);
+                    existingProduct.ProductImages.Clear();
+                }
+
 
                 await _db.SaveChangesAsync();
                 return existingProduct;
@@ -138,6 +142,7 @@ namespace ExMart_Backend.Services.Repository
                 throw new Exception($"An error occurred while updating the product: {ex.Message}", ex);
             }
         }
+
 
 
     }

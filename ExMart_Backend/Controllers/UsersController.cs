@@ -46,16 +46,6 @@ namespace ExMart_Backend.Controllers
             }
         }
 
-        [HttpGet("getAddressById/{id}")]
-        public async Task<IActionResult> GetAddressById(int id)
-        {
-            UserAddress address = await _userRepository.GetAddressById(id);
-            if (address == null)
-                return NotFound("Address not found.");
-
-            return Ok(address);
-        }
-
         [HttpGet("getAddress/{userId}")]
         public async Task<IActionResult> GetUserAddresses(int userId)
         {
@@ -81,7 +71,7 @@ namespace ExMart_Backend.Controllers
             return Ok(AddressDTOs);
         }
 
-        [HttpPut("EditAddress")]
+        [HttpPut("EditAddress/{id}")]
         public async Task<IActionResult> EditAddress(int id, [FromBody] AddAddressDTO editAddressDTO)
         {
             if (id <= 0)
@@ -137,6 +127,17 @@ namespace ExMart_Backend.Controllers
                 return BadRequest(null);
             }
             return Ok(userid);
+
+        }
+        [HttpGet("ReturnEmailFromId/{id}")]
+        public async Task<IActionResult> ReturnEmailFromId(int id)
+        {
+            string? userEmail = await _userRepository.ReturnEmailById(id);
+            if (userEmail == null)
+            {
+                return BadRequest(null);
+            }
+            return Ok(userEmail);
 
         }
     }
