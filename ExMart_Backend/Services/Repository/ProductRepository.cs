@@ -1,5 +1,4 @@
 ﻿using ExMart_Backend.Data;
-using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +40,7 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<bool> DeactivateProductAsync(int id)
         {
-            var product = await _db.Products.FirstOrDefaultAsync(x => x.Id == id);
+            var product =await _db.Products.FirstOrDefaultAsync(x => x.Id == id);
 
             if (product == null)
                 throw new KeyNotFoundException($"Product with ID {id} not found");
@@ -84,6 +83,7 @@ namespace ExMart_Backend.Services.Repository
 
             return products;
         }
+
 
         public async Task<Product> UpdateProductAsync(int productId, EditProductDTO productDTO)
         {
@@ -142,6 +142,7 @@ namespace ExMart_Backend.Services.Repository
                 throw new Exception($"An error occurred while updating the product: {ex.Message}", ex);
             }
         }
+
 
 
     }

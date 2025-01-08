@@ -7,18 +7,8 @@ using ExMart_Backend.Repository;
 using ExMart_Backend.Services.Interface;
 using ExMart_Backend.Services.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.OpenApi.Models;
-using YourNamespace.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-
-//builder.Services.AddControllers()
-//    .AddJsonOptions(options => {
-//        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-//        options.JsonSerializerOptions.MaxDepth = 32;
-//    });
-
 
 // Add services to the container.
 
@@ -31,23 +21,15 @@ builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddTransient<IMailRepository, MailRepository>();
 builder.Services.AddTransient<IConfigRepository, ConfigRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddScoped<IAddToCartRepository, AddToCartRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IImageUpload, ImageUploadRepository>();
-builder.Services.AddScoped<IBannerRepository, BannerRepository>();
 builder.Services.AddScoped<IFeedBackRepository,FeedbackRepository>();
-builder.Services.AddScoped<Ipolicy, PolicyRepo>();
 builder.Services.AddScoped<IAdminRepository,AdminRepository>();
+builder.Services.AddScoped<Ipolicy, PolicyRepo>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-
-    // Enable Swagger to handle IFormFile
-    //c.OperationFilter<FileUploadOperation>();
-});
+builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
@@ -57,40 +39,26 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowCredentials(); // If you're using cookies for authentication
     });
-
 });
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
+
 var app = builder.Build();
-app.UseCors("AllowAngularApp");
-app.UseStaticFiles();
-var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
-if (!Directory.Exists(uploadsPath))
-{
-    Directory.CreateDirectory(uploadsPath);
-}
-
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(uploadsPath),
-    RequestPath = "/uploads"
-});
-
-app.UseRouting();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ExMart_Backend v1");
-    });
+    app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
 // Apply CORS policy globally
+app.UseCors("AllowAngularApp");
 app.UseAuthorization();
 
 app.MapControllers();

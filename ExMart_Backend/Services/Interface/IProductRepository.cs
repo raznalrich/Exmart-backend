@@ -1,5 +1,4 @@
-﻿using ExMart_Backend.DTO;
-using ExMart_Backend.Model;
+﻿using ExMart_Backend.Model;
 
 namespace ExMart_Backend.Services.Interface
 {
