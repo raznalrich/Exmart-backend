@@ -130,5 +130,11 @@ namespace ExMart_Backend.Controllers
                 return StatusCode(500, $"An error occurred while updating the product: {ex.Message}");
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            return Ok(await _productRepository.DeleteProductAsync(id));
+        }
     }
 }
