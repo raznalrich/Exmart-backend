@@ -40,7 +40,7 @@ namespace ExMart_Backend.Services.Repository
 
         //    return $"{APP_PREFIX}-{year}-{month}-{sequence:D4}";
         //}
-        public async Task<Order> AddOrder(Order order)
+        public async Task<OrderResponseDTO> AddOrder(Order order, int shippingCharge)
         {
             if (order == null)
             {
@@ -70,11 +70,7 @@ namespace ExMart_Backend.Services.Repository
                 await _db.Orders.AddAsync(order);
                 await _db.SaveChangesAsync();
 
-                //Assign a new OrderItemId by getting the last one and adding 1
-                //var lastOrderItemId = await _db.OrderItems
-                //                                  .OrderByDescending(item => item.OrderItemId)
-                //                                  .Select(item => item.OrderItemId)
-                //                                  .FirstOrDefaultAsync();
+               
 
                 var lastOrderItemId = await _db.OrderItems
                                .MaxAsync(item => item.OrderItemId);
@@ -85,14 +81,14 @@ namespace ExMart_Backend.Services.Repository
 
                 foreach (var item in orderItems)
                 {
-                    lastOrderItemId ++;
+                    
                     var newItem = new OrderItem
                     {
-                        OrderItemId = lastOrderItemId,
+                       
                         OrderId = order.OrderId,
                         Product_StatusId = item.Product_StatusId,
                         ProductId = item.ProductId,
-                        shippingCharge = 49,
+                        shippingCharge = shippingCharge,
                         Quantity = item.Quantity,
                         SizeId = item.SizeId,
                         ColorId = item.ColorId
@@ -104,7 +100,38 @@ namespace ExMart_Backend.Services.Repository
                 await _db.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return order;
+                // Fetch the saved order with related data
+                var completedOrder = await _db.Orders
+                    .Include(o => o.User)
+                    .Include(o => o.OrderItems)
+                        .ThenInclude(oi => oi.Product)
+                    .FirstOrDefaultAsync(o => o.OrderId == order.OrderId);
+
+                if (completedOrder == null)
+                {
+                    throw new InvalidOperationException("Failed to retrieve the saved order");
+                }
+
+
+
+                // Map to OrderResponseDTO
+                var responseDTO = new OrderResponseDTO
+                {
+                    OrderId = completedOrder.OrderId,
+                    UserName = completedOrder.User?.Name ?? "N/A", 
+                    Email = completedOrder.User?.Email ?? "N/A", 
+                    CreatedAt = completedOrder.CreatedAt ?? DateTime.Now,
+                    OrderItems = completedOrder.OrderItems.Select(item => new OrderItemResponseDTO
+                    {
+                        OrderItemId = item.OrderItemId,
+                        ProductName = item.Product?.Name ?? "Unknown Product",
+                        Quantity = item.Quantity,
+                        shippingCharge = item.shippingCharge,
+                        Price = item.Product?.Price ?? 0,
+                    }).ToList()
+                };
+
+                return responseDTO ;
             }
             catch
             {
@@ -148,8 +175,6 @@ namespace ExMart_Backend.Services.Repository
                     CustomerId = o.User.Id,
                     CustomerName = o.User.Name,
 
-                   
-
                     UserId = o.User.Id,
 
                     TotalAmount = o.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price),
@@ -165,10 +190,12 @@ namespace ExMart_Backend.Services.Repository
                 OrderItemId = o.OrderItemId,
                 OrderDate = o.Order.CreatedAt,
                 ProductName = o.Product.Name,
+                PrimaryImageUrl = o.Product.PrimaryImageUrl,
                 Status = o.Product_StatusId,
                 Amount =  o.Product.Price * o.Quantity,
                 Quantity = o.Quantity,
                 OrderId = o.OrderId,
+                UserId = o.Order.UserId,
             }).ToListAsync();
         }
 
@@ -188,9 +215,11 @@ namespace ExMart_Backend.Services.Repository
                 ZipCode = o.UserAddress.ZipCode,
                 OrderItems = o.OrderItems.Select(oi => new OrderItemDTO
                 {
+                    OrderItemId = oi.OrderItemId,
                     ProductId = oi.ProductId,
                     ProductName = oi.Product.Name,
                     ProductImageUrl = oi.Product.PrimaryImageUrl,
+                    Product_StatusId = oi.Product_StatusId,
                     Quantity = oi.Quantity,
                     SizeName = oi.Size.Size,
                     ColorName = oi.Color.ColorName,
@@ -201,7 +230,7 @@ namespace ExMart_Backend.Services.Repository
             }).FirstOrDefaultAsync();
         }
 
-        public async Task<object>UpdateOrderStatus(UpdateOrderStatusRequest request)
+        public async Task<UpdateOrderStatusResponse> UpdateOrderStatus(UpdateOrderStatusRequest request)
         {
             {
                 var orderItem = await _db.OrderItems
@@ -225,7 +254,13 @@ namespace ExMart_Backend.Services.Repository
 
                 await _db.SaveChangesAsync();
 
-                return orderItem;
+                var updateResponse = new UpdateOrderStatusResponse
+                {
+                    OrderItemId = request.OrderItemId,
+                    ProductStatusId = orderItem.Product_StatusId
+                };
+
+                return updateResponse;
                
             }
         }

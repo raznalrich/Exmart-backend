@@ -104,7 +104,7 @@ namespace ExMart_Backend.Controllers
             return Ok(products);
         }
 
-        [HttpPut("Update")]
+        [HttpPut("Update/{productId}")]
         public async Task<IActionResult> UpdateProduct(int productId, [FromBody] EditProductDTO productDTO)
         {
             if (productDTO == null)
