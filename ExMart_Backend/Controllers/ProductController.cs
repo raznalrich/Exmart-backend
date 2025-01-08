@@ -57,6 +57,25 @@ namespace ExMart_Backend.Controllers
             }
         }
 
+        //[HttpPost]
+        //[Route("add-product")] 
+        //public async Task<IActionResult> AddProduct([FromBody] Product product) 
+        //{ 
+        //    if (product == null) 
+        //    { 
+        //        return BadRequest("Product data is null.");
+        //    } 
+        //    try 
+        //    { 
+        //        var newProduct = await _productRepository.AddProductAsync(product);
+        //        return Ok(newProduct);
+        //    } 
+        //    catch 
+        //    { 
+        //        return StatusCode(500, "An error occurred while adding the product.");
+        //    } 
+        //}
+
         [HttpPut("toggle-status/{id}")]
         public async Task<IActionResult> ToggleProductStatus(int id)
         {
@@ -129,6 +148,12 @@ namespace ExMart_Backend.Controllers
             {
                 return StatusCode(500, $"An error occurred while updating the product: {ex.Message}");
             }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            return Ok(await _productRepository.DeleteProductAsync(id));
         }
     }
 }
