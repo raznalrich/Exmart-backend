@@ -13,6 +13,7 @@ using ExMart_Backend.Services.Interface;
 using ExMart_Backend.Services.Repository;
 using YourNamespace.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,18 +37,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Add services to the container
+builder.Services.AddDbContext<ApplicationDBContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddControllers(options =>
 {
     var policy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
     options.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(policy));
+})
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
-// Add services to the container
-builder.Services.AddDbContext<ApplicationDBContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddControllers();
 builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
@@ -62,7 +67,7 @@ builder.Services.AddScoped<IImageUpload, ImageUploadRepository>();
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();
 builder.Services.AddScoped<IFeedBackRepository, FeedbackRepository>();
 builder.Services.AddScoped<Ipolicy, PolicyRepo>();
-builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 // Swagger configuration
@@ -130,12 +135,8 @@ app.UseRouting();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ExMart_Backend v1");
-    });
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

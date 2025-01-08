@@ -9,14 +9,12 @@ namespace ExMart_Backend.Controllers
     [ApiController]
     public class ConfigController : ControllerBase
     {
-        private readonly IConfigRepository _configRepository;
-
+        private IConfigRepository _configRepository;
         public ConfigController(IConfigRepository configRepository)
         {
             _configRepository = configRepository;
         }
-
-        // Existing Endpoint: Get Color by ID
+   
         [HttpGet("GetColorById")]
         public async Task<IActionResult> GetColorById(int id)
         {
@@ -34,7 +32,6 @@ namespace ExMart_Backend.Controllers
             return Ok(color);
         }
 
-        // Existing Endpoint: Get Size by ID
         [HttpGet("GetSizeById")]
         public async Task<IActionResult> GetSizeById(int id)
         {
@@ -52,30 +49,5 @@ namespace ExMart_Backend.Controllers
             return Ok(size);
         }
 
-        // New Endpoint: Get All Colors
-        [HttpGet("GetAllColors")]
-        public async Task<IActionResult> GetAllColors()
-        {
-            var colors = await _configRepository.GetAllColors();
-            if (colors == null || !colors.Any())
-            {
-                return NotFound("No colors found.");
-            }
-
-            return Ok(colors);
-        }
-
-        // New Endpoint: Get All Sizes
-        [HttpGet("GetAllSizes")]
-        public async Task<IActionResult> GetAllSizes()
-        {
-            var sizes = await _configRepository.GetAllSizes();
-            if (sizes == null || !sizes.Any())
-            {
-                return NotFound("No sizes found.");
-            }
-
-            return Ok(sizes);
-        }
     }
 }

@@ -16,11 +16,8 @@ namespace ExMart_Backend.Services.Interface
 
         Task<List<OrderItemListDTO>> GetOrderItemToList();
 
-        Task<UpdateOrderStatusResponse> UpdateOrderStatus(UpdateOrderStatusRequest request);
-
-        Task<object> UpdateOrderStatusByIdOnly(int orderitemid);
-
+        Task<object> UpdateOrderStatus(UpdateOrderStatusRequest request);
         Task<OrderDetailByOrderIdDTO> GetOrderDetailsById(int orderId);
-
+        Task UpdateOrderStatusByIdOnly(int orderitemid);
     }
 }

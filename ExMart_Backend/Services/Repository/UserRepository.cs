@@ -43,7 +43,8 @@ namespace ExMart_Backend.Services.Repository
                 State = addAddressDTO.State,
                 ZipCode = addAddressDTO.ZipCode,
                 CreatedAt = DateTime.UtcNow,
-                //CreatedBy = currentUserId
+                IsActive = true,
+                CreatedBy = addAddressDTO.UserId
             };
 
 
@@ -51,12 +52,6 @@ namespace ExMart_Backend.Services.Repository
             await _db.SaveChangesAsync();
         }
 
-        public async Task<UserAddress> GetAddressById(int id)
-        {
-            return await _db.UserAddresses
-                            .Include(address => address.AddressType) 
-                            .FirstOrDefaultAsync(a => a.Id == id && a.IsActive);
-        }
 
         public Task<List<UserAddress>> GetAddressByUserId(int userId)
         {
