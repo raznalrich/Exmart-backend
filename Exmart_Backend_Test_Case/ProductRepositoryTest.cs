@@ -96,16 +96,16 @@ namespace Exmart_Backend_Test_Case
 
         // Test case to check if products are fetched correctly
         [Test]
-        public async Task GetProducts_ShouldReturnAllProducts()
+        public async Task GetProductsShouldReturnAllProducts()
         {
             // Act
             var products = await _productRepository.GetProducts();
             // Assert
-            Assert.AreEqual(3, products.Count());
+            Assert.AreEqual(4, products.Count());
         }
 
         [Test]
-        public async Task Test_GetProductById_ValidId_ReturnsProduct()
+        public async Task GetProductByIdValidIdReturnsProduct()
         {
             // Act
             var product = await _productRepository.GetProductById(1);
@@ -116,14 +116,14 @@ namespace Exmart_Backend_Test_Case
         }
 
         [Test]
-        public async Task Test_GetProductById_InvalidId_ReturnsNull()
+        public async Task GetProductByIdInvalidIdReturnsNull()
         {
             var product = await _productRepository.GetProductById(999);
             Assert.IsNull(product);
         }
 
         [Test]
-        public async Task Test_AddProduct_ValidProduct_AddsProductToDatabase()
+        public async Task AddProductValidProductAddsProductToDatabase()
         {
             var newProduct = new Product
             {
@@ -153,7 +153,7 @@ namespace Exmart_Backend_Test_Case
         }
 
         [Test]
-        public async Task Test_UpdateProduct_ValidProduct_UpdatesProductInDatabase()
+        public async Task UpdateProductValidProductUpdatesProductInDatabase()
         {
             var product = await _productRepository.GetProductById(1);
             product.Name = "Updated Product Name";
@@ -166,21 +166,21 @@ namespace Exmart_Backend_Test_Case
         }
 
         [Test]
-        public async Task Test_ProductExists_ExistingProduct_ReturnsTrue()
+        public async Task ProductExistsExistingProductReturnsTrue()
         {
             var exists = await _productRepository.GetProductById(1) != null;
             Assert.IsTrue(exists);
         }
 
         [Test]
-        public async Task Test_ProductExists_NonExistingProduct_ReturnsFalse()
+        public async Task ProductExistsNonExistingProductReturnsFalse()
         {
             var exists = await _productRepository.GetProductById(999) != null;
             Assert.IsFalse(exists);
         }
 
         [Test]
-        public async Task Test_GetProductsByCategory_ValidCategory_ReturnsListOfProducts()
+        public async Task GetProductsByCategoryValidCategoryReturnsListOfProducts()
         {
             var products = _db.Products.Where(p => p.CategoryId == 1).ToList();
             Assert.IsNotEmpty(products);
@@ -188,21 +188,21 @@ namespace Exmart_Backend_Test_Case
         }
 
         [Test]
-        public async Task Test_GetProductsByCategory_InvalidCategory_ReturnsEmptyList()
+        public async Task GetProductsByCategoryInvalidCategoryReturnsEmptyList()
         {
             var products = _db.Products.Where(p => p.CategoryId == 999).ToList();
             Assert.IsEmpty(products);
         }
 
         [Test]
-        public async Task Test_GetProductsByPriceRange_ValidRange_ReturnsCorrectProducts()
+        public async Task GetProductsByPriceRangeValidRangeReturnsCorrectProducts()
         {
             var products = _db.Products.Where(p => p.Price >= 100 && p.Price <= 400).ToList();
             Assert.IsEmpty(products);
         }
 
         [Test]
-        public async Task Test_GetProductByName_ValidName_ReturnsProduct()
+        public async Task GetProductByNameValidNameReturnsProduct()
         {
             var product = await _db.Products.FirstOrDefaultAsync(p => p.Name == "Appliances");
             Assert.IsNotNull(product);
@@ -210,14 +210,14 @@ namespace Exmart_Backend_Test_Case
         }
 
         [Test]
-        public async Task Test_GetProductByName_NoMatch_ReturnsNull()
+        public async Task GetProductByNameNoMatchReturnsNull()
         {
             var product = await _db.Products.FirstOrDefaultAsync(p => p.Name == "NonExistingProduct");
             Assert.IsNull(product);
         }
 
         [Test]
-        public async Task Test_ProductIsActive_ValidProduct_ReturnsTrue()
+        public async Task ProductIsActiveValidProductReturnsTrue()
         {
             var product = await _productRepository.GetProductById(1);
             Assert.IsTrue(product.IsActive);

@@ -292,14 +292,6 @@ namespace ExMart_Backend.Data
                 .HasForeignKey(oi => oi.ColorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
-           
-        
-           
-
-          
-
-
             modelBuilder.Entity<Product>().HasData(
                
                 new Product

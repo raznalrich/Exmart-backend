@@ -6,7 +6,6 @@ namespace ExMart_Backend.Services.Interface
     public interface IUserRepository
     {
         Task<bool> AddUser(User user);
-
         Task<bool> IsUserExisted(int userId);
         Task AddAddress(AddAddressDTO addAddressDTO);
         Task<List<UserAddress>> GetAddressByUserId(int userId);
