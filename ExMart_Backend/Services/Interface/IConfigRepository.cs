@@ -6,5 +6,7 @@ namespace ExMart_Backend.Services.Interface
     {
         Task<ColourMaster> GetColorById(int id);
         Task<SizeMaster> GetSizeById(int id);
+        Task<IEnumerable<ColourMaster>> GetAllColors();
+        Task<IEnumerable<SizeMaster>> GetAllSizes();
     }
 }
