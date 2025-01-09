@@ -18,7 +18,7 @@ namespace ExMart_Backend.Model
         public int ProductId { get; set; }
 
 
-        
+
 
     }
 }
