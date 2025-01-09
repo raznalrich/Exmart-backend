@@ -67,6 +67,7 @@ builder.Services.AddScoped<IImageUpload, ImageUploadRepository>();
 builder.Services.AddScoped<IBannerRepository, BannerRepository>();
 builder.Services.AddScoped<IFeedBackRepository, FeedbackRepository>();
 builder.Services.AddScoped<Ipolicy, PolicyRepo>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 

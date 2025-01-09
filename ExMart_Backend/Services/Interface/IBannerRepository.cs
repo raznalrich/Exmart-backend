@@ -1,4 +1,5 @@
-﻿using ExMart_Backend.Model;
+﻿using ExMart_Backend.DTO;
+using ExMart_Backend.Model;
 
 namespace ExMart_Backend.Services.Interface
 {
@@ -11,6 +12,12 @@ namespace ExMart_Backend.Services.Interface
 
         Task<Banner> GetBannerByIdAsync(int id);
         Task DeleteBannerAsync(int id);
+
+        Task UpdateBannerAsync(Banner banner);
+        Task<bool> ProductExistsAsync(int productId);
+
+        Task<IEnumerable<BannerDTO>> GetAllBannerDetailsAsync();
+
 
 
     }

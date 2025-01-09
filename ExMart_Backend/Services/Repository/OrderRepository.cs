@@ -142,11 +142,32 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<Order> GetOrderWithDetails(int orderId)
         {
-            return await _db.Orders
+            if (orderId <= 0)
+            {
+                throw new ArgumentException("Order ID must be greater than zero.", nameof(orderId));
+            }
+            try
+            {
+               var order = await _db.Orders
                 .AsNoTracking()
                 .Include(o => o.OrderItems)
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
+
+                if (order == null)
+                {
+                    throw new KeyNotFoundException($"Order with ID {orderId} was not found.");
+                }
+
+                return order;
+            }
+            catch(Exception ex) 
+            {
+                    Console.Error.WriteLine($"An error occurred while fetching the order: {ex.Message}");
+                    // Optionally rethrow or handle it
+                    throw new ApplicationException("An unexpected error occurred while fetching the order details.", ex);
+            }
+            
         }
 
         public async Task<IEnumerable<Order>> GetOrders()
