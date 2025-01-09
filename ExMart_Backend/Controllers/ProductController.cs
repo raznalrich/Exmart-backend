@@ -3,6 +3,7 @@ using ExMart_Backend.Data;
 using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
+using ExMart_Backend.Services.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExMart_Backend.Controllers
@@ -13,7 +14,7 @@ namespace ExMart_Backend.Controllers
     {
         private IProductRepository _productRepository;
         private DBDataInitializer _dbInitializer;
-
+        private ProductRepository repository;
         private readonly IMapper _mapper;
         public ProductController(IProductRepository productRepository, DBDataInitializer dbInitializer, IMapper mapper)
         {
@@ -22,6 +23,11 @@ namespace ExMart_Backend.Controllers
             _dbInitializer = dbInitializer;
             _mapper = mapper;
         }
+
+        //public ProductController(ProductRepository repository)
+        //{
+        //    this.repository = repository;
+        //}
 
         [HttpGet]
         public IActionResult GetAllProducts()

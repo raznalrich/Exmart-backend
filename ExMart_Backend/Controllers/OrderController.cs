@@ -29,7 +29,7 @@ namespace ExMart_Backend.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             try
             {
                 //var orderId = await _orderRepository.GenerateOrderId();
@@ -43,7 +43,7 @@ namespace ExMart_Backend.Controllers
                     // Initialize a new list for OrderItems
                     OrderItems = new List<OrderItem>()
                 };
-                 int shippingCharge = 0;
+                int shippingCharge = 0;
                 if (placeOrderDTO.AddressId >= 3)
                 {
                     shippingCharge = 49;
@@ -65,11 +65,7 @@ namespace ExMart_Backend.Controllers
 
                 var result = await _orderRepository.AddOrder(order, shippingCharge);
 
-                //return Ok(result);
-                // Load and return the complete order with details
-
-                var orderWithDetails = await _orderRepository.GetOrderWithDetails(result.OrderId);
-                return CreatedAtAction(nameof(_orderRepository.GetOrderById), new { id = orderWithDetails.OrderId }, orderWithDetails);
+                return Ok(result);
 
             }
             catch (ArgumentException ex)
@@ -139,7 +135,7 @@ namespace ExMart_Backend.Controllers
             }
         }
 
-        [HttpGet("orders/detailsbyid/{orderid}")] 
+        [HttpGet("orders/detailsbyid/{orderid}")]
         public async Task<IActionResult> GetOrderDetailById(int orderid)
         {
             try
@@ -153,34 +149,34 @@ namespace ExMart_Backend.Controllers
             }
         }
 
-            [HttpPut("updatestatus")]
-            public async Task<IActionResult> UpdateOrderStatus( [FromBody] UpdateOrderStatusRequest request)
+        [HttpPut("updatestatus")]
+        public async Task<IActionResult> UpdateOrderItemStatus([FromBody] UpdateOrderStatusRequest request)
+        {
+            try
             {
-                try
-                {
-                    var result = await _orderRepository.UpdateOrderStatus(request);
-                    return Ok(result);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, "An error occurred while updating the order status");
-                }
+                var result = await _orderRepository.UpdateOrderStatus(request);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the order status");
+            }
+        }
+
+        [HttpPut("updatestatusbyidonly/{orderitemid}")]
+        public async Task<IActionResult> UpdateOrderItemStatusByIdOnly(int orderitemid)
+        {
+            try
+            {
+                var result = await _orderRepository.UpdateOrderStatusByIdOnly(orderitemid);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the order status");
             }
 
-        //[HttpPut("updatestatusbyidonly/{orderitemid}")]
-        //public async Task<IActionResult> UpdateOrderItemStatusByIdOnly(int orderitemid)
-        //{
-        //    try
-        //    {
-        //        var result = await _orderRepository.UpdateOrderStatusByIdOnly(orderitemid);
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, "An error occurred while updating the order status");
-        //    }
-
-        //}
+        }
 
     }
 }

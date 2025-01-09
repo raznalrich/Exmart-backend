@@ -9,7 +9,6 @@ namespace ExMart_Backend.Services.Repository
     public class ProductRepository : IProductRepository
     {
         private readonly ApplicationDBContext _db;
-
         public ProductRepository(ApplicationDBContext db)
         {
             _db = db;
@@ -61,9 +60,10 @@ namespace ExMart_Backend.Services.Repository
             return product;
         }
 
-        public Task<Product> GetProductById(int id)
+        public async Task<Product> GetProductById(int id)
         {
-            throw new NotImplementedException();
+            Product product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id);
+            return product;
         }
 
         public async Task<IEnumerable<object>> GetProducts()
@@ -143,8 +143,5 @@ namespace ExMart_Backend.Services.Repository
                 throw new Exception($"An error occurred while updating the product: {ex.Message}", ex);
             }
         }
-
-
-
     }
 }
