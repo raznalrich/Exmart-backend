@@ -1,4 +1,5 @@
 ﻿using ExMart_Backend.Data;
+using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -84,6 +85,9 @@ namespace ExMart_Backend.Services.Repository
             return products;
         }
 
-
+        public Task<Product> UpdateProductAsync(int productId, EditProductDTO product)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

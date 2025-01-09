@@ -11,12 +11,6 @@ namespace ExMart_Backend.Services.Repository
             DBDataInitializer.cartList.Add(addToCart);
             return true;
         }
-
-        //public Task<ICollection<AddToCart>> GetCartList()
-        //{
-        //    List<AddToCart> carts = DBDataInitializer.cartList.ToListasync();
-        //    return carts;
-        //}
         public async Task<ICollection<AddToCart>> GetCartList()
         {
             return DBDataInitializer.cartList.ToList();
@@ -31,5 +25,7 @@ namespace ExMart_Backend.Services.Repository
             }
             return false;
         }
+
+      
     }
 }
