@@ -25,12 +25,6 @@ namespace Exmart_Backend_Test_Case
             _db = new ApplicationDBContext(options);
             _categoryRepository = new CategoryRepository(_db);
 
-            //     _db.addToCategories.AddRange(
-            //    new Category { Id = 1, CategoryName = "Garments", IconPath = "icons/garments.png" },
-            //    new Category { Id = 2, CategoryName = "Stationary", IconPath = "icons/stationary.png" },
-            //    new Category { Id = 3, CategoryName = "Appliances", IconPath = "icons/appliance.png" }
-            //);
-            //     _db.SaveChanges();
             SeedDate();
         }
 
