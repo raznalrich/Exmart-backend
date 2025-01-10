@@ -15,39 +15,56 @@ namespace ExMart_Backend.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        // GET: api/categories
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            var categories = await _categoryRepository.GetCategoriesAsync();
-            return Ok(categories);
+            try
+            {
+                var categories = await _categoryRepository.GetCategoriesAsync();
+                return Ok(categories);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving categories: {ex.Message}");
+            }
         }
 
-        // POST: api/categories
         [HttpPost]
         public async Task<ActionResult<Category>> AddCategory([FromBody] Category category)
         {
-            if (category == null || string.IsNullOrEmpty(category.CategoryName) || string.IsNullOrEmpty(category.IconPath))
+            try
             {
-                return BadRequest("Category name and icon path are required.");
-            }
+                if (category == null || string.IsNullOrEmpty(category.CategoryName) || string.IsNullOrEmpty(category.IconPath))
+                {
+                    return BadRequest("Category name and icon path are required.");
+                }
 
-            var addedCategory = await _categoryRepository.AddCategoryAsync(category);
-            return CreatedAtAction(nameof(GetCategories), new { id = addedCategory.Id }, addedCategory);
+                var addedCategory = await _categoryRepository.AddCategoryAsync(category);
+                return CreatedAtAction(nameof(GetCategories), new { id = addedCategory.Id }, addedCategory);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while adding the category: {ex.Message}");
+            }
         }
 
-        // DELETE: api/categories/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveCategory(int id)
         {
-            var category = await _categoryRepository.RemoveCategoryAsync(id);
-            if (category == null)
+            try
             {
-                return NotFound("Category not found.");
+                var category = await _categoryRepository.RemoveCategoryAsync(id);
+                if (category == null)
+                {
+                    return NotFound("Category not found.");
+                }
+
+                return NoContent();
             }
-
-            return NoContent();
-
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while removing the category: {ex.Message}");
+            }
         }
     }
 }

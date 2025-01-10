@@ -39,5 +39,21 @@ namespace ExMart_Backend.Services.Repository
 
             return feedback;
         }
+
+        public async Task<IEnumerable<FeedBackDTO>> GetAllFeedbacksAsync()
+        {
+            // Fetch all feedbacks from the database
+            var feedbacks = await _context.Feedbacks
+                .Select(f => new FeedBackDTO
+                {
+                    UserId = f.UserId,
+                    ProductName = f.ProductName,
+                    FeedBack = f.FeedBack
+                })
+                .ToListAsync();
+
+            return feedbacks;
+        }
     }
 }
+

@@ -12,7 +12,7 @@ namespace ExMart_Backend.DTO
         public string ProductName { get; set; }
 
         [Required]
-        [JsonPropertyName("feedback")]  // Match the property name in your error
+        [JsonPropertyName("feedback")]  
         public string FeedBack { get; set; }
     }
 }
