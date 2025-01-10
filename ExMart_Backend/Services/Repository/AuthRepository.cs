@@ -29,7 +29,7 @@ namespace ExMart_Backend.Services.Repository
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var secretKey = jwtSettings["SecretKey"];
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-
+                
             var claims = new List<Claim>
             {
             new Claim(JwtRegisteredClaimNames.Sub, user.Email),
