@@ -1,22 +1,60 @@
-using System.Text.Json.Serialization;
+using System.Security.Cryptography;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using ExMart_Backend;
 using ExMart_Backend.Data;
 using ExMart_Backend.Interface;
-using ExMart_Backend.Model;
 using ExMart_Backend.Repository;
 using ExMart_Backend.Services.Interface;
 using ExMart_Backend.Services.Repository;
-using Microsoft.EntityFrameworkCore;
+using YourNamespace.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Get JWT settings from appsettings.json
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"];
 
-builder.Services.AddDbContext<ApplicationDBContext>
-    (options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddControllers();
+// Configure JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+        };
+    });
+
+// Add services to the container
+builder.Services.AddDbContext<ApplicationDBContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddControllers(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(policy));
+})
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 builder.Services.AddScoped<DBDataInitializer>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddTransient<IMailRepository, MailRepository>();
 builder.Services.AddTransient<IConfigRepository, ConfigRepository>();
@@ -25,40 +63,85 @@ builder.Services.AddScoped<IAddToCartRepository, AddToCartRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IFeedBackRepository,FeedbackRepository>();
-builder.Services.AddScoped<IAdminRepository,AdminRepository>();
+builder.Services.AddScoped<IImageUpload, ImageUploadRepository>();
+builder.Services.AddScoped<IBannerRepository, BannerRepository>();
+builder.Services.AddScoped<IFeedBackRepository, FeedbackRepository>();
 builder.Services.AddScoped<Ipolicy, PolicyRepo>();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+
+builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+// Swagger configuration
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ExMart_Backend", Version = "v1" });
+
+    // Add JWT Authentication to Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter 'Bearer' [space] and your token in the text input below.\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+// CORS configuration
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // Allow Angular app URL
+        policy.WithOrigins("http://localhost:4200")
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials(); // If you're using cookies for authentication
+              .AllowCredentials();
     });
 });
-builder.Services.AddAutoMapper(typeof(MappingConfig));
-
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Middleware
+app.UseCors("AllowAngularApp");
+app.UseStaticFiles();
+var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads"
+});
+
+app.UseRouting();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseHttpsRedirection();
-// Apply CORS policy globally
-app.UseCors("AllowAngularApp");
+app.UseAuthentication(); // Ensure authentication is before authorization
 app.UseAuthorization();
 
 app.MapControllers();

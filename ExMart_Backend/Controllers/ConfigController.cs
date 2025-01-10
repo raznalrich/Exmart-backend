@@ -48,6 +48,30 @@ namespace ExMart_Backend.Controllers
 
             return Ok(size);
         }
+        // New Endpoint: Get All Sizes
+        [HttpGet("GetAllSizes")]
+        public async Task<IActionResult> GetAllSizes()
+        {
+            var sizes = await _configRepository.GetAllSizes();
+            if (sizes == null || !sizes.Any())
+            {
+                return NotFound("No sizes found.");
+            }
+
+            return Ok(sizes);
+        }
+        // New Endpoint: Get All Colors
+        [HttpGet("GetAllColors")]
+        public async Task<IActionResult> GetAllColors()
+        {
+            var colors = await _configRepository.GetAllColors();
+            if (colors == null || !colors.Any())
+            {
+                return NotFound("No colors found.");
+            }
+
+            return Ok(colors);
+        }
 
     }
 }

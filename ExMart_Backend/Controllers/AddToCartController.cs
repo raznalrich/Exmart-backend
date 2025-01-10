@@ -21,43 +21,92 @@ namespace ExMart_Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AddToCart addToCart)
         {
-            bool isAdded = _addToCartRepository.AddToCart(addToCart);
-            if (isAdded)
+            if (addToCart == null)
             {
-                return StatusCode(StatusCodes.Status201Created);
+                return BadRequest("Invalid cart data.");
             }
-            else
+
+            try
             {
-                return BadRequest("Something went wrong");
+                bool isAdded = _addToCartRepository.AddToCart(addToCart);
+                if (isAdded)
+                {
+                    return StatusCode(StatusCodes.Status201Created);
+                }
+                else
+                {
+                    return BadRequest("Failed to add item to cart.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error.");
             }
         }
         [HttpGet("GetCart")]
         public async Task<IActionResult> GetCart()
         {
-            List<AddToCart> cart = (List<AddToCart>)await _addToCartRepository.GetCartList();
-            if (cart == null)
+            try
             {
-                return NoContent();
+                var cart = await _addToCartRepository.GetCartList();
+                if (cart == null || !cart.Any())
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return Ok(cart);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Ok(cart);
-            }            
+                return StatusCode(500, "Internal server error.");
+            }
         }
 
         [HttpDelete("DeleteCart")] 
-        public async Task<IActionResult> 
-            DeleteCart(int productId, int userId) { 
-            if (productId <= 0 || userId <= 0) 
-            { 
+        public async Task<IActionResult> DeleteCart(int productId, int userId) 
+        {
+            if (productId <= 0 || userId <= 0)
+            {
                 return BadRequest("Invalid productId or userId.");
-            } 
-            var isDeleted = _addToCartRepository.DeleteCartList(productId, userId);
-            if (isDeleted) { 
-                return Ok(new {
-                    Message = "Product removed from cart successfully." });
-            } 
-            return NotFound(new { Message = "Product not found in cart." });
+            }
+
+            try
+            {
+                var isDeleted = _addToCartRepository.DeleteCartList(productId, userId);
+                if (isDeleted)
+                {
+                    return Ok(new { Message = "Product removed from cart successfully." });
+                }
+                return NotFound(new { Message = "Product not found in cart." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+        [HttpDelete("DeleteAllUserCart/{userId}")]
+        public async Task<IActionResult> DeleteAllUserCart(int userId)
+        {
+            if (userId <= 0)
+            {
+                return BadRequest(new { Message = "Invalid userId." });
+            }
+
+            try
+            {
+                var isDeleted = _addToCartRepository.DeleteAllUserCartItems(userId);
+                if (isDeleted)
+                {
+                    return Ok(new { Message = "All cart items for the user were removed successfully." });
+                }
+                return NotFound(new { Message = "No cart items found for this user." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error.");
+            }
         }
     }
 }

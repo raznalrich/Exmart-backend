@@ -8,24 +8,63 @@ namespace ExMart_Backend.Services.Repository
     {
         public bool AddToCart(AddToCart addToCart)
         {
-            DBDataInitializer.cartList.Add(addToCart);
-            return true;
+            try
+            {
+                DBDataInitializer.cartList.Add(addToCart);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         public async Task<ICollection<AddToCart>> GetCartList()
         {
-            return DBDataInitializer.cartList.ToList();
+            try
+            {
+                return DBDataInitializer.cartList.ToList();
+            }
+            catch (Exception ex)
+            {
+                return new List<AddToCart>();
+            }
         }
         public bool DeleteCartList(int productId, int userId)
         {
-            var itemToRemove = DBDataInitializer.cartList.FirstOrDefault(cart => cart.ProductId == productId && cart.UserId == userId);
-            if (itemToRemove != null)
+            try
             {
-                DBDataInitializer.cartList.Remove(itemToRemove);
-                return true;
+                var itemToRemove = DBDataInitializer.cartList.FirstOrDefault(cart => cart.ProductId == productId && cart.UserId == userId);
+                if (itemToRemove != null)
+                {
+                    DBDataInitializer.cartList.Remove(itemToRemove);
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
-
-      
+        public bool DeleteAllUserCartItems(int userId)
+        {
+            try
+            {
+                var itemsToRemove = DBDataInitializer.cartList.Where(cart => cart.UserId == userId).ToList();
+                if (itemsToRemove.Any())
+                {
+                    foreach (var item in itemsToRemove)
+                    {
+                        DBDataInitializer.cartList.Remove(item);
+                    }
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

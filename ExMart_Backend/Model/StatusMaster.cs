@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ExMart_Backend.Model
 {
@@ -10,10 +11,9 @@ namespace ExMart_Backend.Model
 
         // Navigation Properties
         public ICollection<Order> Orders { get; set; }
-      
+
+        [JsonIgnore]
 
         public ICollection<OrderItem> OrderItems { get; set; }
-
-
     }
 }

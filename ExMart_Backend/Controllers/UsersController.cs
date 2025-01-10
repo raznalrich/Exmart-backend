@@ -70,8 +70,16 @@ namespace ExMart_Backend.Controllers
 
             return Ok(AddressDTOs);
         }
+        [HttpGet("getAddressById/{id}")]
+        public async Task<IActionResult> GetAddressById(int id)
+        {
+            UserAddress address = await _userRepository.GetAddressById(id);
+            if (address == null)
+                return NotFound("Address not found.");
 
-        [HttpPut("EditAddress")]
+            return Ok(address);
+        }
+        [HttpPut("EditAddress/{id}")]
         public async Task<IActionResult> EditAddress(int id, [FromBody] AddAddressDTO editAddressDTO)
         {
             if (id <= 0)

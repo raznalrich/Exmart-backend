@@ -70,11 +70,7 @@ namespace ExMart_Backend.Services.Repository
                 await _db.Orders.AddAsync(order);
                 await _db.SaveChangesAsync();
 
-                //Assign a new OrderItemId by getting the last one and adding 1
-                //var lastOrderItemId = await _db.OrderItems
-                //                                  .OrderByDescending(item => item.OrderItemId)
-                //                                  .Select(item => item.OrderItemId)
-                //                                  .FirstOrDefaultAsync();
+
 
                 var lastOrderItemId = await _db.OrderItems
                                .MaxAsync(item => item.OrderItemId);
@@ -85,10 +81,10 @@ namespace ExMart_Backend.Services.Repository
 
                 foreach (var item in orderItems)
                 {
-                    
+
                     var newItem = new OrderItem
                     {
-                       
+
                         OrderId = order.OrderId,
                         Product_StatusId = item.Product_StatusId,
                         ProductId = item.ProductId,
@@ -97,7 +93,7 @@ namespace ExMart_Backend.Services.Repository
                         SizeId = item.SizeId,
                         ColorId = item.ColorId
                     };
-                    
+
                     await _db.OrderItems.AddAsync(newItem);
                 }
 
@@ -122,8 +118,8 @@ namespace ExMart_Backend.Services.Repository
                 var responseDTO = new OrderResponseDTO
                 {
                     OrderId = completedOrder.OrderId,
-                    UserName = completedOrder.User?.Name ?? "N/A", 
-                    Email = completedOrder.User?.Email ?? "N/A", 
+                    UserName = completedOrder.User?.Name ?? "N/A",
+                    Email = completedOrder.User?.Email ?? "N/A",
                     CreatedAt = completedOrder.CreatedAt ?? DateTime.Now,
                     OrderItems = completedOrder.OrderItems.Select(item => new OrderItemResponseDTO
                     {
@@ -135,7 +131,7 @@ namespace ExMart_Backend.Services.Repository
                     }).ToList()
                 };
 
-                return responseDTO ;
+                return responseDTO;
             }
             catch
             {
@@ -146,11 +142,32 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<Order> GetOrderWithDetails(int orderId)
         {
-            return await _db.Orders
+            if (orderId <= 0)
+            {
+                throw new ArgumentException("Order ID must be greater than zero.", nameof(orderId));
+            }
+            try
+            {
+               var order = await _db.Orders
                 .AsNoTracking()
                 .Include(o => o.OrderItems)
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
+
+                if (order == null)
+                {
+                    throw new KeyNotFoundException($"Order with ID {orderId} was not found.");
+                }
+
+                return order;
+            }
+            catch(Exception ex) 
+            {
+                    Console.Error.WriteLine($"An error occurred while fetching the order: {ex.Message}");
+                    // Optionally rethrow or handle it
+                    throw new ApplicationException("An unexpected error occurred while fetching the order details.", ex);
+            }
+            
         }
 
         public async Task<IEnumerable<Order>> GetOrders()
@@ -179,8 +196,6 @@ namespace ExMart_Backend.Services.Repository
                     CustomerId = o.User.Id,
                     CustomerName = o.User.Name,
 
-                   
-
                     UserId = o.User.Id,
 
                     TotalAmount = o.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price),
@@ -191,15 +206,14 @@ namespace ExMart_Backend.Services.Repository
 
         async Task<List<OrderItemListDTO>> IOrderRepository.GetOrderItemToList()
         {
-            return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).Select(o => new OrderItemListDTO
+            return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).OrderBy(o => o.Order.CreatedAt).Select(o => new OrderItemListDTO
             {
                 OrderItemId = o.OrderItemId,
                 OrderDate = o.Order.CreatedAt,
                 ProductName = o.Product.Name,
                 PrimaryImageUrl = o.Product.PrimaryImageUrl,
-                ProductId = o.Product.Id,
                 Status = o.Product_StatusId,
-                Amount =  o.Product.Price * o.Quantity,
+                Amount = o.Product.Price * o.Quantity,
                 Quantity = o.Quantity,
                 OrderId = o.OrderId,
                 UserId = o.Order.UserId,
@@ -222,27 +236,31 @@ namespace ExMart_Backend.Services.Repository
                 ZipCode = o.UserAddress.ZipCode,
                 OrderItems = o.OrderItems.Select(oi => new OrderItemDTO
                 {
+                    OrderItemId = oi.OrderItemId,
                     ProductId = oi.ProductId,
                     ProductName = oi.Product.Name,
+                    ProductImageUrl = oi.Product.PrimaryImageUrl,
+                    Product_StatusId = oi.Product_StatusId,
                     Quantity = oi.Quantity,
                     SizeName = oi.Size.Size,
                     ColorName = oi.Color.ColorName,
+                    shippingCharge = oi.shippingCharge,
                     Price = oi.Product.Price,
                     SubTotal = oi.Quantity * oi.Product.Price
                 }).ToList()
             }).FirstOrDefaultAsync();
         }
 
-        public async Task<object>UpdateOrderStatus(UpdateOrderStatusRequest request)
+        public async Task<UpdateOrderStatusResponse> UpdateOrderStatus(UpdateOrderStatusRequest request)
         {
             {
-                var order = await _db.OrderItems
+                var orderItem = await _db.OrderItems
                     .Include(o => o.ProductStatus)
-                    .FirstOrDefaultAsync(o => o.OrderId == request.OrderId);
+                    .FirstOrDefaultAsync(o => o.OrderItemId == request.OrderItemId);
 
-                if (order == null)
+                if (orderItem == null)
                 {
-                    throw new Exception($"Order with ID {request.OrderId} not found");
+                    throw new Exception($"Order with ID {request.OrderItemId} not found");
                 }
 
                 var newStatus = await _db.StatusMaster
@@ -253,18 +271,47 @@ namespace ExMart_Backend.Services.Repository
                     throw new Exception($"Status with ID {request.ProductStatusId} not found");
                 }
 
-                order.Product_StatusId = request.ProductStatusId;
+                orderItem.Product_StatusId = request.ProductStatusId;
 
                 await _db.SaveChangesAsync();
 
-                return order;
-               
+                var updateResponse = new UpdateOrderStatusResponse
+                {
+                    OrderItemId = request.OrderItemId,
+                    ProductStatusId = orderItem.Product_StatusId
+                };
+
+                return updateResponse;
+
             }
         }
 
-        Task IOrderRepository.UpdateOrderStatusByIdOnly(int orderitemid)
+        public async Task<object> UpdateOrderStatusByIdOnly(int orderitemid)
         {
-            throw new NotImplementedException();
+            var orderItem = await _db.OrderItems.FirstOrDefaultAsync(o => o.OrderItemId == orderitemid);
+
+            if (orderItem == null)
+            {
+                throw new Exception($"Order with ID {orderitemid} not found");
+            }
+
+            switch (orderItem.Product_StatusId)
+            {
+                case 1:
+                    orderItem.Product_StatusId = 2;
+                    break;
+
+                case 2:
+                    orderItem.Product_StatusId = 3;
+                    break;
+
+                default:
+                    throw new Exception("Invalid status or no update needed");
+            }
+
+            await _db.SaveChangesAsync();
+
+            return orderItem.Product_StatusId;
         }
     }
 }

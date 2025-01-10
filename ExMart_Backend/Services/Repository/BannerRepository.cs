@@ -1,7 +1,12 @@
 ﻿using ExMart_Backend.Data;
+using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExMart_Backend.Services.Repository
 {
@@ -43,6 +48,17 @@ namespace ExMart_Backend.Services.Repository
             return await _db.Banners.ToListAsync();
         }
 
+        public async Task UpdateBannerAsync(Banner banner)
+        {
+            _db.Banners.Update(banner);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task<bool> ProductExistsAsync(int productId)
+        {
+            return await _db.Products.AnyAsync(p => p.Id == productId);
+        }
+
         public async Task<Banner> GetBannerByIdAsync(int id)
         {
             return await _db.Banners.FindAsync(id);
@@ -60,7 +76,24 @@ namespace ExMart_Backend.Services.Repository
             await _db.SaveChangesAsync();
         }
 
+        // **New Method: GetAllBannerDetailsAsync**
+        public async Task<IEnumerable<BannerDTO>> GetAllBannerDetailsAsync()
+        {
+            var bannerDetails = await (from banner in _db.Banners
+                                       join product in _db.Products on banner.ProductId equals product.Id
+                                       join category in _db.addToCategories on product.CategoryId equals category.Id
+                                       select new BannerDTO
+                                       {
+                                           BannerId = banner.BannerId,
+                                           ImageUrl = banner.ImageUrl,
+                                           ProductId = product.Id,
+                                           ProductImage = product.PrimaryImageUrl,
+                                           CategoryName = category.CategoryName,
+                                           ProductName = product.Name,
+                                           ProductPrice = product.Price.ToString("C") // Formats price as currency
+                                       }).ToListAsync();
 
-
+            return bannerDetails;
+        }
     }
 }
