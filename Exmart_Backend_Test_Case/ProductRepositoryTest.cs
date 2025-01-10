@@ -37,8 +37,8 @@ namespace Exmart_Backend_Test_Case
             Brand = "BrandA",
             VendorId = 1,
             CategoryId = 1,
-            SizeId = new List<int> { 1, 2, 3 }, // Sample Size IDs
-            ColorId = new List<int> { 1, 2 }, // Sample Color IDs
+            SizeId = new List<int> { 1, 2, 3 },
+            ColorId = new List<int> { 1, 2 },
             PrimaryImageUrl = "https://example.com/images/garments.jpg",
             Weight = 0.5m,
             Price = 19.99m,
