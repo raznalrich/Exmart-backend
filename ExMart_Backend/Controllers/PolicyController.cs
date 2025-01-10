@@ -19,30 +19,54 @@ namespace ExMart_Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Policy>>> GetPolicy()
         {
-            var policies = await _policyRepo.GetPolicies();
-            return Ok(policies);
+            try
+            {
+                var policies = await _policyRepo.GetPolicies();
+                return Ok(policies);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPolicy(int id)
         {
-            var policies = await _policyRepo.GetPoliciesById(id);
-            return Ok(policies);
+            try
+            {
+                var policy = await _policyRepo.GetPoliciesById(id);
+                if (policy == null)
+                {
+                    return NotFound();
+                }
+                return Ok(policy);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<Policy>> EditPolicy(int id, Policy updatedPolicy)
         {
-            var updated = await _policyRepo.EditPolicies(id, updatedPolicy);
-
-            if (updated == null)
+            try
             {
-                return NotFound(); 
+                var updated = await _policyRepo.EditPolicies(id, updatedPolicy);
+                if (updated == null)
+                {
+                    return NotFound();
+                }
+                return Ok(updated);
             }
-
-            return Ok(updated); 
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }
+
     

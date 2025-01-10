@@ -24,63 +24,79 @@ namespace ExMart_Backend.Controllers
             _mapper = mapper;
         }
 
-        //public ProductController(ProductRepository repository)
-        //{
-        //    this.repository = repository;
-        //}
-
         [HttpGet]
         public IActionResult GetAllProducts()
         {
-            var products = _dbInitializer.GetProducts();
-            return Ok(products);
+            try
+            {
+                var products = _dbInitializer.GetProducts();
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while retrieving products: {ex.Message}"
+                });
+            }
         }
 
         [HttpGet("GetProductById")]
-
         public async Task<IActionResult> GetProductById(int id)
         {
-            return Ok(await _dbInitializer.GetProductById(id));
+            try
+            {
+                var product = await _dbInitializer.GetProductById(id);
+                if (product == null)
+                {
+                    return NotFound($"Product with ID {id} not found.");
+                }
+
+                return Ok(product);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while retrieving the product: {ex.Message}"
+                });
+            }
         }
 
         [HttpPost]
         [Route("add-product")]
         public async Task<IActionResult> AddProduct([FromBody] AddProductDTO addProductDTO)
         {
-            Product product = _mapper.Map<Product>(addProductDTO);
-            if (product == null)
+            if (addProductDTO == null)
             {
                 return BadRequest("Product data is null.");
             }
+
             try
             {
+                Product product = _mapper.Map<Product>(addProductDTO);
                 var newProduct = await _productRepository.AddProductAsync(product);
                 return Ok(newProduct);
             }
-            catch
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while adding the product.");
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while adding the product: {ex.Message}"
+                });
             }
         }
-
-        //[HttpPost]
-        //[Route("add-product")] 
-        //public async Task<IActionResult> AddProduct([FromBody] Product product) 
-        //{ 
-        //    if (product == null) 
-        //    { 
-        //        return BadRequest("Product data is null.");
-        //    } 
-        //    try 
-        //    { 
-        //        var newProduct = await _productRepository.AddProductAsync(product);
-        //        return Ok(newProduct);
-        //    } 
-        //    catch 
-        //    { 
-        //        return StatusCode(500, "An error occurred while adding the product.");
-        //    } 
-        //}
 
         [HttpPut("toggle-status/{id}")]
         public async Task<IActionResult> ToggleProductStatus(int id)
@@ -107,7 +123,7 @@ namespace ExMart_Backend.Controllers
                 return StatusCode(500, new
                 {
                     success = false,
-                    message = "An error occurred while updating the product status"
+                    message = $"An error occurred while updating the product status: {ex.Message}"
                 });
             }
         }
@@ -120,13 +136,24 @@ namespace ExMart_Backend.Controllers
                 return BadRequest("Product name cannot be empty.");
             }
 
-            var products = await _productRepository.GetProductsByNameAsync(name);
-            if (products == null || !products.Any())
+            try
             {
-                return NotFound("No products found.");
-            }
+                var products = await _productRepository.GetProductsByNameAsync(name);
+                if (products == null || !products.Any())
+                {
+                    return NotFound("No products found.");
+                }
 
-            return Ok(products);
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while searching for products: {ex.Message}"
+                });
+            }
         }
 
         [HttpPut("Update/{productId}")]
@@ -136,30 +163,54 @@ namespace ExMart_Backend.Controllers
             {
                 return BadRequest("Product data cannot be null.");
             }
+
             try
             {
                 var updatedProduct = await _productRepository.UpdateProductAsync(productId, productDTO);
-                if (updatedProduct == null)
-                {
-                    return NotFound($"Product with ID {productId} not found.");
-                }
-
                 return Ok(updatedProduct);
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while updating the product: {ex.Message}");
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while updating the product: {ex.Message}"
+                });
             }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            return Ok(await _productRepository.DeleteProductAsync(id));
+            try
+            {
+                var deletedProduct = await _productRepository.DeleteProductAsync(id);
+                return Ok(deletedProduct);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while deleting the product: {ex.Message}"
+                });
+            }
         }
     }
 }
