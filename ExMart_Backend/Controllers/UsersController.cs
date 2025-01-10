@@ -46,73 +46,190 @@ namespace ExMart_Backend.Controllers
             }
         }
 
+        //[HttpGet("getAddress/{userId}")]
+        //public async Task<IActionResult> GetUserAddresses(int userId)
+        //{
+        //    var userAddresses = await _userRepository.GetAddressByUserId(userId);
+
+        //    if (userAddresses == null || !userAddresses.Any())
+        //    {
+        //        return NotFound(new { Message = "No addresses found for the given user." });
+        //    }
+
+        //    var AddressDTOs = userAddresses.Select(address => new AddressDTO
+        //    {
+        //        Id = address.Id,
+        //        IsPrimary = address.IsPrimary,
+        //        AddressLine = address.AddressLine,
+        //        City = address.City,
+        //        State = address.State,
+        //        District = address.District,
+        //        ZipCode = address.ZipCode,
+        //        AddressTypeName = address.AddressType?.AddressTypeName
+        //    }).ToList();
+
+        //    return Ok(AddressDTOs);
+        //}
+        //[HttpGet("getAddressById/{id}")]
+        //public async Task<IActionResult> GetAddressById(int id)
+        //{
+        //    UserAddress address = await _userRepository.GetAddressById(id);
+        //    if (address == null)
+        //        return NotFound("Address not found.");
+
+        //    return Ok(address);
+        //}
+        //[HttpPut("EditAddress/{id}")]
+        //public async Task<IActionResult> EditAddress(int id, [FromBody] AddAddressDTO editAddressDTO)
+        //{
+        //    if (id <= 0)
+        //    {
+        //        return BadRequest("Invalid Address ID.");
+        //    }
+
+        //    if (editAddressDTO == null)
+        //    {
+        //        return BadRequest("Address data cannot be null.");
+        //    }
+
+        //    var isUpdated = await _userRepository.EditAddressById(id, editAddressDTO);
+
+        //    if (!isUpdated)
+        //    {
+        //        return NotFound($"No address found with ID {id}.");
+        //    }
+
+        //    return Ok("Address updated successfully.");
+        //}
+
+        //[HttpDelete("DeleteAddress/{id}")]
+        //public async Task<IActionResult> DeleteAddressById(int id)
+        //{
+        //    var result = await _userRepository.DeleteAddressById(id);
+
+        //    if (!result)
+        //    {
+        //        return NotFound(new { message = "Address not found or already deleted." });
+        //    }
+
+        //    return Ok(new { message = "Address deleted successfully." });
+        //}
+
         [HttpGet("getAddress/{userId}")]
         public async Task<IActionResult> GetUserAddresses(int userId)
         {
-            var userAddresses = await _userRepository.GetAddressByUserId(userId);
-
-            if (userAddresses == null || !userAddresses.Any())
+            try
             {
-                return NotFound(new { Message = "No addresses found for the given user." });
+                if (userId <= 0)
+                {
+                    return BadRequest(new { message = "Invalid User ID." });
+                }
+
+                var userAddresses = await _userRepository.GetAddressByUserId(userId);
+
+                if (userAddresses == null || !userAddresses.Any())
+                {
+                    return NotFound(new { message = "No addresses found for the given user." });
+                }
+
+                var AddressDTOs = userAddresses.Select(address => new AddressDTO
+                {
+                    Id = address.Id,
+                    IsPrimary = address.IsPrimary,
+                    AddressLine = address.AddressLine,
+                    City = address.City,
+                    State = address.State,
+                    District = address.District,
+                    ZipCode = address.ZipCode,
+                    AddressTypeName = address.AddressType?.AddressTypeName
+                }).ToList();
+
+                return Ok(AddressDTOs);
             }
-
-            var AddressDTOs = userAddresses.Select(address => new AddressDTO
+            catch (Exception ex)
             {
-                Id = address.Id,
-                IsPrimary = address.IsPrimary,
-                AddressLine = address.AddressLine,
-                City = address.City,
-                State = address.State,
-                District = address.District,
-                ZipCode = address.ZipCode,
-                AddressTypeName = address.AddressType?.AddressTypeName
-            }).ToList();
-
-            return Ok(AddressDTOs);
+                return StatusCode(500, new { message = "An error occurred while retrieving addresses.", error = ex.Message });
+            }
         }
+
         [HttpGet("getAddressById/{id}")]
         public async Task<IActionResult> GetAddressById(int id)
         {
-            UserAddress address = await _userRepository.GetAddressById(id);
-            if (address == null)
-                return NotFound("Address not found.");
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest(new { message = "Invalid Address ID." });
+                }
 
-            return Ok(address);
+                UserAddress address = await _userRepository.GetAddressById(id);
+
+                if (address == null)
+                {
+                    return NotFound(new { message = "Address not found." });
+                }
+
+                return Ok(address);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving the address.", error = ex.Message });
+            }
         }
+
         [HttpPut("EditAddress/{id}")]
         public async Task<IActionResult> EditAddress(int id, [FromBody] AddAddressDTO editAddressDTO)
         {
-            if (id <= 0)
+            try
             {
-                return BadRequest("Invalid Address ID.");
-            }
+                if (id <= 0)
+                {
+                    return BadRequest(new { message = "Invalid Address ID." });
+                }
 
-            if (editAddressDTO == null)
+                if (editAddressDTO == null)
+                {
+                    return BadRequest(new { message = "Address data cannot be null." });
+                }
+
+                var isUpdated = await _userRepository.EditAddressById(id, editAddressDTO);
+
+                if (!isUpdated)
+                {
+                    return NotFound(new { message = $"No address found with ID {id}." });
+                }
+
+                return Ok(new { message = "Address updated successfully." });
+            }
+            catch (Exception ex)
             {
-                return BadRequest("Address data cannot be null.");
+                return StatusCode(500, new { message = "An error occurred while updating the address.", error = ex.Message });
             }
-
-            var isUpdated = await _userRepository.EditAddressById(id, editAddressDTO);
-
-            if (!isUpdated)
-            {
-                return NotFound($"No address found with ID {id}.");
-            }
-
-            return Ok("Address updated successfully.");
         }
 
         [HttpDelete("DeleteAddress/{id}")]
         public async Task<IActionResult> DeleteAddressById(int id)
         {
-            var result = await _userRepository.DeleteAddressById(id);
-
-            if (!result)
+            try
             {
-                return NotFound(new { message = "Address not found or already deleted." });
-            }
+                if (id <= 0)
+                {
+                    return BadRequest(new { message = "Invalid Address ID." });
+                }
 
-            return Ok(new { message = "Address deleted successfully." });
+                var result = await _userRepository.DeleteAddressById(id);
+
+                if (!result)
+                {
+                    return NotFound(new { message = "Address not found or already deleted." });
+                }
+
+                return Ok(new { message = "Address deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while deleting the address.", error = ex.Message });
+            }
         }
 
         [HttpGet("CheckUserExisted/{userId}")]

@@ -14,7 +14,6 @@ namespace ExMart_Backend.Controllers
         {
             _configRepository = configRepository;
         }
-   
         [HttpGet("GetColorById")]
         public async Task<IActionResult> GetColorById(int id)
         {
@@ -23,13 +22,20 @@ namespace ExMart_Backend.Controllers
                 return BadRequest("Invalid ID. ID must be greater than 0.");
             }
 
-            var color = await _configRepository.GetColorById(id);
-            if (color == null)
+            try
             {
-                return NotFound($"No color found with ID {id}.");
-            }
+                var color = await _configRepository.GetColorById(id);
+                if (color == null)
+                {
+                    return NotFound($"No color found with ID {id}.");
+                }
 
-            return Ok(color);
+                return Ok(color);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An unexpected error occurred. Please try again later.");
+            }
         }
 
         [HttpGet("GetSizeById")]
@@ -40,14 +46,56 @@ namespace ExMart_Backend.Controllers
                 return BadRequest("Invalid ID. ID must be greater than 0.");
             }
 
-            var size = await _configRepository.GetSizeById(id);
-            if (size == null)
+            try
             {
-                return NotFound($"No size found with ID {id}.");
-            }
+                var size = await _configRepository.GetSizeById(id);
+                if (size == null)
+                {
+                    return NotFound($"No size found with ID {id}.");
+                }
 
-            return Ok(size);
+                return Ok(size);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, "An unexpected error occurred. Please try again later.");
+            }
         }
+
+        //[HttpGet("GetColorById")]
+        //public async Task<IActionResult> GetColorById(int id)
+        //{
+        //    if (id <= 0)
+        //    {
+        //        return BadRequest("Invalid ID. ID must be greater than 0.");
+        //    }
+
+        //    var color = await _configRepository.GetColorById(id);
+        //    if (color == null)
+        //    {
+        //        return NotFound($"No color found with ID {id}.");
+        //    }
+
+        //    return Ok(color);
+        //}
+
+        //[HttpGet("GetSizeById")]
+        //public async Task<IActionResult> GetSizeById(int id)
+        //{
+        //    if (id <= 0)
+        //    {
+        //        return BadRequest("Invalid ID. ID must be greater than 0.");
+        //    }
+
+        //    var size = await _configRepository.GetSizeById(id);
+        //    if (size == null)
+        //    {
+        //        return NotFound($"No size found with ID {id}.");
+        //    }
+
+        //    return Ok(size);
+        //}
         // New Endpoint: Get All Sizes
         [HttpGet("GetAllSizes")]
         public async Task<IActionResult> GetAllSizes()
