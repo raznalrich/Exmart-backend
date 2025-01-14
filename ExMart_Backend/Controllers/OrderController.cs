@@ -173,20 +173,20 @@ namespace ExMart_Backend.Controllers
                 }
             }
 
-        //[HttpPut("updatestatusbyidonly/{orderitemid}")]
-        //public async Task<IActionResult> UpdateOrderItemStatusByIdOnly(int orderitemid)
-        //{
-        //    try
-        //    {
-        //        var result = await _orderRepository.UpdateOrderStatusByIdOnly(orderitemid);
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, "An error occurred while updating the order status");
-        //    }
+        [HttpPut("updatestatusbyidonly/{orderitemid}")]
+        public async Task<IActionResult> UpdateOrderItemStatusByIdOnly(int orderitemid)
+        {
+            try
+            {
+                var result = await _orderRepository.UpdateOrderStatusByIdOnly(orderitemid);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the order status");
+            }
 
-        //}
+        }
 
     }
 }

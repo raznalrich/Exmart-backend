@@ -70,11 +70,7 @@ namespace ExMart_Backend.Services.Repository
                 await _db.Orders.AddAsync(order);
                 await _db.SaveChangesAsync();
 
-                //Assign a new OrderItemId by getting the last one and adding 1
-                //var lastOrderItemId = await _db.OrderItems
-                //                                  .OrderByDescending(item => item.OrderItemId)
-                //                                  .Select(item => item.OrderItemId)
-                //                                  .FirstOrDefaultAsync();
+
 
                 var lastOrderItemId = await _db.OrderItems
                                .MaxAsync(item => item.OrderItemId);
@@ -85,10 +81,10 @@ namespace ExMart_Backend.Services.Repository
 
                 foreach (var item in orderItems)
                 {
-                    
+
                     var newItem = new OrderItem
                     {
-                       
+
                         OrderId = order.OrderId,
                         Product_StatusId = item.Product_StatusId,
                         ProductId = item.ProductId,
@@ -97,7 +93,7 @@ namespace ExMart_Backend.Services.Repository
                         SizeId = item.SizeId,
                         ColorId = item.ColorId
                     };
-                    
+
                     await _db.OrderItems.AddAsync(newItem);
                 }
 
@@ -122,8 +118,8 @@ namespace ExMart_Backend.Services.Repository
                 var responseDTO = new OrderResponseDTO
                 {
                     OrderId = completedOrder.OrderId,
-                    UserName = completedOrder.User?.Name ?? "N/A", 
-                    Email = completedOrder.User?.Email ?? "N/A", 
+                    UserName = completedOrder.User?.Name ?? "N/A",
+                    Email = completedOrder.User?.Email ?? "N/A",
                     CreatedAt = completedOrder.CreatedAt ?? DateTime.Now,
                     OrderItems = completedOrder.OrderItems.Select(item => new OrderItemResponseDTO
                     {
@@ -135,7 +131,7 @@ namespace ExMart_Backend.Services.Repository
                     }).ToList()
                 };
 
-                return responseDTO ;
+                return responseDTO;
             }
             catch
             {
@@ -235,7 +231,7 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<object>UpdateOrderStatus(UpdateOrderStatusRequest request)
         {
-            {
+            
                 var order = await _db.OrderItems
                     .Include(o => o.ProductStatus)
                     .FirstOrDefaultAsync(o => o.OrderId == request.OrderId);
@@ -258,13 +254,39 @@ namespace ExMart_Backend.Services.Repository
                 await _db.SaveChangesAsync();
 
                 return order;
-               
-            }
+ 
         }
 
-        Task IOrderRepository.UpdateOrderStatusByIdOnly(int orderitemid)
+       public async Task<int> UpdateOrderStatusByIdOnly(int orderitemid)
         {
-            throw new NotImplementedException();
+            var orderItem = await _db.OrderItems
+                     .Include(o => o.ProductStatus)
+                     .FirstOrDefaultAsync(o => o.OrderId == orderitemid);
+
+            if (orderItem == null)
+            {
+                throw new Exception($"Order with ID {orderitemid} not found");
+            }
+
+            switch (orderItem.Product_StatusId)
+            {
+                case 1:
+                    orderItem.Product_StatusId = 2;
+                    break;
+
+                case 2:
+                    orderItem.Product_StatusId = 3;
+                    break;
+
+                default:
+                    throw new Exception($"Order with ID {orderitemid} is already delivered");
+            }
+
+            await _db.SaveChangesAsync();
+
+            return orderItem.Product_StatusId;
+
+
         }
     }
 }
