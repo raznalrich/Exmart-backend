@@ -142,11 +142,32 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<Order> GetOrderWithDetails(int orderId)
         {
-            return await _db.Orders
+            if (orderId <= 0)
+            {
+                throw new ArgumentException("Order ID must be greater than zero.", nameof(orderId));
+            }
+            try
+            {
+               var order = await _db.Orders
                 .AsNoTracking()
                 .Include(o => o.OrderItems)
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
+
+                if (order == null)
+                {
+                    throw new KeyNotFoundException($"Order with ID {orderId} was not found.");
+                }
+
+                return order;
+            }
+            catch(Exception ex) 
+            {
+                    Console.Error.WriteLine($"An error occurred while fetching the order: {ex.Message}");
+                    // Optionally rethrow or handle it
+                    throw new ApplicationException("An unexpected error occurred while fetching the order details.", ex);
+            }
+            
         }
 
         public async Task<IEnumerable<Order>> GetOrders()
@@ -175,8 +196,6 @@ namespace ExMart_Backend.Services.Repository
                     CustomerId = o.User.Id,
                     CustomerName = o.User.Name,
 
-                   
-
                     UserId = o.User.Id,
 
                     TotalAmount = o.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price),
@@ -187,15 +206,14 @@ namespace ExMart_Backend.Services.Repository
 
         async Task<List<OrderItemListDTO>> IOrderRepository.GetOrderItemToList()
         {
-            return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).Select(o => new OrderItemListDTO
+            return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).OrderBy(o => o.Order.CreatedAt).Select(o => new OrderItemListDTO
             {
                 OrderItemId = o.OrderItemId,
                 OrderDate = o.Order.CreatedAt,
                 ProductName = o.Product.Name,
                 PrimaryImageUrl = o.Product.PrimaryImageUrl,
-                ProductId = o.Product.Id,
                 Status = o.Product_StatusId,
-                Amount =  o.Product.Price * o.Quantity,
+                Amount = o.Product.Price * o.Quantity,
                 Quantity = o.Quantity,
                 OrderId = o.OrderId,
                 UserId = o.Order.UserId,
@@ -218,27 +236,32 @@ namespace ExMart_Backend.Services.Repository
                 ZipCode = o.UserAddress.ZipCode,
                 OrderItems = o.OrderItems.Select(oi => new OrderItemDTO
                 {
+                    OrderItemId = oi.OrderItemId,
                     ProductId = oi.ProductId,
                     ProductName = oi.Product.Name,
+                    ProductImageUrl = oi.Product.PrimaryImageUrl,
+                    Product_StatusId = oi.Product_StatusId,
                     Quantity = oi.Quantity,
                     SizeName = oi.Size.Size,
                     ColorName = oi.Color.ColorName,
+                    shippingCharge = oi.shippingCharge,
                     Price = oi.Product.Price,
                     SubTotal = oi.Quantity * oi.Product.Price
                 }).ToList()
             }).FirstOrDefaultAsync();
         }
 
-        public async Task<object>UpdateOrderStatus(UpdateOrderStatusRequest request)
+        public async Task<UpdateOrderStatusResponse> UpdateOrderStatus(UpdateOrderStatusRequest request)
         {
-            
-                var order = await _db.OrderItems
-                    .Include(o => o.ProductStatus)
-                    .FirstOrDefaultAsync(o => o.OrderId == request.OrderId);
 
-                if (order == null)
+            
+                var orderItem = await _db.OrderItems
+                    .Include(o => o.ProductStatus)
+                    .FirstOrDefaultAsync(o => o.OrderItemId == request.OrderItemId);
+
+                if (orderItem == null)
                 {
-                    throw new Exception($"Order with ID {request.OrderId} not found");
+                    throw new Exception($"Order with ID {request.OrderItemId} not found");
                 }
 
                 var newStatus = await _db.StatusMaster
@@ -249,11 +272,17 @@ namespace ExMart_Backend.Services.Repository
                     throw new Exception($"Status with ID {request.ProductStatusId} not found");
                 }
 
-                order.Product_StatusId = request.ProductStatusId;
+                orderItem.Product_StatusId = request.ProductStatusId;
+
+            var UpdatedStatus = new UpdateOrderStatusResponse
+            {
+                OrderItemId = orderItem.OrderItemId,
+                ProductStatusId = orderItem.Product_StatusId,
+            };
 
                 await _db.SaveChangesAsync();
 
-                return order;
+                return UpdatedStatus;
  
         }
 
@@ -288,5 +317,7 @@ namespace ExMart_Backend.Services.Repository
 
 
         }
+
+        
     }
 }

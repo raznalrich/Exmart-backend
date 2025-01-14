@@ -16,29 +16,49 @@ namespace ExMart_Backend.Services.Repository
         }
         public async Task<Policy> EditPolicies(int id, Policy updatedPolicy)
         {
-            var existingPolicy = await _db.TermsAndConditions.FindAsync(id);
+            try
+            {
+                var existingPolicy = await _db.TermsAndConditions.FindAsync(id);
+                if (existingPolicy == null)
+                {
+                    return null;
+                }
 
-            if (existingPolicy == null)
+                existingPolicy.TndCcontent = updatedPolicy.TndCcontent;
+
+                _db.TermsAndConditions.Update(existingPolicy);
+                await _db.SaveChangesAsync();
+
+                return existingPolicy;
+            }
+            catch (Exception ex)
             {
                 return null; 
             }
-
-            existingPolicy.TndCcontent = updatedPolicy.TndCcontent;
-            
-            _db.TermsAndConditions.Update(existingPolicy);
-            await _db.SaveChangesAsync();
-
-            return existingPolicy;
         }
 
         public async Task<Policy> GetPoliciesById(int id)
         {
-            return await _db.TermsAndConditions.FirstOrDefaultAsync(u => u.Id == id);
+            try
+            {
+                return await _db.TermsAndConditions.FirstOrDefaultAsync(u => u.Id == id);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<IEnumerable<Policy>> GetPolicies()
         {
-            return await _db.TermsAndConditions.ToListAsync();
+            try
+            {
+                return await _db.TermsAndConditions.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return Enumerable.Empty<Policy>(); 
+            }
         }
     }
 }

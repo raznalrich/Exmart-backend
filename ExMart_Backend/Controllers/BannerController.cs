@@ -58,6 +58,45 @@ namespace ExMart_Backend.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBanner(int id, [FromBody] Banner updatedBanner)
+        {
+            if (updatedBanner == null || id != updatedBanner.BannerId)
+            {
+                return BadRequest("Invalid Banner data or mismatched ID.");
+            }
+
+            try
+            {
+                var existingBanner = await _bannerRepository.GetBannerByIdAsync(id);
+                if (existingBanner == null)
+                {
+                    return NotFound(new { message = $"Banner with ID {id} not found." });
+                }
+
+                // Ensure the ProductId exists in the database
+                var productExists = await _bannerRepository.ProductExistsAsync(updatedBanner.ProductId);
+                if (!productExists)
+                {
+                    return BadRequest(new { message = "Invalid ProductId. The product does not exist." });
+                }
+
+                // Update the banner properties
+                existingBanner.ImageUrl = updatedBanner.ImageUrl;
+                existingBanner.ProductName = updatedBanner.ProductName;
+                existingBanner.ProductId = updatedBanner.ProductId;
+
+                await _bannerRepository.UpdateBannerAsync(existingBanner);
+
+                return Ok(new { message = $"Banner with ID {id} has been updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"An error occurred while updating the banner: {ex.Message}" });
+            }
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> GetAllBanners()
@@ -99,6 +138,25 @@ namespace ExMart_Backend.Controllers
             }
         }
 
+        [HttpGet("Detailed")]
+        public async Task<IActionResult> GetDetailedBanners()
+        {
+            try
+            {
+                var bannerDetails = await _bannerRepository.GetAllBannerDetailsAsync();
+
+                if (bannerDetails == null || !bannerDetails.Any())
+                {
+                    return NotFound("No banners found.");
+                }
+
+                return Ok(bannerDetails);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while fetching banner details: " + ex.Message);
+            }
+        }
 
 
 

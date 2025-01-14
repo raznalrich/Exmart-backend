@@ -11,10 +11,6 @@ namespace ExMart_Backend.Model
         public string Phone { get; set; }
         public DateTime? CreatedAt { get; set; }
 
-
-
-
-
         // Navigation Properties
         public ICollection<Order> Orders { get; set; }
         public ICollection<Feedback> Feedbacks { get; set; }

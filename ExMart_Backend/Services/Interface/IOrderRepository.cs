@@ -6,7 +6,7 @@ namespace ExMart_Backend.Services.Interface
     public interface IOrderRepository
     {
         //Task<string> GenerateOrderId();
-        Task<OrderResponseDTO> AddOrder(Order order,int shippingCharge);
+        Task<OrderResponseDTO> AddOrder(Order order, int shippingCharge);
         Task<IEnumerable<Order>> GetOrders();
         Task<Order> GetOrderById(int id);
 
@@ -16,8 +16,11 @@ namespace ExMart_Backend.Services.Interface
 
         Task<List<OrderItemListDTO>> GetOrderItemToList();
 
-        Task<object> UpdateOrderStatus(UpdateOrderStatusRequest request);
-        Task<OrderDetailByOrderIdDTO> GetOrderDetailsById(int orderId);
+        Task<UpdateOrderStatusResponse> UpdateOrderStatus(UpdateOrderStatusRequest request);
+
         Task<int> UpdateOrderStatusByIdOnly(int orderitemid);
+
+        Task<OrderDetailByOrderIdDTO> GetOrderDetailsById(int orderId);
+
     }
 }
