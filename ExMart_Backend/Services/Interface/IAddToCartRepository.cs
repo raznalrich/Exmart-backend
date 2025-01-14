@@ -1,4 +1,5 @@
-﻿using ExMart_Backend.Model;
+﻿using ExMart_Backend.DTO;
+using ExMart_Backend.Model;
 
 namespace ExMart_Backend.Services.Interface
 {
@@ -6,7 +7,7 @@ namespace ExMart_Backend.Services.Interface
     {
         bool AddToCart(AddToCart AddToCart);
         //List<AddToCart> GetCartList();
-        Task<ICollection<AddToCart>> GetCartList();
+        Task<ICollection<CartListDTO>> GetCartList();
 
         bool DeleteCartList(int productId, int userId);
         bool DeleteAllUserCartItems(int userId);
