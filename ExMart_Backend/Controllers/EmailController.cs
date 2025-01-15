@@ -13,8 +13,8 @@ namespace ExMart_Backend.Controllers
     public class EmailController : ControllerBase
     {
         private readonly IMailRepository _mailRepository;
-        private const int MaxSubjectLength = 998; // RFC 2822 limit
-        private const int MaxBodyLength = 10000; // Arbitrary limit, adjust as needed
+        private const int MaxSubjectLength = 998; 
+        private const int MaxBodyLength = 10000; 
 
         public EmailController(IMailRepository mailRepository)
         {
@@ -40,7 +40,6 @@ namespace ExMart_Backend.Controllers
         {
             try
             {
-                // Additional validation beyond attributes
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(new
@@ -50,7 +49,6 @@ namespace ExMart_Backend.Controllers
                     });
                 }
 
-                // Validate email format with more strict rules
                 if (!IsValidEmail(receptor))
                 {
                     return BadRequest(new
@@ -60,7 +58,6 @@ namespace ExMart_Backend.Controllers
                     });
                 }
 
-                // Content validation
                 if (string.IsNullOrWhiteSpace(subject?.Trim()))
                 {
                     return BadRequest(new { Message = "Subject cannot be empty or whitespace" });
@@ -71,7 +68,6 @@ namespace ExMart_Backend.Controllers
                     return BadRequest(new { Message = "Body cannot be empty or whitespace" });
                 }
 
-                // Check for potential spam or malicious content
                 if (ContainsSuspiciousContent(subject) || ContainsSuspiciousContent(body))
                 {
                     return BadRequest(new { Message = "Message content appears to be suspicious" });
@@ -87,7 +83,7 @@ namespace ExMart_Backend.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                // Log specific error here
+            
                 return StatusCode(
                     StatusCodes.Status400BadRequest,
                     new { Message = "Failed to send email: " + ex.Message }
@@ -95,7 +91,6 @@ namespace ExMart_Backend.Controllers
             }
             catch (Exception ex)
             {
-                // Log general exception here
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     new { Message = "An error occurred while sending the email" }
@@ -110,18 +105,16 @@ namespace ExMart_Backend.Controllers
 
             try
             {
-                // More comprehensive email validation
                 string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
 
                 if (!Regex.IsMatch(email, pattern))
                     return false;
 
-                // Additional checks
-                if (email.Length > 254) // RFC 5321
+                if (email.Length > 254) 
                     return false;
 
                 var parts = email.Split('@');
-                if (parts[0].Length > 64) // RFC 5321
+                if (parts[0].Length > 64)
                     return false;
 
                 return true;
@@ -137,7 +130,6 @@ namespace ExMart_Backend.Controllers
             if (string.IsNullOrWhiteSpace(content))
                 return false;
 
-            // Check for potential XSS or injection patterns
             var suspiciousPatterns = new[]
             {
                 "<script",

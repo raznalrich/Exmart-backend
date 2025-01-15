@@ -97,11 +97,10 @@ namespace ExMart_Backend.Controllers
                     return NoContent();
                 }
 
-                return Ok(new { Items = cart, Count = cart.Count });
+                return Ok(cart);
             }
             catch (Exception ex)
             {
-                // Log the exception here
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new { Message = "An error occurred while retrieving cart items" });
             }
@@ -137,7 +136,6 @@ namespace ExMart_Backend.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception here
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new { Message = "An error occurred while removing the item from cart" });
             }
@@ -168,7 +166,6 @@ namespace ExMart_Backend.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception here
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new { Message = "An error occurred while removing user's cart items" });
             }
