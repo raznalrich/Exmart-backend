@@ -143,7 +143,7 @@ namespace ExMart_Backend.Services.Repository
 
             if (existingAddress == null)
             {
-                return false; 
+                return false;
             }
 
             existingAddress.AddressLine = editAddressDTO.AddressLine ?? existingAddress.AddressLine;
@@ -153,11 +153,11 @@ namespace ExMart_Backend.Services.Repository
             existingAddress.ZipCode = editAddressDTO.ZipCode ?? existingAddress.ZipCode;
             existingAddress.IsPrimary = editAddressDTO.IsPrimary;
             existingAddress.UpdatedAt = DateTime.UtcNow;
-            
+
             _db.UserAddresses.Update(existingAddress);
             await _db.SaveChangesAsync();
 
-            return true; 
+            return true;
         }
 
         public async Task<bool> DeleteAddressById(int id)
