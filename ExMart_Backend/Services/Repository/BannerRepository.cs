@@ -16,52 +16,104 @@ namespace ExMart_Backend.Services.Repository
 
         public BannerRepository(ApplicationDBContext db)
         {
-            _db = db;
+            _db = db ?? throw new ArgumentNullException(nameof(db), "Database context cannot be null.");
         }
 
         public async Task<Banner> AddBannerAsync(Banner banner)
         {
-            // Ensure the ProductId exists in the database
+            if (banner == null)
+            {
+                throw new ArgumentNullException(nameof(banner), "Banner object cannot be null.");
+            }
+
             var productExists = await _db.Products.AnyAsync(p => p.Id == banner.ProductId);
             if (!productExists)
             {
                 throw new ArgumentException("Invalid ProductId. The product does not exist.");
             }
 
-            // Add the banner to the database
-            await _db.Banners.AddAsync(banner);
-            await _db.SaveChangesAsync();
+            try
+            {
+                await _db.Banners.AddAsync(banner);
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new InvalidOperationException("An error occurred while adding the banner to the database.", ex);
+            }
 
             return banner;
         }
 
         public async Task<IEnumerable<Banner>> GetBannersByProductIdAsync(int productId)
         {
-            // Fetch banners with the given ProductId
-            return await _db.Banners
-                            .Where(b => b.ProductId == productId)
-                            .ToListAsync();
+            try
+            {
+                return await _db.Banners.Where(b => b.ProductId == productId).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("An error occurred while retrieving banners by ProductId.", ex);
+            }
         }
 
         public async Task<IEnumerable<Banner>> GetAllBannersAsync()
         {
-            return await _db.Banners.ToListAsync();
+            try
+            {
+                return await _db.Banners.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("An error occurred while retrieving all banners.", ex);
+            }
         }
 
         public async Task UpdateBannerAsync(Banner banner)
         {
-            _db.Banners.Update(banner);
-            await _db.SaveChangesAsync();
+            if (banner == null)
+            {
+                throw new ArgumentNullException(nameof(banner), "Banner object cannot be null.");
+            }
+
+            try
+            {
+                _db.Banners.Update(banner);
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new InvalidOperationException("An error occurred while updating the banner.", ex);
+            }
         }
 
         public async Task<bool> ProductExistsAsync(int productId)
         {
-            return await _db.Products.AnyAsync(p => p.Id == productId);
+            try
+            {
+                return await _db.Products.AnyAsync(p => p.Id == productId);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("An error occurred while checking if the product exists.", ex);
+            }
         }
 
         public async Task<Banner> GetBannerByIdAsync(int id)
         {
-            return await _db.Banners.FindAsync(id);
+            try
+            {
+                var banner = await _db.Banners.FindAsync(id);
+                if (banner == null)
+                {
+                    throw new KeyNotFoundException($"Banner with ID {id} not found.");
+                }
+                return banner;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("An error occurred while retrieving the banner by ID.", ex);
+            }
         }
 
         public async Task DeleteBannerAsync(int id)
@@ -72,28 +124,41 @@ namespace ExMart_Backend.Services.Repository
                 throw new ArgumentException($"Banner with ID {id} not found.");
             }
 
-            _db.Banners.Remove(banner);
-            await _db.SaveChangesAsync();
+            try
+            {
+                _db.Banners.Remove(banner);
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new InvalidOperationException("An error occurred while deleting the banner.", ex);
+            }
         }
 
-        // **New Method: GetAllBannerDetailsAsync**
         public async Task<IEnumerable<BannerDTO>> GetAllBannerDetailsAsync()
         {
-            var bannerDetails = await (from banner in _db.Banners
-                                       join product in _db.Products on banner.ProductId equals product.Id
-                                       join category in _db.addToCategories on product.CategoryId equals category.Id
-                                       select new BannerDTO
-                                       {
-                                           BannerId = banner.BannerId,
-                                           ImageUrl = banner.ImageUrl,
-                                           ProductId = product.Id,
-                                           ProductImage = product.PrimaryImageUrl,
-                                           CategoryName = category.CategoryName,
-                                           ProductName = product.Name,
-                                           ProductPrice = product.Price.ToString("C") // Formats price as currency
-                                       }).ToListAsync();
+            try
+            {
+                var bannerDetails = await (from banner in _db.Banners
+                                           join product in _db.Products on banner.ProductId equals product.Id
+                                           join category in _db.addToCategories on product.CategoryId equals category.Id
+                                           select new BannerDTO
+                                           {
+                                               BannerId = banner.BannerId,
+                                               ImageUrl = banner.ImageUrl,
+                                               ProductId = product.Id,
+                                               ProductImage = product.PrimaryImageUrl,
+                                               CategoryName = category.CategoryName,
+                                               ProductName = product.Name,
+                                               ProductPrice = product.Price.ToString("C")
+                                           }).ToListAsync();
 
-            return bannerDetails;
+                return bannerDetails;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("An error occurred while retrieving banner details.", ex);
+            }
         }
     }
 }
