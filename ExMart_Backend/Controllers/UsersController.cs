@@ -6,7 +6,7 @@ using Microsoft.VisualBasic;
 
 namespace ExMart_Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
