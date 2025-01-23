@@ -6,7 +6,7 @@ using Microsoft.VisualBasic;
 
 namespace ExMart_Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -15,16 +15,16 @@ namespace ExMart_Backend.Controllers
         {
             _userRepository = userRepository;
         }
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] User users)
-        {
-            var IsAdded = await _userRepository.AddUser(users);
-            if (IsAdded)
-            {
-                return StatusCode(StatusCodes.Status201Created);
-            }
-            return BadRequest("Something went wrong");
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> AddNewUser([FromBody] User users)
+        //{
+        //    var IsAdded = await _userRepository.AddUser(users);
+        //    if (IsAdded)
+        //    {
+        //        return StatusCode(StatusCodes.Status201Created);
+        //    }
+        //    return BadRequest("Something went wrong");
+        //}
 
         [HttpPost]
         [Route("addAddress")]
@@ -115,38 +115,139 @@ namespace ExMart_Backend.Controllers
             return Ok(new { message = "Address deleted successfully." });
         }
 
+        //[HttpGet("CheckUserExisted/{userId}")]
+        //public async Task<IActionResult> CheckUserExisted(int userId)
+        //{
+        //    var result = await _userRepository.IsUserExisted(userId);
+        //    if (!result)
+        //    {
+        //        return NotFound(new { message = "user not founded" });
+        //    }
+
+        //    return Ok(new { message = "user existed" });
+        //}
+
+        //[HttpGet("ReturnIdfromemail/{email}")]
+        //public async Task<IActionResult> ReturnIdfromEmail(string email)
+        //{
+        //    int? userid = await _userRepository.ReturnIdbyEmail(email);
+        //    if (userid == 0)
+        //    {
+        //        return BadRequest(null);
+        //    }
+        //    return Ok(userid);
+
+        //}
+
+        //[HttpGet("ReturnEmailFromId/{id}")]
+        //public async Task<IActionResult> ReturnEmailFromId(int id)
+        //{
+        //    string? userEmail = await _userRepository.ReturnEmailById(id);
+        //    if (userEmail == null)
+        //    {
+        //        return BadRequest(null);
+        //    }
+        //    return Ok(userEmail);
+
+        //}
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddNewUser([FromBody] User users)
+        {
+            if (users == null)
+            {
+                return BadRequest(new { message = "User data cannot be null." });
+            }
+
+            try
+            {
+                var isAdded = await _userRepository.AddUser(users);
+                if (isAdded)
+                {
+                    return StatusCode(StatusCodes.Status201Created, new { message = "User added successfully." });
+                }
+                return BadRequest(new { message = "An error occurred while adding the user." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while adding the user: {ex.Message}"
+                });
+            }
+        }
+
         [HttpGet("CheckUserExisted/{userId}")]
         public async Task<IActionResult> CheckUserExisted(int userId)
         {
-            var result = await _userRepository.IsUserExisted(userId);
-            if (!result)
+            try
             {
-                return NotFound(new { message = "user not founded" });
+                var result = await _userRepository.IsUserExisted(userId);
+                if (!result)
+                {
+                    return NotFound(new { message = "User not found." });
+                }
+                return Ok(new { message = "User exists." });
             }
-
-            return Ok(new { message = "user existed" });
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while checking user existence: {ex.Message}"
+                });
+            }
         }
+
         [HttpGet("ReturnIdfromemail/{email}")]
         public async Task<IActionResult> ReturnIdfromEmail(string email)
         {
-            int? userid = await _userRepository.ReturnIdbyEmail(email);
-            if (userid == 0)
+            if (string.IsNullOrWhiteSpace(email))
             {
-                return BadRequest(null);
+                return BadRequest(new { message = "Email cannot be empty." });
             }
-            return Ok(userid);
 
+            try
+            {
+                int? userId = await _userRepository.ReturnIdbyEmail(email);
+                if (userId == null || userId == 0)
+                {
+                    return NotFound(new { message = "User not found for the provided email." });
+                }
+                return Ok(new { userId });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while retrieving user ID: {ex.Message}"
+                });
+            }
         }
+
         [HttpGet("ReturnEmailFromId/{id}")]
         public async Task<IActionResult> ReturnEmailFromId(int id)
         {
-            string? userEmail = await _userRepository.ReturnEmailById(id);
-            if (userEmail == null)
+            try
             {
-                return BadRequest(null);
+                string? userEmail = await _userRepository.ReturnEmailById(id);
+                if (string.IsNullOrWhiteSpace(userEmail))
+                {
+                    return NotFound(new { message = "Email not found for the provided user ID." });
+                }
+                return Ok(new { userEmail });
             }
-            return Ok(userEmail);
-
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while retrieving user email: {ex.Message}"
+                });
+            }
         }
     }
 }

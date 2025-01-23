@@ -86,6 +86,7 @@ builder.Services.AddScoped<IBannerRepository, BannerRepository>();
 builder.Services.AddScoped<IFeedBackRepository, FeedbackRepository>();
 builder.Services.AddScoped<Ipolicy, PolicyRepo>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IHrDetails, HrDetailsRepository>();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 

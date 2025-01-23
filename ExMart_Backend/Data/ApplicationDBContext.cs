@@ -29,6 +29,7 @@ namespace ExMart_Backend.Data
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<AdminMembers> AdminMembers { get; set; }
         public DbSet<Policy>  TermsAndConditions { get; set; }
+        public DbSet<HrDetails> Hrdetailing {  get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,8 +41,13 @@ namespace ExMart_Backend.Data
                 new Policy { Id =1, TndCheading = "Terms And Conditions" , TndCcontent = "Trail T & C"},
                 new Policy { Id =2, TndCheading = "Payment Policy" , TndCcontent = "Trail Payment Policy"},
                 new Policy { Id =3, TndCheading = "Shipping Policy" , TndCcontent = "Trail Shipping Policy"}
-                );
-                
+            );
+
+            //seeding data on HR details
+            modelBuilder.Entity<HrDetails>().HasData(
+                new HrDetails {Id=1, HrPhoneNumber = 9999999999, HrAddress = "HR, Experion Global, Gayathiri Building, Technopark phase-1, Trivandrum - 695581",
+                    HrEmail = "experion.hr.experionglobal.com", ProTagLine = "exMart is the online merchandise selling platform for experion global which holds all the experion branded items for sale"
+                });
 
             modelBuilder.Entity<Product>()
             .HasMany(p => p.ProductImages)    // Changed from Images to ProductImages to match the property name
