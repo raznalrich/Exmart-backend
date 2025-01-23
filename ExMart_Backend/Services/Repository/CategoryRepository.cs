@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExMart_Backend.Repository
 {
-    public class CategoryRepository:ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly ApplicationDBContext _context;
 
@@ -16,26 +16,52 @@ namespace ExMart_Backend.Repository
 
         public async Task<IEnumerable<Category>> GetCategoriesAsync()
         {
-            return await _context.addToCategories.ToListAsync();
+            try
+            {
+                return await _context.addToCategories.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                
+                Console.WriteLine($"Error in GetCategoriesAsync: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task<Category> AddCategoryAsync(Category category)
         {
-            _context.addToCategories.Add(category);
-            await _context.SaveChangesAsync();
-            return category;
+            try
+            {
+                _context.addToCategories.Add(category);
+                await _context.SaveChangesAsync();
+                return category;
+            }
+            catch (Exception ex)
+            {
+               
+                Console.WriteLine($"Error in AddCategoryAsync: {ex.Message}");
+                throw; 
+            }
         }
 
         public async Task<Category> RemoveCategoryAsync(int categoryId)
         {
-            var category = await _context.addToCategories.FindAsync(categoryId);
-            if (category != null)
+            try
             {
-                _context.addToCategories.Remove(category);
-                await _context.SaveChangesAsync();
+                var category = await _context.addToCategories.FindAsync(categoryId);
+                if (category != null)
+                {
+                    _context.addToCategories.Remove(category);
+                    await _context.SaveChangesAsync();
+                }
+                return category;
             }
-            return category;
+            catch (Exception ex)
+            {
+               
+                Console.WriteLine($"Error in RemoveCategoryAsync: {ex.Message}");
+                throw; 
+            }
         }
-
     }
 }

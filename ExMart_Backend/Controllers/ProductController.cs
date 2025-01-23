@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExMart_Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/product")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -84,8 +84,10 @@ namespace ExMart_Backend.Controllers
 
             try
             {
-                Product product = _mapper.Map<Product>(addProductDTO);
-                var newProduct = await _productRepository.AddProductAsync(product);
+                var newProduct = await _productRepository.AddProductAsync(addProductDTO);
+                return Ok(new { success = true, message = "Product added successfully.", data = newProduct });
+                //Product product = _mapper.Map<Product>(addProductDTO);
+                //var newProduct = await _productRepository.AddProductAsync(product);
                 return Ok(newProduct);
             }
             catch (Exception ex)
