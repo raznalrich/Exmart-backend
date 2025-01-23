@@ -8,10 +8,14 @@ namespace ExMart_Backend.Services.Repository
     public class ProductImageRepository : IProductImageRepository
     {
         private readonly ApplicationDBContext _db;
+        private readonly Supabase.Client _supabaseClient;
 
-        public ProductImageRepository(ApplicationDBContext db)
+
+        public ProductImageRepository(ApplicationDBContext db, Supabase.Client supabaseClient)
         {
             _db = db;
+            _supabaseClient = supabaseClient;
+
         }
         public async Task<List<ProductImages>> GetImagesByProductId(int productId)
         {

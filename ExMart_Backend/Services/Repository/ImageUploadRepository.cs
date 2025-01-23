@@ -1,5 +1,6 @@
 ﻿using ExMart_Backend.Services.Interface;
 using Microsoft.OpenApi.Models;
+using Supabase;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using YourNamespace.Repositories;
 
@@ -8,10 +9,18 @@ namespace ExMart_Backend.Services.Repository
     public class ImageUploadRepository : IImageUpload
     {
         private readonly IWebHostEnvironment _env;
+        
 
         public ImageUploadRepository(IWebHostEnvironment env)
         {
             _env = env ?? throw new ArgumentNullException(nameof(env), "Web host environment cannot be null.");
+            var supabaseClient = new Client("your-supabase-url", "your-supabase-anon-key");
+
+        }
+
+        public Task<string> uploadImage()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<string> UploadImageAsync(IFormFile file, string requestScheme, string requestHost)
@@ -56,5 +65,10 @@ namespace ExMart_Backend.Services.Repository
                 throw new InvalidOperationException("An unexpected error occurred while uploading the image.", ex);
             }
         }
+        //public async Task<string> uploadImage()
+        //{
+
+        //    return "iamdsf";
+        //}
     }
 }
