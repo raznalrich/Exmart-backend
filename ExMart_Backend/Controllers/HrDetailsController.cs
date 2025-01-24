@@ -25,7 +25,8 @@ namespace ExMart_Backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Internal server error --->", error = ex });
+                return StatusCode(500, new { message = "Internal server error --->", 
+                    error = ex.Message,ex.InnerException?.Message});
             }
         }
         [HttpPut]
@@ -42,7 +43,8 @@ namespace ExMart_Backend.Controllers
         }
             catch (Exception ex)
             {   
-                return StatusCode(500, new { message = "Internal server error --->", error = ex });
+                return StatusCode(500, new { message = "Internal server error --->",
+                    error = ex.Message,ex.InnerException?.Message});
             }
         }   
     }

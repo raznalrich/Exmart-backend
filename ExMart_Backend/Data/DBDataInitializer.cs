@@ -10,7 +10,7 @@ namespace ExMart_Backend.Data
         public DBDataInitializer(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
-            InitializeData();
+            InitializeData();   
         }
 
         public void InitializeData()
