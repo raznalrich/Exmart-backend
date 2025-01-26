@@ -13,7 +13,7 @@ namespace ExMart_Backend.Controllers
 
         public PolicyController(Ipolicy policyRepo)
         {
-            _policyRepo = policyRepo;
+            _policyRepo = policyRepo;       
         }
 
         [HttpGet]

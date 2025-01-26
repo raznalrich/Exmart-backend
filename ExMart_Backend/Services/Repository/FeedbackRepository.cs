@@ -17,43 +17,65 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<IEnumerable<FeedBackDTO>> GetFeedbacksByUserIdAsync()
         {
-            return await _context.Feedbacks
-                .Include(f => f.User)
-                .Select(f => new FeedBackDTO
-                {
-                    FeedBackId = f.FeedBackId,
-                    UserId = f.UserId,
-                    UserName = f.User.Name,
-                    ProductName = f.ProductName,
-                    FeedBack = f.FeedBack
-                })
-                .ToListAsync();
+            try
+            {
+                return await _context.Feedbacks
+                    .Include(f => f.User)
+                    .Select(f => new FeedBackDTO
+                    {
+                        FeedBackId = f.FeedBackId,
+                        UserId = f.UserId,
+                        UserName = f.User.Name,
+                        ProductName = f.ProductName,
+                        FeedBack = f.FeedBack
+                    })
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+               
+                Console.WriteLine($"Error in GetFeedbacksByUserIdAsync: {ex.Message}");
+                throw; 
+            }
         }
-
 
         public async Task<Feedback> AddFeedbackAsync(Feedback feedback)
         {
-            // Add the feedback to the database
-            _context.Feedbacks.Add(feedback);
-            await _context.SaveChangesAsync();
-
-            return feedback;
+            try
+            {
+                _context.Feedbacks.Add(feedback);
+                await _context.SaveChangesAsync();
+                return feedback;
+            }
+            catch (Exception ex)
+            {
+                
+                Console.WriteLine($"Error in AddFeedbackAsync: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<IEnumerable<FeedBackDTO>> GetAllFeedbacksAsync()
         {
-            // Fetch all feedbacks from the database
-            var feedbacks = await _context.Feedbacks
-                .Select(f => new FeedBackDTO
-                {
-                    UserId = f.UserId,
-                    ProductName = f.ProductName,
-                    FeedBack = f.FeedBack
-                })
-                .ToListAsync();
+            try
+            {
+                var feedbacks = await _context.Feedbacks
+                    .Select(f => new FeedBackDTO
+                    {
+                        UserId = f.UserId,
+                        ProductName = f.ProductName,
+                        FeedBack = f.FeedBack
+                    })
+                    .ToListAsync();
 
-            return feedbacks;
+                return feedbacks;
+            }
+            catch (Exception ex)
+            {
+                
+                Console.WriteLine($"Error in GetAllFeedbacksAsync: {ex.Message}");
+                throw; 
+            }
         }
     }
 }
-

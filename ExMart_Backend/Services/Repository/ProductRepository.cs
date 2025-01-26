@@ -1,4 +1,5 @@
-﻿using ExMart_Backend.Data;
+﻿using AutoMapper;
+using ExMart_Backend.Data;
 using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
@@ -9,13 +10,18 @@ namespace ExMart_Backend.Services.Repository
     public class ProductRepository : IProductRepository
     {
         private readonly ApplicationDBContext _db;
-        public ProductRepository(ApplicationDBContext db)
+        private readonly IMapper _mapper;
+
+        public ProductRepository(ApplicationDBContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
-        public async Task<Product> AddProductAsync(Product product)
+        public async Task<Product> AddProductAsync(AddProductDTO addProductDTO)
         {
+            var product = _mapper.Map<Product>(addProductDTO);
+
             product.IsActive = true;
 
             try
@@ -38,6 +44,32 @@ namespace ExMart_Backend.Services.Repository
                 throw new Exception($"An error occurred while adding the product: {ex.Message}", ex);
             }
         }
+
+
+        //public async Task<Product> AddProductAsync(Product product)
+        //{
+        //    product.IsActive = true;
+
+        //    try
+        //    {
+        //        if (product.ProductImages != null && product.ProductImages.Any())
+        //        {
+        //            foreach (var image in product.ProductImages)
+        //            {
+        //                image.Product = product;
+        //            }
+        //        }
+
+        //        await _db.Products.AddAsync(product);
+        //        await _db.SaveChangesAsync();
+
+        //        return product;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception($"An error occurred while adding the product: {ex.Message}", ex);
+        //    }
+        //}
 
         public async Task<bool> DeactivateProductAsync(int id)
         {

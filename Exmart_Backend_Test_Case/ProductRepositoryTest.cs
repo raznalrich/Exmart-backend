@@ -15,16 +15,16 @@ namespace Exmart_Backend_Test_Case
         private ApplicationDBContext _db;
         private ProductRepository _productRepository;
 
-        public ProductRepositoryTest()
-        {
-            var options = new DbContextOptionsBuilder<ApplicationDBContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-                .Options;
+        //public ProductRepositoryTest()
+        //{
+        //    var options = new DbContextOptionsBuilder<ApplicationDBContext>()
+        //        .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+        //        .Options;
 
-            _db = new ApplicationDBContext(options);
-            _productRepository = new ProductRepository(_db);
-            SeedData();
-        }
+        //    _db = new ApplicationDBContext(options);
+        //    _productRepository = new ProductRepository(_db);
+        //    SeedData();
+        //}
 
         // Method to seed data before each test
         private void SeedData()
