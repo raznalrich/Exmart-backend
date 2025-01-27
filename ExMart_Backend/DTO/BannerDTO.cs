@@ -17,6 +17,6 @@ namespace ExMart_Backend.DTO
 
         public string ProductName { get; set; } // Ensure this property is present
 
-        public string ProductPrice { get; set; }
+        public decimal ProductPrice { get; set; }
     }
 }

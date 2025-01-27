@@ -8,6 +8,7 @@ namespace ExMart_Backend.Services.Interface
         Task<bool> AddUser(User user);
         Task<bool> IsUserExisted(int userId);
         Task AddAddress(AddAddressDTO addAddressDTO);
+        Task<IEnumerable<UserAddress>> GetUserAddress();
         Task<List<UserAddress>> GetAddressByUserId(int userId);
         Task<UserAddress> GetAddressById(int id);
         Task<bool> EditAddressById(int id, AddAddressDTO editAddressDTO);

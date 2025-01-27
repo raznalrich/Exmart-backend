@@ -46,6 +46,20 @@ namespace ExMart_Backend.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserAddress>>> GetUserAddress()
+        {
+            try
+            {
+                var address = await _userRepository.GetUserAddress();
+                return Ok(address);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving categories: {ex.Message}");
+            }
+        }
+
         [HttpGet("getAddress/{userId}")]
         public async Task<IActionResult> GetUserAddresses(int userId)
         {
