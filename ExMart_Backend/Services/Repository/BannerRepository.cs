@@ -150,7 +150,7 @@ namespace ExMart_Backend.Services.Repository
                                                ProductImage = product.PrimaryImageUrl,
                                                CategoryName = category.CategoryName,
                                                ProductName = product.Name,
-                                               ProductPrice = product.Price.ToString("C")
+                                               ProductPrice = product.Price.ToString()
                                            }).ToListAsync();
 
                 return bannerDetails;
