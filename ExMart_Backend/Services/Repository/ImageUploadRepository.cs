@@ -62,5 +62,10 @@ namespace ExMart_Backend.Services.Repository
                 throw new InvalidOperationException("An error occurred while uploading the image to ImageKit.", ex);
             }
         }
+        //public async Task<string> uploadImage()
+        //{
+
+        //    return "iamdsf";
+        //}
     }
 }
