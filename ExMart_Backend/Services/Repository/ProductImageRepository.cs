@@ -11,10 +11,10 @@ namespace ExMart_Backend.Services.Repository
         private readonly Supabase.Client _supabaseClient;
 
 
-        public ProductImageRepository(ApplicationDBContext db, Supabase.Client supabaseClient)
+        public ProductImageRepository(ApplicationDBContext db)
         {
             _db = db;
-            _supabaseClient = supabaseClient;
+            //_supabaseClient = supabaseClient;
 
         }
         public async Task<List<ProductImages>> GetImagesByProductId(int productId)

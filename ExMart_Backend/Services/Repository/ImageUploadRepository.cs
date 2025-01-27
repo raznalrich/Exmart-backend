@@ -1,26 +1,26 @@
 ﻿using ExMart_Backend.Services.Interface;
-using Microsoft.OpenApi.Models;
-using Supabase;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using Imagekit;
+using Imagekit.Models;
+using Imagekit.Sdk;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using YourNamespace.Repositories;
 
 namespace ExMart_Backend.Services.Repository
 {
     public class ImageUploadRepository : IImageUpload
     {
-        private readonly IWebHostEnvironment _env;
-        
+        private readonly ImagekitClient _imagekit;
 
-        public ImageUploadRepository(IWebHostEnvironment env)
+        public ImageUploadRepository()
         {
-            _env = env ?? throw new ArgumentNullException(nameof(env), "Web host environment cannot be null.");
-            var supabaseClient = new Client("your-supabase-url", "your-supabase-anon-key");
-
-        }
-
-        public Task<string> uploadImage()
-        {
-            throw new NotImplementedException();
+            _imagekit = new ImagekitClient(
+                "public_pVMv3+nW/kdzxYm9xvIU8fDI7D8=",
+                "private_bomY0ZQi4OBjK6ZW2PZwzbfF9FQ=",
+                "https://ik.imagekit.io/qxpwttqf26/"
+            );
         }
 
         public async Task<string> UploadImageAsync(IFormFile file, string requestScheme, string requestHost)
@@ -30,39 +30,36 @@ namespace ExMart_Backend.Services.Repository
                 throw new ArgumentException("No file uploaded.");
             }
 
-            if (string.IsNullOrWhiteSpace(requestScheme) || string.IsNullOrWhiteSpace(requestHost))
-            {
-                throw new ArgumentException("Invalid request scheme or host.");
-            }
-
             try
             {
-                // Ensure that the "uploads" directory exists within wwwroot.
-                var uploadsPath = Path.Combine(_env.WebRootPath ?? throw new InvalidOperationException("WebRootPath is not set."), "uploads");
-                Directory.CreateDirectory(uploadsPath);
+                // Convert file to byte array
+                using var memoryStream = new MemoryStream();
+                await file.CopyToAsync(memoryStream);
+                byte[] fileBytes = memoryStream.ToArray();
 
-                // Generate a unique filename to avoid collisions.
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                var filePath = Path.Combine(uploadsPath, fileName);
-
-                // Save the file locally.
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                // Create upload request for ImageKit
+                var uploadRequest = new FileCreateRequest
                 {
-                    await file.CopyToAsync(stream);
+                    file = fileBytes,
+                    fileName = file.FileName,
+                    folder = "/uploads",  // Specify the folder in ImageKit
+                    useUniqueFileName = true,  // Ensures unique filenames
+                    isPrivateFile = false  // Set false to allow public access
+                };
+
+                // Upload file to ImageKit
+                var uploadResponse = _imagekit.Upload(uploadRequest);
+
+                if (uploadResponse == null || string.IsNullOrEmpty(uploadResponse.url))
+                {
+                    throw new Exception("Failed to upload image to ImageKit.");
                 }
 
-                // Construct the publicly accessible URL.
-                var imageUrl = $"{requestScheme}://{requestHost}/uploads/{fileName}";
-
-                return imageUrl;
-            }
-            catch (IOException ex)
-            {
-                throw new InvalidOperationException("An error occurred while saving the file.", ex);
+                return uploadResponse.url;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("An unexpected error occurred while uploading the image.", ex);
+                throw new InvalidOperationException("An error occurred while uploading the image to ImageKit.", ex);
             }
         }
         //public async Task<string> uploadImage()
