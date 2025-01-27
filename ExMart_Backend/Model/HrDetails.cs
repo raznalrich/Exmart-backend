@@ -6,7 +6,7 @@ namespace ExMart_Backend.Model
     {
         [Key]
         public int Id { get; set; }
-        public long HrPhoneNumber {  get; set; }
+        public long PhoneNumber {  get; set; }
         public string HrEmail { get; set; }
         public string HrAddress { get; set;}
         public string ProTagLine { get; set; }

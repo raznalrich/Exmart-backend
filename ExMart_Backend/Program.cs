@@ -13,10 +13,15 @@ using ExMart_Backend.Services.Interface;
 using ExMart_Backend.Services.Repository;
 using YourNamespace.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json.Serialization;
+using Supabase;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Get JWT settings from appsettings.json
+var supabaseSettings = builder.Configuration.GetSection("Supabase");
+
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"];
 
@@ -35,6 +40,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
         };
     });
+
+
+
+builder.Services.AddSingleton<Client>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var supabaseUrl = configuration["Supabase:Url"];
+    var supabaseAnonKey = configuration["Supabase:AnonKey"];
+
+    var client = new Client(supabaseUrl, supabaseAnonKey);
+    client.InitializeAsync().Wait(); // Initialize Supabase client
+    return client;
+});
+
+
+// Add services to the container
+builder.Services.AddDbContext<ApplicationDBContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers(options =>
 {

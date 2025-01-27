@@ -1,4 +1,5 @@
 ﻿using ExMart_Backend.Model;
+using Supabase;
 
 namespace ExMart_Backend.Data
 {
@@ -7,10 +8,11 @@ namespace ExMart_Backend.Data
         public static List<Product> productList = new List<Product>();
         public static List<AddToCart> cartList = new List<AddToCart>();
         private readonly ApplicationDBContext _dbContext;
+
         public DBDataInitializer(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
-            InitializeData();
+            InitializeData();   
         }
 
         public void InitializeData()

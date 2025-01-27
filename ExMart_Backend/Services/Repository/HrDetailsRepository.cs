@@ -14,9 +14,21 @@ namespace ExMart_Backend.Services.Repository
             _db = db;
         }
 
-        public Task<HrDetails> EditDetailsRepo(HrDetails hrDetails)
+        public async Task<HrDetails> EditDetailsRepo(HrDetails hrDetails)
         {
-            throw new NotImplementedException();
+            var existingDetail = await _db.Hrdetailing.FirstOrDefaultAsync(u => u.Id == hrDetails.Id);
+            if (existingDetail != null)
+            {
+                existingDetail.HrPhoneNumber = hrDetails.HrPhoneNumber;
+                existingDetail.HrEmail = hrDetails.HrEmail;
+                existingDetail.HrAddress = hrDetails.HrAddress;
+                existingDetail.ProTagLine = hrDetails.ProTagLine;
+                existingDetail.HrChatEmail = hrDetails.HrChatEmail;
+
+                await _db.SaveChangesAsync();
+                return existingDetail;
+            }
+            return null;
         }
 
         //public async Task<IEnumerable<HrDetails>> GetDetailsRepo()
