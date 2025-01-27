@@ -330,6 +330,7 @@ namespace ExMart_Backend.Services.Repository
                 }
 
                 orderItem.Product_StatusId = request.ProductStatusId;
+            orderItem.shippingCharge =      request.shippingCharge;
 
             var UpdatedStatus = new UpdateOrderStatusResponse
             {

@@ -99,6 +99,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
+
 // CORS configuration
 builder.Services.AddCors(options =>
 {
@@ -110,6 +112,16 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+       policy.RequireRole("Admin"));
+
+    options.AddPolicy("UserOnly", policy =>
+        policy.RequireRole("User"));
+});
+
 
 var app = builder.Build();
 
@@ -141,7 +153,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication(); // Ensure authentication is before authorization
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllers();
