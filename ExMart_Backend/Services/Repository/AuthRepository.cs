@@ -1,15 +1,17 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ExMart_Backend.Data;
 using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ExMart_Backend.Services.Repository
 {
-    public class AuthRepository : IAuthRepository
+    public class AuthRepository : IAuthRepository 
     {
         private readonly ApplicationDBContext _db;
         private readonly IConfiguration _configuration;
@@ -25,19 +27,31 @@ namespace ExMart_Backend.Services.Repository
       public async  Task<LoginResponseDTO> Login(LoginRequestDTO loginReq)
         {
             var user = _db.Users.SingleOrDefault(u => u.Email == loginReq.Email);
+            bool isAdmin = await _db.AdminMembers.AnyAsync(m => m.UserId == user.Id);
 
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var secretKey = jwtSettings["SecretKey"];
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-                
+
             var claims = new List<Claim>
             {
             new Claim(JwtRegisteredClaimNames.Sub, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Email, user.Email),
+           new Claim(ClaimTypes.Role, isAdmin ? "Admin" : "User"),
             new Claim("UserId", user.Id.ToString())
         };
+            
+
+            //if (isAdmin)
+            //{
+            //    claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            //}
+            //else
+            //{
+            //    claims.Add(new Claim(ClaimTypes.Role, "User"));
+            //}
 
             var token = new JwtSecurityToken(
             issuer: jwtSettings["Issuer"],

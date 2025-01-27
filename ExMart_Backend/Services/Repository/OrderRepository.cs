@@ -172,20 +172,50 @@ namespace ExMart_Backend.Services.Repository
 
         public async Task<IEnumerable<Order>> GetOrders()
         {
-            return await _db.Orders.ToListAsync();
+            try
+            {
+                return await _db.Orders.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"An error occured while retrieving the orders. Please try again later", ex);
+
+            }
         }
 
         public async Task<Order> GetOrderById(int id)
         {
-            Order order = await _db.Orders.Include(o => o.OrderItems)
-                          .FirstOrDefaultAsync(o => o.OrderId == id);
+            if(id <= 0)
+            {
+                throw new ArgumentException("Order Id must be a positive number.", nameof(id));
+            }
+            
+            try
+            {
+                Order order = await _db.Orders.Include(o => o.OrderItems)
+                         .FirstOrDefaultAsync(o => o.OrderId == id);
 
-            return order;
+                if (order == null)
+                {
+                    throw new KeyNotFoundException($"Order with ID {id} was not found. ");
+                }
+
+                return order;
+            }
+            catch(Exception ex)
+            {
+                throw new ApplicationException("An unexpected error occurred while fetching the order details.", ex);
+            }
+           
+           
+            
         }
 
         public async Task<List<OrderListDTO>> GetOrderToList()
         {
-            return await _db.Orders
+            try
+            {
+                return await _db.Orders
                 .Include(o => o.User)
                 .Include(o => o.OrderItems)
                     .ThenInclude(oi => oi.Product)
@@ -202,12 +232,38 @@ namespace ExMart_Backend.Services.Repository
                     TotalItems = o.OrderItems.Sum(oi => oi.Quantity)
                 })
                 .ToListAsync();
+            }
+            catch(Exception ex)
+            {
+                throw new ApplicationException("An unexpected error occurred while fetching the order details.", ex);
+            }
+            
         }
 
         async Task<List<OrderItemListDTO>> IOrderRepository.GetOrderItemToList()
         {
-            return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).OrderBy(o => o.Order.CreatedAt).Select(o => new OrderItemListDTO
+            try
             {
+<<<<<<< HEAD
+                return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).OrderBy(o => o.Order.CreatedAt).Select(o => new OrderItemListDTO
+                {
+                    OrderItemId = o.OrderItemId,
+                    OrderDate = o.Order.CreatedAt,
+                    ProductName = o.Product.Name,
+                    PrimaryImageUrl = o.Product.PrimaryImageUrl,
+                    Status = o.Product_StatusId,
+                    Amount = o.Product.Price * o.Quantity,
+                    Quantity = o.Quantity,
+                    OrderId = o.OrderId,
+                    UserId = o.Order.UserId,
+                }).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An unexpected error occured while fetching the order details.", ex);
+            }
+           
+=======
                 OrderItemId = o.OrderItemId,
                 OrderDate = o.Order.CreatedAt,
                 ProductName = o.Product.Name,
@@ -219,42 +275,57 @@ namespace ExMart_Backend.Services.Repository
                 OrderId = o.OrderId,
                 UserId = o.Order.UserId,
             }).ToListAsync();
+>>>>>>> acebf793b4d07c6da33a68046f90ea3a47b4f674
         }
 
         async Task<OrderDetailByOrderIdDTO> IOrderRepository.GetOrderDetailsById(int orderId)
         {
-            return await _db.Orders.Where(o => o.OrderId == orderId).Select(o => new OrderDetailByOrderIdDTO
+            if(orderId <= 0)
             {
-                Name = o.User.Name,
-                Email = o.User.Email,
-                Phone = o.User.Phone,
-                OrderId = o.OrderId,
-                CreatedAt = o.CreatedAt,
-                TotalAmount = o.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price),
-                AddressLine = o.UserAddress.AddressLine,
-                City = o.UserAddress.City,
-                State = o.UserAddress.State,
-                ZipCode = o.UserAddress.ZipCode,
-                OrderItems = o.OrderItems.Select(oi => new OrderItemDTO
+                throw new ArgumentException("Order Id must be a Positive number");
+            }
+
+            try
+            {
+                return await _db.Orders.Where(o => o.OrderId == orderId).Select(o => new OrderDetailByOrderIdDTO
                 {
-                    OrderItemId = oi.OrderItemId,
-                    ProductId = oi.ProductId,
-                    ProductName = oi.Product.Name,
-                    ProductImageUrl = oi.Product.PrimaryImageUrl,
-                    Product_StatusId = oi.Product_StatusId,
-                    Quantity = oi.Quantity,
-                    SizeName = oi.Size.Size,
-                    ColorName = oi.Color.ColorName,
-                    shippingCharge = oi.shippingCharge,
-                    Price = oi.Product.Price,
-                    SubTotal = oi.Quantity * oi.Product.Price
-                }).ToList()
-            }).FirstOrDefaultAsync();
+                    Name = o.User.Name,
+                    Email = o.User.Email,
+                    Phone = o.User.Phone,
+                    OrderId = o.OrderId,
+                    CreatedAt = o.CreatedAt,
+                    TotalAmount = o.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price),
+                    AddressLine = o.UserAddress.AddressLine,
+                    City = o.UserAddress.City,
+                    State = o.UserAddress.State,
+                    ZipCode = o.UserAddress.ZipCode,
+                    OrderItems = o.OrderItems.Select(oi => new OrderItemDTO
+                    {
+                        OrderItemId = oi.OrderItemId,
+                        ProductId = oi.ProductId,
+                        ProductName = oi.Product.Name,
+                        ProductImageUrl = oi.Product.PrimaryImageUrl,
+                        Product_StatusId = oi.Product_StatusId,
+                        Quantity = oi.Quantity,
+                        SizeName = oi.Size.Size,
+                        ColorName = oi.Color.ColorName,
+                        shippingCharge = oi.shippingCharge,
+                        Price = oi.Product.Price,
+                        SubTotal = oi.Quantity * oi.Product.Price
+                    }).ToList()
+                }).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An unexpected error occured while fetching the order details");
+            }
+           
         }
 
         public async Task<UpdateOrderStatusResponse> UpdateOrderStatus(UpdateOrderStatusRequest request)
         {
-            {
+
+            
                 var orderItem = await _db.OrderItems
                     .Include(o => o.ProductStatus)
                     .FirstOrDefaultAsync(o => o.OrderItemId == request.OrderItemId);
@@ -273,23 +344,25 @@ namespace ExMart_Backend.Services.Repository
                 }
 
                 orderItem.Product_StatusId = request.ProductStatusId;
+            orderItem.shippingCharge =      request.shippingCharge;
+
+            var UpdatedStatus = new UpdateOrderStatusResponse
+            {
+                OrderItemId = orderItem.OrderItemId,
+                ProductStatusId = orderItem.Product_StatusId,
+            };
 
                 await _db.SaveChangesAsync();
 
-                var updateResponse = new UpdateOrderStatusResponse
-                {
-                    OrderItemId = request.OrderItemId,
-                    ProductStatusId = orderItem.Product_StatusId
-                };
-
-                return updateResponse;
-
-            }
+                return UpdatedStatus;
+ 
         }
 
-        public async Task<object> UpdateOrderStatusByIdOnly(int orderitemid)
+       public async Task<int> UpdateOrderStatusByIdOnly(int orderitemid)
         {
-            var orderItem = await _db.OrderItems.FirstOrDefaultAsync(o => o.OrderItemId == orderitemid);
+            var orderItem = await _db.OrderItems
+                     .Include(o => o.ProductStatus)
+                     .FirstOrDefaultAsync(o => o.OrderId == orderitemid);
 
             if (orderItem == null)
             {
@@ -307,12 +380,16 @@ namespace ExMart_Backend.Services.Repository
                     break;
 
                 default:
-                    throw new Exception("Invalid status or no update needed");
+                    throw new Exception($"Order with ID {orderitemid} is already delivered");
             }
 
             await _db.SaveChangesAsync();
 
             return orderItem.Product_StatusId;
+
+
         }
+
+        
     }
 }

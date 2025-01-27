@@ -65,12 +65,12 @@ builder.Services.AddControllers(options =>
         .RequireAuthenticatedUser()
         .Build();
     options.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(policy));
-})
-.AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
+// Add services to the container
+builder.Services.AddDbContext<ApplicationDBContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddControllers();
 builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
@@ -122,6 +122,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
+
 // CORS configuration
 builder.Services.AddCors(options =>
 {
@@ -133,6 +135,16 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+       policy.RequireRole("Admin"));
+
+    options.AddPolicy("UserOnly", policy =>
+        policy.RequireRole("User"));
+});
+
 
 var app = builder.Build();
 
@@ -155,12 +167,16 @@ app.UseRouting();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(); 
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ExMart_Backend v1");
+    });
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication(); // Ensure authentication is before authorization
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllers();
