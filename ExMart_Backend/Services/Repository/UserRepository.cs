@@ -123,7 +123,38 @@ namespace ExMart_Backend.Services.Repository
             await _db.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<UserAddress>> GetUserAddress()
+        {
+            try
+            {
+                return await _db.UserAddresses
+           .Select(address => new UserAddress
+           {
+               UserId = address.UserId,
+               AddressType = new AddressType
+               {
+                   Id = address.AddressType.Id,
+                   AddressTypeName = address.AddressType.AddressTypeName
+               },
+               IsPrimary = address.IsPrimary,
+               AddressLine = address.AddressLine,
+               City = address.City,
+               District = address.District,
+               State = address.State,
+               ZipCode = address.ZipCode,
+               CreatedAt = DateTime.UtcNow,
+               IsActive = true,
+               CreatedBy = address.UserId
+           })
+           .ToListAsync();
+            }
+            catch (Exception ex)
+            {
 
+                Console.WriteLine($"Error in GetCategoriesAsync: {ex.Message}");
+                throw;
+            }
+        }
         public Task<List<UserAddress>> GetAddressByUserId(int userId)
         {
             return _db.UserAddresses

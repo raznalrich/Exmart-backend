@@ -3,6 +3,7 @@ using AutoMapper;
 using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -93,6 +94,7 @@ namespace ExMart_Backend.Controllers
 
         [HttpGet]
         [Route("getallorders")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetAllOrders()
         {
             IEnumerable<Order> orders = await _orderRepository.GetOrders();
@@ -101,6 +103,7 @@ namespace ExMart_Backend.Controllers
 
         [HttpGet]
         [Route("getorderbyid/{id}")]
+
         public async Task<IActionResult> GetOrderById(int id)
         {
             var order = await _orderRepository.GetOrderById(id);
@@ -108,6 +111,7 @@ namespace ExMart_Backend.Controllers
         }
 
         [HttpGet("orders/List")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetOrderDetails()
         {
             try
@@ -122,6 +126,7 @@ namespace ExMart_Backend.Controllers
         }
 
         [HttpGet("orderItem/List")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetOrderItemList()
         {
             try
@@ -136,6 +141,7 @@ namespace ExMart_Backend.Controllers
         }
 
         [HttpGet("orders/detailsbyid/{orderid}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetOrderDetailById(int orderid)
         {
             try
@@ -150,6 +156,7 @@ namespace ExMart_Backend.Controllers
         }
 
         [HttpPut("updatestatus")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> UpdateOrderItemStatus([FromBody] UpdateOrderStatusRequest request)
         {
             try
@@ -164,6 +171,7 @@ namespace ExMart_Backend.Controllers
         }
 
         [HttpPut("updatestatusbyidonly/{orderitemid}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> UpdateOrderItemStatusByIdOnly(int orderitemid)
         {
             try
@@ -176,7 +184,8 @@ namespace ExMart_Backend.Controllers
                 return StatusCode(500, "An error occurred while updating the order status");
             }
 
-        }
 
+
+        }
     }
 }

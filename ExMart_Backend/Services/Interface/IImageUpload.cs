@@ -7,5 +7,6 @@ namespace YourNamespace.Repositories
     {
         
          Task<string> UploadImageAsync(IFormFile file, string requestScheme, string requestHost);
+          //Task<string> uploadImage();
     }
 }

@@ -14,10 +14,14 @@ using ExMart_Backend.Services.Repository;
 using YourNamespace.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json.Serialization;
+using Supabase;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Get JWT settings from appsettings.json
+var supabaseSettings = builder.Configuration.GetSection("Supabase");
+
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"];
 
@@ -37,6 +41,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+
+
+builder.Services.AddSingleton<Client>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var supabaseUrl = configuration["Supabase:Url"];
+    var supabaseAnonKey = configuration["Supabase:AnonKey"];
+
+    var client = new Client(supabaseUrl, supabaseAnonKey);
+    client.InitializeAsync().Wait(); // Initialize Supabase client
+    return client;
+});
+
+
 // Add services to the container
 builder.Services.AddDbContext<ApplicationDBContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -47,12 +65,12 @@ builder.Services.AddControllers(options =>
         .RequireAuthenticatedUser()
         .Build();
     options.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(policy));
-})
-.AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
+// Add services to the container
+builder.Services.AddDbContext<ApplicationDBContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddControllers();
 builder.Services.AddScoped<DBDataInitializer>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
@@ -68,6 +86,7 @@ builder.Services.AddScoped<IBannerRepository, BannerRepository>();
 builder.Services.AddScoped<IFeedBackRepository, FeedbackRepository>();
 builder.Services.AddScoped<Ipolicy, PolicyRepo>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IHrDetails, HrDetailsRepository>();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
@@ -103,6 +122,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
+
 // CORS configuration
 builder.Services.AddCors(options =>
 {
@@ -114,6 +135,16 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+       policy.RequireRole("Admin"));
+
+    options.AddPolicy("UserOnly", policy =>
+        policy.RequireRole("User"));
+});
+
 
 var app = builder.Build();
 
@@ -136,12 +167,16 @@ app.UseRouting();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ExMart_Backend v1");
+    });
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication(); // Ensure authentication is before authorization
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllers();

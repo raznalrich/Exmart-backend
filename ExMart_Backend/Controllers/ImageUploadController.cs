@@ -32,12 +32,8 @@ public class ImageUploadController : ControllerBase
 
         try
         {
-            var imageUrl = await _imageUpload.UploadImageAsync(
-               model.File,
-               Request.Scheme,
-               Request.Host.Value
-            );
-            return Ok(new { imageUrl });
+            var imageUrl = await _imageUpload.UploadImageAsync(model.File, Request.Scheme, Request.Host.Value);
+            return Ok(new { message = "Image uploaded successfully to ImageKit", imageUrl });
         }
         catch (ArgumentException ex)
         {
@@ -45,7 +41,8 @@ public class ImageUploadController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An unexpected error occurred.", details = ex.Message });
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = "An error occurred while uploading to ImageKit.", details = ex.Message });
         }
     }
+
 }
