@@ -204,7 +204,7 @@ namespace ExMart_Backend.Services.Repository
                 .ToListAsync();
         }
 
-        async Task<List<OrderItemListDTO>> IOrderRepository.GetOrderItemToList()
+        public async Task<List<OrderItemListDTO>> GetOrderItemToList()
         {
             return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).OrderBy(o => o.Order.CreatedAt).Select(o => new OrderItemListDTO
             {
@@ -217,10 +217,11 @@ namespace ExMart_Backend.Services.Repository
                 Quantity = o.Quantity,
                 OrderId = o.OrderId,
                 UserId = o.Order.UserId,
+                Shipping = o.Order.Shipping,
             }).ToListAsync();
         }
 
-        async Task<OrderDetailByOrderIdDTO> IOrderRepository.GetOrderDetailsById(int orderId)
+        public async Task<OrderDetailByOrderIdDTO> IOrderRepository.GetOrderDetailsById(int orderId)
         {
             return await _db.Orders.Where(o => o.OrderId == orderId).Select(o => new OrderDetailByOrderIdDTO
             {

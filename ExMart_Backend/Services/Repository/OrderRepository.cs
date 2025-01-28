@@ -246,17 +246,21 @@ namespace ExMart_Backend.Services.Repository
             {
                 return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).OrderBy(o => o.Order.CreatedAt).Select(o => new OrderItemListDTO
                 {
-                OrderItemId = o.OrderItemId,
-                OrderDate = o.Order.CreatedAt,
-                ProductName = o.Product.Name,
-                ProductId = o.Product.Id,
-                PrimaryImageUrl = o.Product.PrimaryImageUrl,
-                Status = o.Product_StatusId,
-                Amount = o.Product.Price * o.Quantity,
-                Quantity = o.Quantity,
-                OrderId = o.OrderId,
-                UserId = o.Order.UserId,
-            }).ToListAsync();
+
+
+                    OrderItemId = o.OrderItemId,
+                    OrderDate = o.Order.CreatedAt,
+                    ProductName = o.Product.Name,
+                    ProductId = o.Product.Id,
+                    PrimaryImageUrl = o.Product.PrimaryImageUrl,
+                    Status = o.Product_StatusId,
+                    Amount = o.Product.Price * o.Quantity,
+                    Quantity = o.Quantity,
+                    OrderId = o.OrderId,
+                    ShippingCharge = o.shippingCharge,
+                    UserId = o.Order.UserId,
+                }).ToListAsync();
+
             }
             catch (Exception ex)
             {
@@ -337,6 +341,7 @@ namespace ExMart_Backend.Services.Repository
             {
                 OrderItemId = orderItem.OrderItemId,
                 ProductStatusId = orderItem.Product_StatusId,
+                shippingCharge = orderItem.shippingCharge,
             };
 
                 await _db.SaveChangesAsync();

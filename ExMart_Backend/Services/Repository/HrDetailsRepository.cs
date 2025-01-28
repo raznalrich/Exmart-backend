@@ -19,8 +19,14 @@ namespace ExMart_Backend.Services.Repository
             var existingDetail = await _db.Hrdetailing.FirstOrDefaultAsync(u => u.Id == HRid);
             if (existingDetail != null)
             {
+
+
+//                 existingDetail.PhoneNumber = hrDetails.PhoneNumber;
+
                 existingDetail.Id = HRid;
                 existingDetail.HrPhoneNumber = hrDetails.HrPhoneNumber;
+
+
                 existingDetail.HrEmail = hrDetails.HrEmail;
                 existingDetail.HrAddress = hrDetails.HrAddress;
                 existingDetail.ProTagLine = hrDetails.ProTagLine;
