@@ -127,7 +127,26 @@ namespace ExMart_Backend.Services.Repository
         {
             try
             {
-                return await _db.UserAddresses.ToListAsync();
+                return await _db.UserAddresses
+           .Select(address => new UserAddress
+           {
+               UserId = address.UserId,
+               AddressType = new AddressType
+               {
+                   Id = address.AddressType.Id,
+                   AddressTypeName = address.AddressType.AddressTypeName
+               },
+               IsPrimary = address.IsPrimary,
+               AddressLine = address.AddressLine,
+               City = address.City,
+               District = address.District,
+               State = address.State,
+               ZipCode = address.ZipCode,
+               CreatedAt = DateTime.UtcNow,
+               IsActive = true,
+               CreatedBy = address.UserId
+           })
+           .ToListAsync();
             }
             catch (Exception ex)
             {

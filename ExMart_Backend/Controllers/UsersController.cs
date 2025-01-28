@@ -52,14 +52,25 @@ namespace ExMart_Backend.Controllers
             try
             {
                 var address = await _userRepository.GetUserAddress();
-                return Ok(address);
+                var AddressDTOs = address.Select(address => new AddressDTO
+                {
+                    Id = address.Id,
+                    IsPrimary = address.IsPrimary,
+                    AddressLine = address.AddressLine,
+                    City = address.City,
+                    State = address.State,
+                    District = address.District,
+                    ZipCode = address.ZipCode,
+                    AddressTypeName = address.AddressType?.AddressTypeName
+                }).ToList();
+                return Ok(AddressDTOs);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"An error occurred while retrieving categories: {ex.Message}");
             }
         }
-
+        
         [HttpGet("getAddress/{userId}")]
         public async Task<IActionResult> GetUserAddresses(int userId)
         {

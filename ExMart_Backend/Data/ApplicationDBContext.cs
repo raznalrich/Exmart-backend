@@ -45,13 +45,9 @@ namespace ExMart_Backend.Data
 
             //seeding data on HR details
             modelBuilder.Entity<HrDetails>().HasData(
-                new HrDetails
-                {
-                    Id = 1,
-                    PhoneNumber = 9999999999,
-                    HrAddress = "HR, Experion Global, Gayathiri Building, Technopark phase-1, Trivandrum - 695581",
-                    HrEmail = "experion.hr.experionglobal.com",
-                    ProTagLine = "exMart is the online merchandise selling platform for experion global which holds all the experion branded items for sale"
+                new HrDetails {Id=1, HrPhoneNumber = 9999999999, HrAddress = "HR, Experion Global, Gayathiri Building, Technopark phase-1, Trivandrum - 695581",
+                    HrEmail = "experion.hr.experionglobal.com", ProTagLine = "exMart is the online merchandise selling platform for experion global which holds all the experion branded items for sale",
+                    HrChatEmail = "sona.george@experionglobal.com"
                 });
 
             modelBuilder.Entity<Product>()
