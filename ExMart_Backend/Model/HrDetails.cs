@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ExMart_Backend.Model
 {
@@ -6,7 +7,7 @@ namespace ExMart_Backend.Model
     {
         [Key]
         public int Id { get; set; }
-        public long PhoneNumber {  get; set; }
+        public long HrPhoneNumber {  get; set; }
         public string HrEmail { get; set; }
         public string HrAddress { get; set;}
         public string HrChatEmail { get; set;}
