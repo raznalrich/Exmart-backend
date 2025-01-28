@@ -20,10 +20,12 @@ namespace ExMart_Backend.Services.Repository
             if (existingDetail != null)
             {
 
+
 //                 existingDetail.PhoneNumber = hrDetails.PhoneNumber;
 
                 existingDetail.Id = HRid;
                 existingDetail.HrPhoneNumber = hrDetails.HrPhoneNumber;
+
 
                 existingDetail.HrEmail = hrDetails.HrEmail;
                 existingDetail.HrAddress = hrDetails.HrAddress;
