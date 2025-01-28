@@ -254,6 +254,7 @@ namespace ExMart_Backend.Services.Repository
                     Amount = o.Product.Price * o.Quantity,
                     Quantity = o.Quantity,
                     OrderId = o.OrderId,
+                    ShippingCharge = o.shippingCharge,
                     UserId = o.Order.UserId,
                 }).ToListAsync();
             }
@@ -336,6 +337,7 @@ namespace ExMart_Backend.Services.Repository
             {
                 OrderItemId = orderItem.OrderItemId,
                 ProductStatusId = orderItem.Product_StatusId,
+                shippingCharge = orderItem.shippingCharge,
             };
 
                 await _db.SaveChangesAsync();

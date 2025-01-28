@@ -4,5 +4,6 @@
     {
         public int OrderItemId { get; set; }
         public int ProductStatusId { get; set; }
+        public int? shippingCharge { get; set; }
     }
 }
