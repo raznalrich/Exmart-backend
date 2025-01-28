@@ -244,7 +244,6 @@ namespace ExMart_Backend.Services.Repository
         {
             try
             {
-<<<<<<< HEAD
                 return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).OrderBy(o => o.Order.CreatedAt).Select(o => new OrderItemListDTO
                 {
                     OrderItemId = o.OrderItemId,
@@ -263,19 +262,6 @@ namespace ExMart_Backend.Services.Repository
                 throw new ApplicationException("An unexpected error occured while fetching the order details.", ex);
             }
            
-=======
-                OrderItemId = o.OrderItemId,
-                OrderDate = o.Order.CreatedAt,
-                ProductName = o.Product.Name,
-                ProductId = o.Product.Id,
-                PrimaryImageUrl = o.Product.PrimaryImageUrl,
-                Status = o.Product_StatusId,
-                Amount = o.Product.Price * o.Quantity,
-                Quantity = o.Quantity,
-                OrderId = o.OrderId,
-                UserId = o.Order.UserId,
-            }).ToListAsync();
->>>>>>> acebf793b4d07c6da33a68046f90ea3a47b4f674
         }
 
         async Task<OrderDetailByOrderIdDTO> IOrderRepository.GetOrderDetailsById(int orderId)

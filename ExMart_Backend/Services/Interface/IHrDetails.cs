@@ -6,6 +6,6 @@ namespace ExMart_Backend.Services.Interface
     {
         //Task<IEnumerable<HrDetails>>GetDetailsRepo(int HrDid);
         Task<HrDetails> GetDetailsRepo(int HrDid);
-        Task<HrDetails> EditDetailsRepo(HrDetails hrDetails);
+        Task<HrDetails> EditDetailsRepo(int HRid, HrDetails hrDetails);
     }
 }

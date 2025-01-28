@@ -35,7 +35,7 @@ namespace ExMart_Backend.Controllers
         {
             try
             {
-                var updated = await _hrDetailsRepo.EditDetailsRepo(hrDetails);
+                var updated = await _hrDetailsRepo.EditDetailsRepo(1,hrDetails);
             if (updated == null)
             {
                 return NotFound();

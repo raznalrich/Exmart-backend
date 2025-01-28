@@ -23,6 +23,11 @@ namespace ExMart_Backend.Services.Repository
             );
         }
 
+        public Task<string> uploadImage()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<string> UploadImageAsync(IFormFile file, string requestScheme, string requestHost)
         {
             if (file == null || file.Length == 0)
