@@ -14,11 +14,12 @@ namespace ExMart_Backend.Services.Repository
             _db = db;
         }
 
-        public async Task<HrDetails> EditDetailsRepo(HrDetails hrDetails)
+        public async Task<HrDetails> EditDetailsRepo(int HRid, HrDetails hrDetails)
         {
-            var existingDetail = await _db.Hrdetailing.FirstOrDefaultAsync(u => u.Id == hrDetails.Id);
+            var existingDetail = await _db.Hrdetailing.FirstOrDefaultAsync(u => u.Id == HRid);
             if (existingDetail != null)
             {
+                existingDetail.Id = HRid;
                 existingDetail.HrPhoneNumber = hrDetails.HrPhoneNumber;
                 existingDetail.HrEmail = hrDetails.HrEmail;
                 existingDetail.HrAddress = hrDetails.HrAddress;
@@ -30,18 +31,6 @@ namespace ExMart_Backend.Services.Repository
             }
             return null;
         }
-
-        //public async Task<IEnumerable<HrDetails>> GetDetailsRepo()
-        //{
-        //    try
-        //    {
-        //        return await _db.Hrdetailing.ToListAsync();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new InvalidOperationException("An error occurred while retrieving all details.", ex);
-        //    }
-        //}
         public async Task<HrDetails> GetDetailsRepo(int HrDid)
         {
             try
