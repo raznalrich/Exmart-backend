@@ -130,6 +130,7 @@ namespace ExMart_Backend.Services.Repository
                 return await _db.UserAddresses
            .Select(address => new UserAddress
            {
+               Id = address.Id,
                UserId = address.UserId,
                AddressType = new AddressType
                {
