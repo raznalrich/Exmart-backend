@@ -246,9 +246,12 @@ namespace ExMart_Backend.Services.Repository
             {
                 return await _db.OrderItems.Include(o => o.Order).Include(o => o.Product).OrderBy(o => o.Order.CreatedAt).Select(o => new OrderItemListDTO
                 {
+
+
                     OrderItemId = o.OrderItemId,
                     OrderDate = o.Order.CreatedAt,
                     ProductName = o.Product.Name,
+                    ProductId = o.Product.Id,
                     PrimaryImageUrl = o.Product.PrimaryImageUrl,
                     Status = o.Product_StatusId,
                     Amount = o.Product.Price * o.Quantity,
@@ -257,6 +260,7 @@ namespace ExMart_Backend.Services.Repository
                     ShippingCharge = o.shippingCharge,
                     UserId = o.Order.UserId,
                 }).ToListAsync();
+
             }
             catch (Exception ex)
             {
