@@ -17,6 +17,11 @@ namespace ExMart_Backend.Services.Repository
         {
             _context = context;
         }
+
+        public AddToCartRepository()
+        {
+        }
+
         public bool AddToCart(AddToCart addToCart)
         {
             try

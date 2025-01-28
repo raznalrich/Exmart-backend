@@ -8,7 +8,7 @@ namespace Exmart_Backend_Test_Case
     public class AddToCartRepoTest
     {
         private AddToCartRepository _addToCartRepository;
-    private List<AddToCart> _testCartList;
+        private List<AddToCart> _testCartList;
         public AddToCartRepoTest()
         {
             _testCartList = new List<AddToCart>
@@ -77,6 +77,6 @@ namespace Exmart_Backend_Test_Case
     }
 
 
-  
+
 }
 
