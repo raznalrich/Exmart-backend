@@ -94,7 +94,7 @@ namespace ExMart_Backend.Controllers
 
         [HttpGet]
         [Route("getallorders")]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetAllOrders()
         {
             IEnumerable<Order> orders = await _orderRepository.GetOrders();
@@ -111,7 +111,7 @@ namespace ExMart_Backend.Controllers
         }
 
         [HttpGet("orders/List")]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetOrderDetails()
         {
             try
@@ -126,7 +126,7 @@ namespace ExMart_Backend.Controllers
         }
 
         [HttpGet("orderItem/List")]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetOrderItemList()
         {
             try
@@ -141,7 +141,7 @@ namespace ExMart_Backend.Controllers
         }
 
         [HttpGet("orders/detailsbyid/{orderid}")]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetOrderDetailById(int orderid)
         {
             try
@@ -171,7 +171,7 @@ namespace ExMart_Backend.Controllers
         }
 
         [HttpPut("updatestatusbyidonly/{orderitemid}")]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> UpdateOrderItemStatusByIdOnly(int orderitemid)
         {
             try
