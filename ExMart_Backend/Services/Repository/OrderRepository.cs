@@ -354,7 +354,7 @@ namespace ExMart_Backend.Services.Repository
         {
             var orderItem = await _db.OrderItems
                      .Include(o => o.ProductStatus)
-                     .FirstOrDefaultAsync(o => o.OrderId == orderitemid);
+                     .FirstOrDefaultAsync(o => o.OrderItemId == orderitemid);
 
             if (orderItem == null)
             {
@@ -382,6 +382,27 @@ namespace ExMart_Backend.Services.Repository
 
         }
 
-        
+        public async Task<int> CancelOrderStatusByIdOnly(int orderitemid)
+        {
+            var orderItem = await _db.OrderItems
+                     .Include(o => o.ProductStatus)
+                     .FirstOrDefaultAsync(o => o.OrderItemId == orderitemid);
+
+            if (orderItem == null)
+            {
+                throw new Exception($"Order with ID {orderitemid} not found");
+            }
+            orderItem.Product_StatusId = 4;
+
+           
+
+            await _db.SaveChangesAsync();
+
+            return orderItem.Product_StatusId;
+
+
+        }
+
+
     }
 }
