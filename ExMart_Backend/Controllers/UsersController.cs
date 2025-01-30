@@ -1,6 +1,7 @@
 ﻿using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 
@@ -175,7 +176,7 @@ namespace ExMart_Backend.Controllers
         //    return Ok(userEmail);
 
         //}
-
+        [AllowAnonymous]
 
         [HttpPost]
         public async Task<IActionResult> AddNewUser([FromBody] User users)
@@ -225,6 +226,7 @@ namespace ExMart_Backend.Controllers
                 });
             }
         }
+        [AllowAnonymous]
 
         [HttpGet("ReturnIdfromemail/{email}")]
         public async Task<IActionResult> ReturnIdfromEmail(string email)

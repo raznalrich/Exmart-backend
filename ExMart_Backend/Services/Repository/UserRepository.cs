@@ -3,6 +3,7 @@ using ExMart_Backend.Data;
 using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExMart_Backend.Services.Repository
@@ -30,6 +31,7 @@ namespace ExMart_Backend.Services.Repository
         //        return false;
         //    }
         //}
+    
 
         public async Task<bool> AddUser(User user)
         {
