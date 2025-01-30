@@ -274,5 +274,28 @@ namespace ExMart_Backend.Controllers
                 });
             }
         }
+
+
+        [HttpGet("ReturnNameFromId/{id}")]
+        public async Task<IActionResult> ReturnNameFromId(int id)
+        {
+            try
+            {
+                string? userName = await _userRepository.ReturnNameById(id);
+                if (string.IsNullOrWhiteSpace(userName))
+                {
+                    return NotFound(new { message = "Name not found for the provided user ID." });
+                }
+                return Ok(new { userName });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while retrieving user name: {ex.Message}"
+                });
+            }
+        }
     }
 }
