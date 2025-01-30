@@ -106,7 +106,7 @@ namespace ExMart_Backend.Controllers
             }
         }
 
-        [HttpDelete("DeleteCart/{productId}/{userId}")]
+        [HttpDelete("DeleteCart")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
