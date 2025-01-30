@@ -57,6 +57,7 @@ namespace ExMart_Backend.Services.Repository
                 {
                     return false;
                 }
+                addToCart.CartId = DBDataInitializer.GetNextCartId();
 
                 // Add to cart
                 DBDataInitializer.cartList.Add(addToCart);
@@ -104,7 +105,7 @@ namespace ExMart_Backend.Services.Repository
             }
         }
 
-        public bool DeleteCartList(int productId, int userId)
+        public bool DeleteCartList(int productId, int userId , int colorId,int sizeId)
         {
             try
             {
@@ -124,7 +125,7 @@ namespace ExMart_Backend.Services.Repository
                 }
 
                 var itemToRemove = DBDataInitializer.cartList.FirstOrDefault(
-                    cart => cart.ProductId == productId && cart.UserId == userId
+                    cart => cart.ProductId == productId && cart.UserId == userId && cart.ColorId == colorId && cart.SizeId == sizeId
                 );
 
                 if (itemToRemove == null)

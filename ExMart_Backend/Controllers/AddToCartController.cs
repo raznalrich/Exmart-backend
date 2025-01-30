@@ -63,7 +63,8 @@ namespace ExMart_Backend.Controllers
                 {
                     return BadRequest(new { Message = "Quantity must be greater than zero" });
                 }
-
+                int cartID = DBDataInitializer.GetNextCartId();
+                addToCart.CartId = cartID;
                 bool isAdded = await Task.Run(() => _addToCartRepository.AddToCart(addToCart));
 
                 if (isAdded)
@@ -111,7 +112,7 @@ namespace ExMart_Backend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteCart([Range(1, int.MaxValue)] int productId, [Range(1, int.MaxValue)] int userId)
+        public async Task<IActionResult> DeleteCart([Range(1, int.MaxValue)] int productId, [Range(1, int.MaxValue)] int userId, [Range(1, int.MaxValue)] int colorId, [Range(1, int.MaxValue)] int sizeId)
         {
             try
             {
@@ -125,7 +126,7 @@ namespace ExMart_Backend.Controllers
                     return BadRequest(new { Message = "User ID must be greater than zero" });
                 }
 
-                var isDeleted = await Task.Run(() => _addToCartRepository.DeleteCartList(productId, userId));
+                var isDeleted = await Task.Run(() => _addToCartRepository.DeleteCartList(productId, userId, colorId,sizeId));
 
                 if (isDeleted)
                 {
