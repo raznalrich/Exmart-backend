@@ -15,5 +15,6 @@ namespace ExMart_Backend.Services.Interface
         Task<bool> DeleteAddressById(int id);
         Task<int?> ReturnIdbyEmail(string email);
         Task<string?> ReturnEmailById(int id);
+        Task<string?> ReturnNameById(int id);
     }
 }

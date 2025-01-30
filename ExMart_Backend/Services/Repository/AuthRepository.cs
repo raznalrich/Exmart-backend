@@ -40,18 +40,9 @@ namespace ExMart_Backend.Services.Repository
             new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Email, user.Email),
            new Claim(ClaimTypes.Role, isAdmin ? "Admin" : "User"),
+           
             new Claim("UserId", user.Id.ToString())
         };
-            
-
-            //if (isAdmin)
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-            //}
-            //else
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, "User"));
-            //}
 
             var token = new JwtSecurityToken(
             issuer: jwtSettings["Issuer"],
@@ -64,7 +55,7 @@ namespace ExMart_Backend.Services.Repository
             return new LoginResponseDTO
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Username = user.Name
+                Username = user.Name 
             };
            
         }

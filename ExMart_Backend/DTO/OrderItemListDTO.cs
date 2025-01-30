@@ -12,6 +12,10 @@
         public int Quantity { get; set; }
         public int OrderId { get; set; }
         public int? ShippingCharge { get; set; }
+        public string AddressLine { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZipCode { get; set; }
 
         public int UserId { get; set; }
     }

@@ -24,6 +24,6 @@ namespace ExMart_Backend.Services.Interface
         Task<int> RequestCancelOrderStatusByIdOnly(int orderitemid);
 
         Task<OrderDetailByOrderIdDTO> GetOrderDetailsById(int orderId);
-
+        Task<int> UpdateShippingCharge(int orderItemId, int shippingCharge);
     }
 }
