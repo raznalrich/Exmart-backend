@@ -187,5 +187,22 @@ namespace ExMart_Backend.Controllers
 
 
         }
+        [HttpPut("Cancelstatusbyidonly/{orderitemid}")]
+        //[Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> CancelOrderStatusByIdOnly(int orderitemid)
+        {
+            try
+            {
+                var result = await _orderRepository.CancelOrderStatusByIdOnly(orderitemid);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while cancel the order status");
+            }
+
+
+
+        }
     }
 }

@@ -55,7 +55,7 @@ namespace ExMart_Backend.Services.Repository
 
                 if (existingItem != null)
                 {
-                    throw new InvalidOperationException("Item already exists in cart");
+                    return false;
                 }
 
                 // Add to cart
