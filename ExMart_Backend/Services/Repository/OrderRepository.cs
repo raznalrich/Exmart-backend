@@ -258,6 +258,10 @@ namespace ExMart_Backend.Services.Repository
                     Quantity = o.Quantity,
                     OrderId = o.OrderId,
                     ShippingCharge = o.shippingCharge,
+                    AddressLine = o.Order.UserAddress.AddressLine,
+                    City = o.Order.UserAddress.City,
+                    State = o.Order.UserAddress.State,
+                    ZipCode = o.Order.UserAddress.ZipCode,
                     UserId = o.Order.UserId,
                 }).ToListAsync();
 
@@ -403,6 +407,18 @@ namespace ExMart_Backend.Services.Repository
 
         }
 
+        public async Task<int> UpdateShippingCharge(int orderItemId, int shippingCharge)
+        {
+            var orderItem = await _db.OrderItems.FirstOrDefaultAsync(o => o.OrderItemId == orderItemId);
 
+            if (orderItem == null)
+            {
+                throw new Exception($"Order with ID {orderItemId} not found");
+            }
+            orderItem.shippingCharge = shippingCharge;
+            await _db.SaveChangesAsync();
+            return (int)orderItem.shippingCharge;
+
+        }
     }
 }
