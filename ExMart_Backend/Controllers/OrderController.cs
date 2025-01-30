@@ -200,9 +200,23 @@ namespace ExMart_Backend.Controllers
             {
                 return StatusCode(500, "An error occurred while cancel the order status");
             }
-
-
-
         }
+
+        [HttpPut("updateShippingCharge")]
+        [Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> UpdateShippingCharge(int orderItemId , int shippingCharge)
+        {
+            try
+            {
+                var result = await _orderRepository.UpdateShippingCharge(orderItemId,shippingCharge);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while updating the order status");
+            }
+        }
+
+
     }
 }
