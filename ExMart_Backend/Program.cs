@@ -125,18 +125,28 @@ builder.Services.AddSwaggerGen(c =>
 
 
 // CORS configuration
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowAll", policy =>
+//    {
+//        policy.WithOrigins("http://localhost:4200",
+//                            "https://exmart-edyx1dpw8-mohammed-rasnal-k-as-projects.vercel.app",
+//                            "https://exmart.vercel.app"
+
+//            )
+//              .AllowAnyHeader()
+//              .AllowAnyMethod()
+//              .AllowCredentials();
+//    });
+//});
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:4200",
-                            "https://exmart-edyx1dpw8-mohammed-rasnal-k-as-projects.vercel.app",
-                            "https://exmart.vercel.app"
-
-            )
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials();
+        .AllowCredentials();
     });
 });
 
@@ -153,7 +163,7 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 // Middleware
-app.UseCors("AllowAngularApp");
+app.UseCors("AllowAll");
 app.UseStaticFiles();
 var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
 if (!Directory.Exists(uploadsPath))
