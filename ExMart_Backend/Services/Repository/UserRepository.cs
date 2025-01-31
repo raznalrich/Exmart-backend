@@ -3,6 +3,7 @@ using ExMart_Backend.Data;
 using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExMart_Backend.Services.Repository
@@ -30,6 +31,7 @@ namespace ExMart_Backend.Services.Repository
         //        return false;
         //    }
         //}
+    
 
         public async Task<bool> AddUser(User user)
         {
@@ -98,6 +100,19 @@ namespace ExMart_Backend.Services.Repository
             {
                 Console.WriteLine($"Error retrieving email by user ID: {ex.Message}");
                 throw new Exception("An error occurred while retrieving email by user ID.", ex);
+            }
+        }
+        public async Task<string?> ReturnNameById(int id)
+        {
+            try
+            {
+                var user = await _db.Users.FirstOrDefaultAsync(m => m.Id == id);
+                return user?.Name;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving Name by user ID: {ex.Message}");
+                throw new Exception("An error occurred while retrieving Name by user ID.", ex);
             }
         }
 

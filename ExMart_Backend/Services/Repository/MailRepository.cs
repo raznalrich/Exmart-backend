@@ -22,8 +22,10 @@ namespace ExMart_Backend.Services.Repository
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
             // Initialize configuration values in constructor
-            _email = _configuration.GetValue<string>("EMAIL_CONFIGURATION:EMAIL");
-            _password = _configuration.GetValue<string>("EMAIL_CONFIGURATION:PASSWORD");
+            //_email = _configuration.GetValue<string>("EMAIL_CONFIGURATION:EMAIL");
+            _email = Environment.GetEnvironmentVariable("EMAIL");
+            _password = Environment.GetEnvironmentVariable("PASSWORD");
+            //_password = _configuration.GetValue<string>("EMAIL_CONFIGURATION:PASSWORD");
             _host = _configuration.GetValue<string>("EMAIL_CONFIGURATION:HOST");
             _port = _configuration.GetValue<int>("EMAIL_CONFIGURATION:PORT");
 

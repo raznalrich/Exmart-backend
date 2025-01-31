@@ -9,7 +9,7 @@ namespace ExMart_Backend.Services.Interface
         //List<AddToCart> GetCartList();
         Task<ICollection<CartListDTO>> GetCartList();
 
-        bool DeleteCartList(int productId, int userId);
+        bool DeleteCartList(int productId, int userId,  int colorId, int sizeId);
         bool DeleteAllUserCartItems(int userId);
     }
 }

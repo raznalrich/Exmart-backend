@@ -1,6 +1,7 @@
 ﻿using ExMart_Backend.DTO;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 
@@ -175,7 +176,7 @@ namespace ExMart_Backend.Controllers
         //    return Ok(userEmail);
 
         //}
-
+        [AllowAnonymous]
 
         [HttpPost]
         public async Task<IActionResult> AddNewUser([FromBody] User users)
@@ -225,6 +226,7 @@ namespace ExMart_Backend.Controllers
                 });
             }
         }
+        [AllowAnonymous]
 
         [HttpGet("ReturnIdfromemail/{email}")]
         public async Task<IActionResult> ReturnIdfromEmail(string email)
@@ -271,6 +273,29 @@ namespace ExMart_Backend.Controllers
                 {
                     success = false,
                     message = $"An error occurred while retrieving user email: {ex.Message}"
+                });
+            }
+        }
+
+
+        [HttpGet("ReturnNameFromId/{id}")]
+        public async Task<IActionResult> ReturnNameFromId(int id)
+        {
+            try
+            {
+                string? userName = await _userRepository.ReturnNameById(id);
+                if (string.IsNullOrWhiteSpace(userName))
+                {
+                    return NotFound(new { message = "Name not found for the provided user ID." });
+                }
+                return Ok(new { userName });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = $"An error occurred while retrieving user name: {ex.Message}"
                 });
             }
         }

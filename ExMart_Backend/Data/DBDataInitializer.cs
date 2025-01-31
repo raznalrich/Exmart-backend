@@ -7,6 +7,12 @@ namespace ExMart_Backend.Data
     {
         public static List<Product> productList = new List<Product>();
         public static List<AddToCart> cartList = new List<AddToCart>();
+        private static int _cartIdCounter = 1; // Start with 1
+
+        public static int GetNextCartId()
+        {
+            return _cartIdCounter++;
+        }
         private readonly ApplicationDBContext _dbContext;
 
         public DBDataInitializer(ApplicationDBContext dbContext)

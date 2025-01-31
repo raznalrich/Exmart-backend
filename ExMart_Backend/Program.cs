@@ -15,6 +15,7 @@ using YourNamespace.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json.Serialization;
 using Supabase;
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ var supabaseSettings = builder.Configuration.GetSection("Supabase");
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"];
+
 
 // Configure JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -125,14 +127,28 @@ builder.Services.AddSwaggerGen(c =>
 
 
 // CORS configuration
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowAll", policy =>
+//    {
+//        policy.WithOrigins("http://localhost:4200",
+//                            "https://exmart-edyx1dpw8-mohammed-rasnal-k-as-projects.vercel.app",
+//                            "https://exmart.vercel.app"
+
+//            )
+//              .AllowAnyHeader()
+//              .AllowAnyMethod()
+//              .AllowCredentials();
+//    });
+//});
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowAnyMethod();
+        //.AllowCredentials();
     });
 });
 
@@ -149,7 +165,7 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 // Middleware
-app.UseCors("AllowAngularApp");
+app.UseCors("AllowAll");
 app.UseStaticFiles();
 var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
 if (!Directory.Exists(uploadsPath))

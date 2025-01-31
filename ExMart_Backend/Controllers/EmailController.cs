@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ExMart_Backend.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,8 @@ namespace ExMart_Backend.Controllers
         {
             _mailRepository = mailRepository ?? throw new ArgumentNullException(nameof(mailRepository));
         }
+
+        [AllowAnonymous]
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]

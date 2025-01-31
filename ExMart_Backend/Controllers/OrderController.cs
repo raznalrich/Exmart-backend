@@ -169,7 +169,7 @@ namespace ExMart_Backend.Controllers
                 return StatusCode(500, "An error occurred while updating the order status");
             }
         }
-
+        [AllowAnonymous]
         [HttpPut("updatestatusbyidonly/{orderitemid}")]
         //[Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> UpdateOrderItemStatusByIdOnly(int orderitemid)
@@ -187,6 +187,7 @@ namespace ExMart_Backend.Controllers
 
 
         }
+        [AllowAnonymous]
         [HttpPut("Cancelstatusbyidonly/{orderitemid}")]
         //[Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> CancelOrderStatusByIdOnly(int orderitemid)
@@ -201,6 +202,23 @@ namespace ExMart_Backend.Controllers
                 return StatusCode(500, "An error occurred while cancel the order status");
             }
         }
+        [HttpPut("RequestCancelOrderStatusByIdOnly/{orderitemid}")]
+        //[Authorize(Policy = "AdminOnly")]
+        public async Task<IActionResult> RequestCancelOrderStatusByIdOnly(int orderitemid)
+        {
+            try
+            {
+                var result = await _orderRepository.RequestCancelOrderStatusByIdOnly(orderitemid);
+                  return Ok(result);
+            }
+            catch (Exception ex){
+
+             return StatusCode(500, "An error occurred while cancel the order status");
+            }
+
+
+
+        }
 
         [HttpPut("updateShippingCharge")]
         [Authorize(Policy = "AdminOnly")]
@@ -213,6 +231,7 @@ namespace ExMart_Backend.Controllers
             }
             catch (Exception ex)
             {
+               
                 return StatusCode(500, "An error occurred while updating the order status");
             }
         }
