@@ -15,6 +15,7 @@ using YourNamespace.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json.Serialization;
 using Supabase;
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ var supabaseSettings = builder.Configuration.GetSection("Supabase");
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"];
+
 
 // Configure JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
