@@ -129,7 +129,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins("http://localhost:4200",
+                            "https://exmart-edyx1dpw8-mohammed-rasnal-k-as-projects.vercel.app",
+                            "https://exmart.vercel.app"
+
+            )
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
