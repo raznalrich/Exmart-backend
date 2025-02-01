@@ -222,11 +222,11 @@ namespace ExMart_Backend.Controllers
 
         [HttpPut("updateShippingCharge")]
         [Authorize(Policy = "AdminOnly")]
-        public async Task<IActionResult> UpdateShippingCharge(int orderItemId , int shippingCharge)
+        public async Task<IActionResult> UpdateShippingCharge(UpdateOrderStatusRequest updateShippingCharge)
         {
             try
             {
-                var result = await _orderRepository.UpdateShippingCharge(orderItemId,shippingCharge);
+                var result = await _orderRepository.UpdateShippingCharge(updateShippingCharge);
                 return Ok(result);
             }
             catch (Exception ex)
