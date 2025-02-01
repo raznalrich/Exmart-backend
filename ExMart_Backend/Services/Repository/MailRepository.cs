@@ -23,8 +23,10 @@ namespace ExMart_Backend.Services.Repository
 
             // Initialize configuration values in constructor
             //_email = _configuration.GetValue<string>("EMAIL_CONFIGURATION:EMAIL");
-            _email = Environment.GetEnvironmentVariable("EMAIL");
-            _password = Environment.GetEnvironmentVariable("PASSWORD");
+            _email = Environment.GetEnvironmentVariable("EMAIL") ?? _configuration.GetValue<string>("EMAIL_CONFIGURATION:EMAIL");
+
+            _password = Environment.GetEnvironmentVariable("PASSWORD") ?? _configuration.GetValue<string>("EMAIL_CONFIGURATION:PASSWORD");
+
             //_password = _configuration.GetValue<string>("EMAIL_CONFIGURATION:PASSWORD");
             _host = _configuration.GetValue<string>("EMAIL_CONFIGURATION:HOST");
             _port = _configuration.GetValue<int>("EMAIL_CONFIGURATION:PORT");
