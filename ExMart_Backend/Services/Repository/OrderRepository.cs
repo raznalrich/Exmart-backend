@@ -427,15 +427,15 @@ namespace ExMart_Backend.Services.Repository
 
         }
 
-        public async Task<int> UpdateShippingCharge(int orderItemId, int shippingCharge)
+        public async Task<int> UpdateShippingCharge(UpdateOrderStatusRequest request)
         {
-            var orderItem = await _db.OrderItems.FirstOrDefaultAsync(o => o.OrderItemId == orderItemId);
+            var orderItem = await _db.OrderItems.FirstOrDefaultAsync(o => o.OrderItemId == request.OrderItemId);
 
             if (orderItem == null)
             {
-                throw new Exception($"Order with ID {orderItemId} not found");
+                throw new Exception($"Order with ID {request.OrderItemId} not found");
             }
-            orderItem.shippingCharge = shippingCharge;
+            orderItem.shippingCharge = request.shippingCharge;
             await _db.SaveChangesAsync();
             return (int)orderItem.shippingCharge;
 
