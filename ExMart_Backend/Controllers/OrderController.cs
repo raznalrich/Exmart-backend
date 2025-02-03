@@ -45,10 +45,7 @@ namespace ExMart_Backend.Controllers
                     OrderItems = new List<OrderItem>()
                 };
                 int shippingCharge = 0;
-                if (placeOrderDTO.AddressId >= 3)
-                {
-                    shippingCharge = 49;
-                }
+             
 
                 // Explicitly create OrderItems
                 foreach (var itemDTO in placeOrderDTO.OrderItems)
