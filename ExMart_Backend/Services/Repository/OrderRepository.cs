@@ -256,7 +256,7 @@ namespace ExMart_Backend.Services.Repository
                     Status = o.Product_StatusId,
                     Amount = o.Product.Price * o.Quantity,
                     Product_amount = o.Product.Price,
-                    SizeName = o.Size,
+                    SizeName = o.Size.Size,
                     ColorName = o.Color.ColorName,
                     Quantity = o.Quantity,
                     OrderId = o.OrderId,
