@@ -9,6 +9,9 @@
         public string? PrimaryImageUrl { get; set; }
         public int Status { get; set; }
         public decimal Amount { get; set; }
+        public decimal Product_amount { get; set; }
+        public string SizeName { get; set; }
+        public string ColorName { get; set; }
         public int Quantity { get; set; }
         public int OrderId { get; set; }
         public int? ShippingCharge { get; set; }

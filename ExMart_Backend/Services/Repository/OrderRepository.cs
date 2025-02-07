@@ -255,6 +255,9 @@ namespace ExMart_Backend.Services.Repository
                     PrimaryImageUrl = o.Product.PrimaryImageUrl,
                     Status = o.Product_StatusId,
                     Amount = o.Product.Price * o.Quantity,
+                    Product_amount = o.Product.Price,
+                    SizeName = o.Size,
+                    ColorName = o.Color.ColorName,
                     Quantity = o.Quantity,
                     OrderId = o.OrderId,
                     ShippingCharge = o.shippingCharge,
@@ -339,7 +342,7 @@ namespace ExMart_Backend.Services.Repository
                 }
 
                 orderItem.Product_StatusId = request.ProductStatusId;
-            orderItem.shippingCharge =      request.shippingCharge;
+                orderItem.shippingCharge =      request.shippingCharge;
 
             var UpdatedStatus = new UpdateOrderStatusResponse
             {
