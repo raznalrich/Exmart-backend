@@ -63,5 +63,30 @@ namespace ExMart_Backend.Repository
                 throw; 
             }
         }
+
+        public async Task<Category> UpdateCategoryAsync(Category category)
+        {
+            // Find the existing category in the database
+            var existingCategory = await _context.addToCategories.FindAsync(category.Id);
+
+            // If not found, return null or handle as needed
+            if (existingCategory == null)
+            {
+                return null;
+            }
+
+            // Update the properties
+            existingCategory.CategoryName = category.CategoryName;
+            existingCategory.IconPath = category.IconPath;
+
+            // Mark the entity as modified
+            _context.addToCategories.Update(existingCategory);
+
+            // Save changes
+            await _context.SaveChangesAsync();
+
+            return existingCategory;
+        }
+
     }
 }

@@ -66,5 +66,32 @@ namespace ExMart_Backend.Controllers
                 return StatusCode(500, $"An error occurred while removing the category: {ex.Message}");
             }
         }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
+        {
+            try
+            {
+                if (id != category.Id)
+                {
+                    return BadRequest("Category ID in route and request body do not match.");
+                }
+
+                var updatedCategory = await _categoryRepository.UpdateCategoryAsync(category);
+
+                if (updatedCategory == null)
+                {
+                    return NotFound("Category not found.");
+                }
+
+                // Return the updated category
+                return Ok(updatedCategory);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while updating the category: {ex.Message}");
+            }
+        }
+
     }
 }
