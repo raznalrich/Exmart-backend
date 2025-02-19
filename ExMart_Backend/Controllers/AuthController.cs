@@ -30,9 +30,17 @@ namespace ExMart_Backend.Controllers
                 var loginResponseDTO = await _authRepository.Login(request);
                 if (loginResponseDTO == null)
                 {
-                    return Unauthorized(new { Message = "Invalid email or password" });
+                    return NotFound(new { message = "User not found" });
                 }
                 return Ok(loginResponseDTO);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(500, new { message = "Configuration error", details = ex.Message });
             }
             catch (Exception ex)
             {
