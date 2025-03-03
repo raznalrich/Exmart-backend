@@ -1,5 +1,6 @@
 ﻿using ExMart_Backend.Data;
 using ExMart_Backend.DTO;
+using ExMart_Backend.Migrations;
 using ExMart_Backend.Model;
 using ExMart_Backend.Services.Interface;
 using System;
@@ -48,7 +49,7 @@ namespace ExMart_Backend.Services.Repository
                 }
 
                 // Check if the item already exists in cart
-                var existingItem = DBDataInitializer.cartList.FirstOrDefault(
+                var existingItem = _context.CartList.FirstOrDefault(
                     x => x.ProductId == addToCart.ProductId && x.UserId == addToCart.UserId && x.SizeId == addToCart.SizeId && x.ColorId == addToCart.ColorId
 
                 );
@@ -57,10 +58,12 @@ namespace ExMart_Backend.Services.Repository
                 {
                     return false;
                 }
-                addToCart.CartId = DBDataInitializer.GetNextCartId();
-
+                //addToCart.CartId = DBDataInitializer.GetNextCartId();
+                int latestCartId = _context.CartList.Any() ? _context.CartList.Max(x => x.CartId) : 0;
+                addToCart.CartId = latestCartId + 1;
                 // Add to cart
-                DBDataInitializer.cartList.Add(addToCart);
+                _context.CartList.Add(addToCart);
+                _context.SaveChanges(); 
                 return true;
             }
             catch (Exception)
@@ -74,23 +77,24 @@ namespace ExMart_Backend.Services.Repository
         {
             try
             {
-                if (DBDataInitializer.cartList == null)
+                if (_context.CartList == null)
                 {
                     throw new InvalidOperationException("Cart list is not initialized");
                 }
 
-                var cartList = DBDataInitializer.cartList;
+                var cartList = _context.CartList;
                 var carListDTO = cartList.Select(cartitem => new CartListDTO
                 {
+                    CartId = cartitem.CartId,
                     ProductId = cartitem.ProductId,
                     Quantity = cartitem.Quantity,
                     ColorId = cartitem.ColorId,
                     SizeId = cartitem.SizeId,
-                    ProductName = _context.Products.FirstOrDefault(p => p.Id == cartitem.ProductId)?.Name,
-                    ProductImageUrl = _context.Products.FirstOrDefault(p=>p.Id == cartitem.ProductId)?.PrimaryImageUrl,
+                    ProductName = _context.Products.FirstOrDefault(p => p.Id == cartitem.ProductId).Name,
+                    ProductImageUrl = _context.Products.FirstOrDefault(p=>p.Id == cartitem.ProductId).PrimaryImageUrl,
                     Price = _context.Products.FirstOrDefault(p =>p.Id == cartitem.ProductId).Price,
-                    ColorName = _context.ColourMaster.FirstOrDefault(p=>p.ColorId == cartitem.ColorId)?.ColorName,
-                    SizeName = _context.SizeMaster.FirstOrDefault(p=>p.SizeId == cartitem.SizeId)?.Size,
+                    ColorName = _context.ColourMaster.FirstOrDefault(p=>p.ColorId == cartitem.ColorId).ColorName,
+                    SizeName = _context.SizeMaster.FirstOrDefault(p=>p.SizeId == cartitem.SizeId).Size,
                     UserId = cartitem.UserId,
 
                 }).ToList();
@@ -105,27 +109,21 @@ namespace ExMart_Backend.Services.Repository
             }
         }
 
-        public bool DeleteCartList(int productId, int userId , int colorId,int sizeId)
+        public bool DeleteCartList(int cartId)
         {
             try
             {
-                if (productId <= 0)
+                if (cartId <= 0)
                 {
-                    throw new ArgumentException("Invalid product ID", nameof(productId));
+                    throw new ArgumentException("Invalid cart ID", nameof(cartId));
                 }
-
-                if (userId <= 0)
-                {
-                    throw new ArgumentException("Invalid user ID", nameof(userId));
-                }
-
-                if (DBDataInitializer.cartList == null)
+                if (_context.CartList == null)
                 {
                     throw new InvalidOperationException("Cart list is not initialized");
                 }
 
-                var itemToRemove = DBDataInitializer.cartList.FirstOrDefault(
-                    cart => cart.ProductId == productId && cart.UserId == userId && cart.ColorId == colorId && cart.SizeId == sizeId
+                var itemToRemove = _context.CartList.FirstOrDefault(
+                    cart => cart.CartId == cartId
                 );
 
                 if (itemToRemove == null)
@@ -133,7 +131,8 @@ namespace ExMart_Backend.Services.Repository
                     return false;
                 }
 
-                DBDataInitializer.cartList.Remove(itemToRemove);
+                _context.CartList.Remove(itemToRemove);
+                _context.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -152,12 +151,12 @@ namespace ExMart_Backend.Services.Repository
                     throw new ArgumentException("Invalid user ID", nameof(userId));
                 }
 
-                if (DBDataInitializer.cartList == null)
+                if (_context.CartList == null)
                 {
                     throw new InvalidOperationException("Cart list is not initialized");
                 }
 
-                var itemsToRemove = DBDataInitializer.cartList
+                var itemsToRemove = _context.CartList
                     .Where(cart => cart.UserId == userId)
                     .ToList();
 
@@ -168,9 +167,9 @@ namespace ExMart_Backend.Services.Repository
 
                 foreach (var item in itemsToRemove)
                 {
-                    DBDataInitializer.cartList.Remove(item);
+                    _context.CartList.Remove(item);
                 }
-
+                _context.SaveChanges();
                 return true;
             }
             catch (Exception)
