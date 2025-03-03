@@ -30,6 +30,7 @@ namespace ExMart_Backend.Data
         public DbSet<AdminMembers> AdminMembers { get; set; }
         public DbSet<Policy>  TermsAndConditions { get; set; }
         public DbSet<HrDetails> Hrdetailing {  get; set; }
+        public DbSet<AddToCart> CartList {  get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,13 +43,18 @@ namespace ExMart_Backend.Data
                 new Policy { Id =2, TndCheading = "Payment Policy" , TndCcontent = "Trail Payment Policy"},
                 new Policy { Id =3, TndCheading = "Shipping Policy" , TndCcontent = "Trail Shipping Policy"}
             );
+            //seeding data on policies 
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<AddToCart>().HasData(
+                new AddToCart { CartId = 1, ProductId = 1, ColorId = 1, SizeId = 2, Quantity = 1, UserId = 6 }
+            );
 
             //seeding data on HR details
-            modelBuilder.Entity<HrDetails>().HasData(
-                new HrDetails {Id=1, HrPhoneNumber = 9999999999, HrAddress = "HR, Experion Global, Gayathiri Building, Technopark phase-1, Trivandrum - 695581",
-                    HrEmail = "experion.hr.experionglobal.com", ProTagLine = "exMart is the online merchandise selling platform for experion global which holds all the experion branded items for sale",
-                    HrChatEmail = "sona.george@experionglobal.com"
-                });
+            //modelBuilder.Entity<HrDetails>().HasData(
+            //    new HrDetails {Id=1, HrPhoneNumber = 9999999999, HrAddress = "HR, Experion Global, Gayathiri Building, Technopark phase-1, Trivandrum - 695581",
+            //        HrEmail = "experion.hr.experionglobal.com", ProTagLine = "exMart is the online merchandise selling platform for experion global which holds all the experion branded items for sale",
+            //        HrChatEmail = "sona.george@experionglobal.com"
+            //    });
 
             modelBuilder.Entity<Product>()
             .HasMany(p => p.ProductImages)    // Changed from Images to ProductImages to match the property name
